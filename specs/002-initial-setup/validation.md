@@ -74,7 +74,7 @@ Branch `feat/002-initial-setup-us3-card`. Implementação de T019–T020 conclu�
 | Verificação | Resultado |
 |-------------|-----------|
 | `xtool dev build` | Passou |
-| `xtool dev run --usb` no aparelho "Gremio" | Passou em 2026-11-06 |
+| `xtool dev run --usb` no aparelho "Gremio" | 1ª tentativa falhou: `connectTimeout` ao registrar o aparelho em `api.appstoreconnect.apple.com`; 2ª tentativa passou em 2026-11-06 |
 | "Agora não" conclui sem datas; "Sim" abre as datas 3 e 10 | Pendente: conferência do usuário no iPhone |
 | Dias iguais: erro, tremor e Continuar indisponível; dias diferentes: aviso verde | Pendente |
 | VoiceOver nas fileiras de dias, texto ampliado; comparação com as etapas 5–6 | Pendente |
