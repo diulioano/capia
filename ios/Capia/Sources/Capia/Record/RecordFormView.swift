@@ -11,13 +11,12 @@ struct RecordFormView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var descriptionFocused: Bool
-    /// Calendário de "Outra data", aberto no próprio formulário.
+    /// Folha de "Outra data", na altura do calendário.
     @State private var showingCalendar = false
 
     private var draft: RecordDraft { flow.draft }
 
     var body: some View {
-        ScrollViewReader { proxy in
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 top
@@ -35,16 +34,32 @@ struct RecordFormView: View {
             .padding(.top, 4)
             .padding(.bottom, 24)
         }
-        .onChange(of: showingCalendar) { _, shown in
-            guard shown else { return }
-            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) { proxy.scrollTo("calendar", anchor: .bottom) }
-        }
-        }
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) { actions }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: flow.showsInstallments)
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: showingCalendar)
+        .sheet(isPresented: $showingCalendar) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Outra data")
+                    .font(CapiaFonts.body(17, relativeTo: .headline, weight: .bold))
+                    .foregroundStyle(CapiaTheme.ink)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.horizontal, 8)
+                DatePicker("Data do registro", selection: calendarSelection, in: ...Date(), displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+                    .tint(CapiaTheme.action)
+                    .environment(\.locale, Locale(identifier: "pt_BR"))
+            }
+            .padding(.horizontal, 14)
+            .padding(.top, 22)
+            .frame(maxHeight: .infinity, alignment: .top)
+            // Sobe só até a altura do calendário; com texto ampliado, pode ir à tela cheia.
+            .presentationDetents([.height(450), .large])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(24)
+            .presentationBackground(CapiaTheme.cream)
+            .preferredColorScheme(.light)
+        }
     }
 
     // MARK: Topo
@@ -234,7 +249,7 @@ struct RecordFormView: View {
             } else {
                 send(.chooseDate(.other(day)))
             }
-            // Escolher o dia fecha o calendário, como ao editar um evento no Calendário.
+            // Escolher o dia fecha a folha.
             showingCalendar = false
             AccessibilityNotification.Announcement("Data escolhida: \(day.dayMonthText)").post()
         }
@@ -247,20 +262,10 @@ struct RecordFormView: View {
                 dateChip("Hoje", selected: draft.date == .today) { send(.chooseDate(.today)) }
                 dateChip("Ontem", selected: draft.date == .yesterday) { send(.chooseDate(.yesterday)) }
                 if case .other(let day) = draft.date {
-                    dateChip(day.dayMonthText, selected: true, hint: "Escolher outra data") { showingCalendar.toggle() }
+                    dateChip(day.dayMonthText, selected: true, hint: "Escolher outra data") { showingCalendar = true }
                 } else {
-                    dateChip("Outra data", selected: false) { showingCalendar.toggle() }
+                    dateChip("Outra data", selected: false) { showingCalendar = true }
                 }
-            }
-            if showingCalendar {
-                DatePicker("Data do registro", selection: calendarSelection, in: ...Date(), displayedComponents: .date)
-                    .datePickerStyle(.graphical)
-                    .tint(CapiaTheme.action)
-                    .environment(\.locale, Locale(identifier: "pt_BR"))
-                    .padding(.horizontal, 8)
-                    .background(CapiaTheme.paper, in: RoundedRectangle(cornerRadius: 18))
-                    .id("calendar")
-                    .transition(reduceMotion ? .identity : .opacity.combined(with: .offset(y: -8)))
             }
         }
         .accessibilityElement(children: .contain)
