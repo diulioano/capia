@@ -1,8 +1,8 @@
 import CapiaFlow
 import SwiftUI
 
-/// Contêiner da configuração inicial, conforme o quadro "Configuração inicial":
-/// Voltar, progresso, capivara com dica, título da etapa e Continuar fixo no rodapé.
+/// Configuração inicial, conforme o quadro "Configuração inicial": etapas com Voltar,
+/// progresso, capivara com dica, título e Continuar fixo; conclusão em tela própria.
 @MainActor
 struct SetupView: View {
     let flow: SetupFlow
@@ -15,6 +15,19 @@ struct SetupView: View {
     @AccessibilityFocusState private var titleFocused: Bool
 
     var body: some View {
+        if flow.step == .done {
+            // Capture the rendered step, rather than reading the latest state in a tap.
+            let source = flow.step
+            SetupDoneView(flow: flow, saveFailed: saveFailed,
+                          send: { send(.init($0, from: source)) }, retrySave: retrySave)
+                .transition(.opacity)
+        } else {
+            steps
+        }
+    }
+
+    @ViewBuilder
+    private var steps: some View {
         // Capture the rendered step, rather than reading the latest state in a tap.
         let source = flow.step
         VStack(alignment: .leading, spacing: 0) {
@@ -141,10 +154,8 @@ struct SetupView: View {
                 CardQuestionStepView(draft: flow.draft, edit: edit)
             case .cardDates:
                 CardDatesStepView(draft: flow.draft, edit: edit)
-            default:
-                ProvisionalStepContent(flow: flow, saveFailed: saveFailed, edit: edit,
-                                       send: { send(.init($0, from: source)) },
-                                       retrySave: retrySave)
+            case .done:
+                EmptyView()
             }
         }
     }
@@ -169,39 +180,5 @@ private struct ProgressTrack: View {
         .accessibilityElement()
         .accessibilityLabel("Progresso da configuração")
         .accessibilityValue("Etapa \(position) de \(total)")
-    }
-}
-
-/// Conteúdo provisório das etapas ainda não finalizadas. Substituído por arquivo
-/// próprio na US4 (conclusão).
-@MainActor
-private struct ProvisionalStepContent: View {
-    let flow: SetupFlow
-    let saveFailed: Bool
-    let edit: ((inout SetupDraft) -> Void) -> Void
-    let send: (SetupAction.Intent) -> Void
-    let retrySave: () -> Void
-
-    var body: some View {
-        switch flow.step {
-        case .name, .goals, .account, .balance, .cardQuestion, .cardDates:
-            EmptyView()
-        case .done:
-            ForEach(flow.accounts) { account in
-                Text("\(account.name) · \(SetupCopy.kindDescription(account.kind)) · \(BRL.format(account.initialBalance))")
-            }
-            ForEach(flow.cards) { card in
-                Text("Cartão \(card.name) · Fecha dia \(card.closingDay) · vence dia \(card.dueDay) · Separado")
-            }
-            if flow.cards.isEmpty { Text("Sem cartão por enquanto.") }
-            if saveFailed {
-                Text("Não consegui guardar no aparelho. Seus dados ficam só até fechar o app.")
-                Button("Tentar de novo", action: retrySave)
-            }
-            Button("Ver meu mês") { send(.viewMonth) }
-                .buttonStyle(CapiaPrimaryButtonStyle())
-            Button("Adicionar outra conta") { send(.addAnotherAccount) }
-                .frame(minHeight: 44)
-        }
     }
 }
