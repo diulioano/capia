@@ -90,7 +90,7 @@ struct WelcomeView: View {
                 ? geometry.size.height - 744 * scale
                 : (geometry.size.height - 844 * scale) / 2
             ZStack(alignment: .topLeading) {
-                Image("OnsenWallpaper", bundle: .module)
+                Image(uiImage: CapiaImages.onsenWallpaper)
                     .resizable()
                     .frame(width: 390 * scale, height: 844 * scale)
                     .offset(x: offsetX, y: offsetY)
@@ -169,7 +169,7 @@ struct WelcomeView: View {
     private var mascot: some View {
         TimelineView(.animation(paused: reduceMotion || !visible)) { context in
             let phase = reduceMotion ? 0 : sin(context.date.timeIntervalSinceReferenceDate * .pi / 2)
-            Image("WelcomeCapybara", bundle: .module).resizable().scaledToFit()
+            Image(uiImage: CapiaImages.welcomeCapybara).resizable().scaledToFit()
                 .offset(y: phase * 0.75)
         }
     }

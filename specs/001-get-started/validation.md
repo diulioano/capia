@@ -86,3 +86,30 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 - **T016 permanece pendente**: instalação comprovada, mas abertura, interação, fidelidade visual,
   VoiceOver, maior texto acessível, redução de movimento e SC-001 ainda não observados.
   Este registro atualiza o estado de conexão e instalação relatado nas seções anteriores.
+
+## Capturas recebidas e correção das imagens — 2026-11-06
+
+- As cinco capturas enviadas pelo usuário foram preservadas sem edição em
+  [evidence/us1-build1/](evidence/us1-build1/). Elas confirmam abertura real da welcome
+  e presença das três introduções e configuração provisórias.
+- **Falhou**: [welcome.png](evidence/us1-build1/welcome.png) mostra textos, botão e vapor,
+  mas o fundo onsen, a capivara e seu reflexo estão ausentes. A US1 não atende ao design.
+  A interpretação anterior de problema na tela inicial ou de versão antiga foi inadequada;
+  a captura mostra a welcome implementada com falha no conteúdo de imagem.
+- As outras quatro capturas correspondem às telas provisórias esperadas antes da US2.
+  Não comprovam aceite da apresentação final. T016 segue pendente, e T012/T014 foram
+  reabertas até confirmar a correção visual.
+- Inspeção do artefato: PNGs RGBA válidos, dimensões corretas e bytes iguais às origens,
+  presentes no `Capia_Capia.bundle`. O acessor `Bundle.module` gerado encontra esse bundle;
+  o executável contém WelcomeView e suas referências. Isso não comprova que a busca
+  de imagens por nome do SwiftUI consiga resolvê-las em execução.
+- Correção candidata: `CapiaImages` resolve a URL PNG por `Bundle.module` e cria uma
+  `UIImage(contentsOfFile:)`, usada em `Image(uiImage:)`. As imagens são carregadas uma
+  única vez; ausência ou falha de decodificação deixa de produzir uma cena vazia silenciosa.
+- `CFBundleVersion` incrementado de 1 para 2 para distinguir a próxima instalação.
+- **Passou**: `xtool dev build`, `python scripts/prepare-design-assets.py --check` e inspeção
+  de metadados/PNGs do `.app` da build 2. Sem alteração das imagens ou do HTML.
+- **Pendente**: reinstalar build 2 e repetir a conferência visual e o carinho no iPhone.
+  A conexão `USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015` não listava aparelhos ao final dessas
+  verificações; solicitado manter iPhone desbloqueado e visível em Dispositivos Apple.
+  Não há host UIKit neste ambiente Linux para substituir essa verificação por um teste nativo.
