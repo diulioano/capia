@@ -31,6 +31,7 @@ O app substituirá a planilha, com exportação dos registros para uso fora do a
 - Registros recebidos por voz ou imagem serão apresentados como rascunho para confirmação antes de salvar.
 - A v1 acompanhará compras parceladas, com parcelas nos meses seguintes.
 - O resumo mensal considera o valor das parcelas atribuídas às faturas daquele mês; o detalhe da compra preserva seu valor total.
+- Em 2026-11-06, o usuário decidiu que a compra no cartão conta nos gastos do mês da compra; numa compra parcelada, cada parcela seguinte conta no mês seguinte. O indicador Fatura mostra a fatura aberta. Os limites exatos do ciclo da fatura continuam em aberto.
 - O pagamento da fatura será vinculado a uma conta: reduz seu saldo e quita a fatura, sem contabilizar novamente os gastos que a compõem.
 - Cada cartão terá datas de fechamento e vencimento. O app sugere a fatura da compra, com possibilidade de correção pelo usuário.
 - Ao cadastrar uma conta, a pessoa informa o saldo inicial, sem precisar cadastrar todo o histórico anterior.
