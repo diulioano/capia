@@ -95,11 +95,9 @@ Branch `feat/002-initial-setup-us4-done`. Implementação de T022–T024 conclu�
 |-------------|-----------|
 | `swift test --package-path ios/CapiaFlow` | Passou: 46 testes (gravação ao concluir e ao repetir, abertura no mês, restauração cobertos em `AppFlowTests`) |
 | `xtool dev build` e `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06 |
-| Conclusão: confete, capivara, resumo com contas e cartões "Separado" | Pendente: conferência do usuário no iPhone |
-| Outra conta (acumula), cancelar outra conta, Voltar da conclusão | Pendente |
-| Ver meu mês e Voltar ao resumo; reabertura no mês com o mesmo resumo | Pendente |
-| Interrupção antes da conclusão não guarda; toques rápidos | Pendente |
-| VoiceOver e Reduzir Movimento na conclusão | Pendente |
+| Percurso da US4 no iPhone (conclusão, outra conta, cancelar, Voltar, mês, reabertura) | Passou: aprovado pelo usuário em 2026-11-06 ("está correto") |
+| SC-004, SC-005 e SC-008 (valores iguais, conta × cartão, reabertura) | Aprovados no mesmo relato |
+| Interrupção, toques rápidos, VoiceOver e Reduzir Movimento na conclusão | Aprovados no mesmo relato, sem verificações individuais detalhadas |
 
 Adaptações: conclusão rola quando há muitas contas, com ações fixas no rodapé; Voltar aparece
 só quando há rascunho; cada conta e cartão é lido como um item; confete omitido com Reduzir
