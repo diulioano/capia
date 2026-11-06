@@ -31,7 +31,7 @@ Branch `feat/003-month-summary-us1-overview`. T008–T010 implementadas em 2026-
 | Verificação | Resultado |
 |-------------|-----------|
 | `xtool dev build` | Passou |
-| T011: percursos Entrada, Reabertura, Cabeçalho, Saldo, Indicadores e Capivara no iPhone, com VoiceOver, texto ampliado e redução de movimento | Pendente: depende do aparelho e da conferência do usuário |
+| T011: percursos Entrada, Reabertura, Cabeçalho, Saldo, Indicadores e Capivara no iPhone, com VoiceOver, texto ampliado e redução de movimento | Passou: aceite do usuário em 2026-11-06 após uso no iPhone. VoiceOver, texto ampliado e redução de movimento não foram registrados separadamente |
 
 Adaptações: o recuo de 58 pt do topo vira área segura + 12; o olho do cabeçalho entra na
 US3, junto com o comportamento de ocultar; a contagem do saldo usa a curva do quadro
@@ -44,7 +44,7 @@ Branch `feat/003-month-summary-us2-sections`. T012 implementada em 2026-11-06.
 | Verificação | Resultado |
 |-------------|-----------|
 | `xtool dev build` | Passou |
-| T013: percurso Seções no iPhone, com VoiceOver e texto ampliado | Pendente: depende do aparelho e da conferência do usuário |
+| T013: percurso Seções no iPhone, com VoiceOver e texto ampliado | Passou: aceite do usuário em 2026-11-06 após uso no iPhone. VoiceOver, texto ampliado e redução de movimento não foram registrados separadamente |
 
 Adaptação: os botões das abas de "Para onde foi" têm 38 pt em vez de 34, para que o
 controle chegue a 44 pt de alvo de toque.
