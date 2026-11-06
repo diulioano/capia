@@ -301,3 +301,79 @@ final class SetupFlowTests: XCTestCase {
         XCTAssertNil(flow.space(completedAt: Date()))
     }
 }
+
+final class CardDatesTests: XCTestCase {
+    func testGapCountsIntoNextMonth() {
+        XCTAssertEqual(CreditCard.gap(closingDay: 3, dueDay: 10), 7)
+        XCTAssertEqual(CreditCard.gap(closingDay: 25, dueDay: 5), 10)
+        XCTAssertEqual(CreditCard.gap(closingDay: 10, dueDay: 3), 23)
+        XCTAssertTrue(CreditCard.dueIsNextMonth(closingDay: 25, dueDay: 5))
+        XCTAssertFalse(CreditCard.dueIsNextMonth(closingDay: 3, dueDay: 10))
+    }
+
+    func testSuggestedDueDayIsSevenDaysLater() {
+        XCTAssertEqual(CreditCard.suggestedDueDay(closingDay: 3), 10)
+        XCTAssertEqual(CreditCard.suggestedDueDay(closingDay: 24), 31)
+        XCTAssertEqual(CreditCard.suggestedDueDay(closingDay: 25), 2)
+        XCTAssertEqual(CreditCard.suggestedDueDay(closingDay: 31), 8)
+        for day in CreditCard.days {
+            let due = CreditCard.suggestedDueDay(closingDay: day)
+            XCTAssertTrue(CreditCard.days.contains(due))
+            XCTAssertEqual(CreditCard.gap(closingDay: day, dueDay: due), 7)
+        }
+    }
+
+    func testClosingSuggestsDueUntilDueIsChosen() {
+        var draft = SetupDraft()
+        draft.setClosingDay(25)
+        XCTAssertEqual(draft.dueDay, 2)
+        XCTAssertTrue(draft.dueIsNextMonth)
+        XCTAssertFalse(draft.isCardGapUnusual)
+        draft.setDueDay(5)
+        draft.setClosingDay(20)
+        XCTAssertEqual(draft.dueDay, 5, "Vencimento escolhido não é sobrescrito")
+    }
+
+    func testUnusualGapWarnsWithoutBlocking() {
+        var flow = SetupFlow(origin: .register)
+        flow.draft.name = "Diuli"
+        flow.send(.init(.continueStep, from: .name))
+        flow.draft.toggle(.saveForGoal)
+        flow.send(.init(.continueStep, from: .goals))
+        flow.draft.accountName = "Banco Aurora"
+        flow.send(.init(.continueStep, from: .account))
+        flow.send(.init(.continueStep, from: .balance))
+        flow.draft.hasCard = true
+        flow.send(.init(.continueStep, from: .cardQuestion))
+        flow.draft.setDueDay(4)
+        XCTAssertTrue(flow.draft.isCardGapUnusual, "1 dia")
+        XCTAssertTrue(flow.canContinue)
+        flow.draft.setClosingDay(10)
+        flow.draft.setDueDay(3)
+        XCTAssertTrue(flow.draft.isCardGapUnusual, "23 dias")
+        flow.draft.setDueDay(20)
+        XCTAssertFalse(flow.draft.isCardGapUnusual, "10 dias")
+        flow.draft.setDueDay(10)
+        XCTAssertFalse(flow.draft.isCardGapUnusual, "Dias iguais são erro, não aviso")
+        XCTAssertFalse(flow.canContinue)
+    }
+
+    func testAnotherAccountRestoresSuggestion() {
+        var flow = SetupFlow(origin: .register)
+        flow.draft.name = "Diuli"
+        flow.send(.init(.continueStep, from: .name))
+        flow.draft.toggle(.saveForGoal)
+        flow.send(.init(.continueStep, from: .goals))
+        flow.draft.accountName = "Banco Aurora"
+        flow.send(.init(.continueStep, from: .account))
+        flow.send(.init(.continueStep, from: .balance))
+        flow.draft.hasCard = true
+        flow.send(.init(.continueStep, from: .cardQuestion))
+        flow.draft.setDueDay(20)
+        flow.send(.init(.continueStep, from: .cardDates))
+        flow.send(.init(.addAnotherAccount, from: .done))
+        XCTAssertFalse(flow.draft.dueDayChosen)
+        flow.draft.setClosingDay(25)
+        XCTAssertEqual(flow.draft.dueDay, 2)
+    }
+}

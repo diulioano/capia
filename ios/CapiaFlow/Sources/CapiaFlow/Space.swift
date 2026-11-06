@@ -43,6 +43,26 @@ public struct Account: Codable, Equatable, Identifiable, Sendable {
 /// Meio de pagamento com fatura própria. Não tem saldo e não é uma conta.
 public struct CreditCard: Codable, Equatable, Identifiable, Sendable {
     public static let days = 1...31
+    /// Distância sugerida entre fechamento e vencimento.
+    public static let suggestedGap = 7
+    /// Faixa usual entre fechamento e vencimento. Fora dela o app só avisa; não é regra.
+    public static let typicalGap = 5...15
+
+    /// Dias do fechamento até o vencimento seguinte, contando um mês nominal de 30 dias.
+    /// Vencimento com número menor que o fechamento cai no mês seguinte (fecha 25, vence 5).
+    public static func gap(closingDay: Int, dueDay: Int) -> Int {
+        dueDay > closingDay ? dueDay - closingDay : dueDay + 30 - closingDay
+    }
+
+    /// Vencimento sugerido para um fechamento: sete dias depois, dentro de 1…31.
+    public static func suggestedDueDay(closingDay: Int) -> Int {
+        let day = closingDay + suggestedGap
+        return day > 31 ? day - 30 : day
+    }
+
+    public static func dueIsNextMonth(closingDay: Int, dueDay: Int) -> Bool {
+        dueDay < closingDay
+    }
 
     public let id: UUID
     public var name: String

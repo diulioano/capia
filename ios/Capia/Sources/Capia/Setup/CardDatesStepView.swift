@@ -2,7 +2,8 @@ import CapiaFlow
 import SwiftUI
 
 /// Etapa 6: "Datas do cartão {conta}". Fileiras de dias de 1 a 31 para fechamento e
-/// vencimento, com aviso do design ou erro quando os dias coincidem.
+/// vencimento. O vencimento é sugerido 7 dias após o fechamento; distância fora de 5 a 15
+/// dias gera aviso sem bloquear; dias iguais são erro.
 @MainActor
 struct CardDatesStepView: View {
     let draft: SetupDraft
@@ -19,8 +20,15 @@ struct CardDatesStepView: View {
             DayRow(selected: draft.dueDay, title: "Vence no dia") { day in edit { $0.setDueDay(day) } }
             Group {
                 if draft.areCardDaysValid {
-                    message("Compras a partir do dia \(draft.closingDay) entram na fatura seguinte. Parcelas são distribuídas automaticamente pelos próximos meses.",
-                            background: CapiaTheme.selection, foreground: CapiaTheme.notice)
+                    VStack(alignment: .leading, spacing: 8) {
+                        message(notice, background: CapiaTheme.selection, foreground: CapiaTheme.notice)
+                        if draft.isCardGapUnusual {
+                            message("Costuma haver de 5 a 15 dias entre o fechamento e o vencimento. Confira as datas na sua fatura.",
+                                    background: CapiaTheme.sand, foreground: CapiaTheme.alert)
+                                .transition(.opacity)
+                        }
+                    }
+                    .animation(.easeOut(duration: 0.3), value: draft.isCardGapUnusual)
                 } else {
                     message("Fechamento e vencimento precisam ser em dias diferentes.",
                             background: CapiaTheme.errorBackground, foreground: CapiaTheme.errorText)
@@ -36,6 +44,13 @@ struct CardDatesStepView: View {
             .transition(.opacity)
         }
         .animation(.easeOut(duration: 0.3), value: draft.areCardDaysValid)
+    }
+
+    /// Texto do design, acrescido do mês do vencimento quando ele cai no mês seguinte.
+    private var notice: String {
+        var text = "Compras a partir do dia \(draft.closingDay) entram na fatura seguinte. Parcelas são distribuídas automaticamente pelos próximos meses."
+        if draft.dueIsNextMonth { text += " A fatura vence no dia \(draft.dueDay) do mês seguinte." }
+        return text
     }
 
     private func sectionTitle(_ text: String) -> some View {
@@ -65,6 +80,8 @@ private struct DayRow: View {
     let title: String
     let pick: (Int) -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal) {
@@ -80,6 +97,10 @@ private struct DayRow: View {
             .scrollIndicators(.hidden)
             .padding(.horizontal, -20)
             .onAppear { proxy.scrollTo(selected, anchor: .center) }
+            // O vencimento sugerido ao mudar o fechamento fica visível.
+            .onChange(of: selected) { _, day in
+                withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) { proxy.scrollTo(day, anchor: .center) }
+            }
         }
     }
 

@@ -79,6 +79,11 @@ Branch `feat/002-initial-setup-us3-card`. Implementação de T019–T020 conclu�
 | Dias iguais: erro, tremor e Continuar indisponível; dias diferentes: aviso verde | Pendente |
 | VoiceOver nas fileiras de dias, texto ampliado; comparação com as etapas 5–6 | Pendente |
 
+Retorno do usuário em 2026-11-06: "está funcional", com dúvida sobre a distância entre fechamento
+e vencimento. Decisão: sugerir vencimento 7 dias após o fechamento, avisar sem bloquear fora de
+5 a 15 dias e informar vencimento no mês seguinte. 46 testes passaram (`CardDatesTests` +5);
+nova build compilada e instalada no "Gremio". Conferência da regra no iPhone: pendente.
+
 Adaptações: ícones de cartão e "Agora não" desenhados a partir dos traços do quadro; dias
 anunciados como "Fecha no dia N" / "Vence no dia N"; tremor omitido com Reduzir Movimento.
 

@@ -31,7 +31,11 @@ selecionada, fundo `#ECEBD6` e borda `#5C6B34`; anuncia "selecionado".
 | 5 | Você usa cartão de crédito de {conta}? | "Sim, tenho cartão" / "Acompanho a fatura separada da conta"; "Agora não" / "Dá para adicionar depois"; cartões 76 pt, raio 20 | Cartões ficam separados da conta, mesmo no mesmo banco. |
 | 6 | Datas do cartão {conta} | "Fecha no dia" e "Vence no dia", fileiras horizontais 1…31 (48 × 52, raio 16; selecionado verde); aviso verde `#ECEBD6`/`#45512A` ou erro `#FADDCB`/`#84401E` com tremor | Assim eu sei em qual fatura cada compra cai. |
 
-As fileiras de dias rolam até o dia selecionado ao abrir. O tremor do erro é omitido com
+As fileiras de dias rolam até o dia selecionado ao abrir e quando o vencimento é sugerido.
+Complementos (decisão de 2026-11-06): o aviso verde acrescenta "A fatura vence no dia Y do
+mês seguinte." quando for o caso; distância fora de 5 a 15 dias mostra, abaixo, em areia
+`#F1E6D2` com texto `#9C4A22`, "Costuma haver de 5 a 15 dias entre o fechamento e o
+vencimento. Confira as datas na sua fatura.", sem bloquear Continuar. O tremor do erro é omitido com
 redução de movimento; o texto permanece.
 
 ## Conclusão

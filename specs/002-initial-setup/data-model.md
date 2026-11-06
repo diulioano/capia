@@ -40,7 +40,11 @@ outro vazio → "sua conta"), `mood` e `space` (montado a partir de perfil e lis
 | `account` | tipo `wallet`, ou nome aparado com ≥ 2 caracteres |
 | `balance` | sempre (zero aceito) |
 | `cardQuestion` | `hasCard != nil` |
-| `cardDates` | `closingDay != dueDay` |
+| `cardDates` | `closingDay != dueDay` (distância fora de 5…15 dias só avisa) |
+
+Datas do cartão: distância = `due − closing` quando `due > closing`, senão `due + 30 − closing`
+(vencimento no mês seguinte). `setClosingDay` sugere `closing + 7` (acima de 31, subtrai 30)
+enquanto `dueDayChosen` é falso; `setDueDay` o torna verdadeiro; outra conta o reinicia.
 
 ## Humor da capivara (derivado)
 

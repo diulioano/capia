@@ -14,6 +14,7 @@
 
 ### Session 2026-11-06
 
+- Q: Existe regra entre fechamento e vencimento do cartão, e pode fechar depois do dia do vencimento? → A: Sem regra obrigatória conhecida; fechar num dia maior que o vencimento é normal (vence no mês seguinte). Sugerir o vencimento 7 dias após o fechamento e avisar, sem bloquear, fora de 5 a 15 dias (decisão do usuário em 2026-11-06, durante a US3).
 - Q: Ao reabrir o app após concluir a configuração, os dados permanecem? → A: Sim. Guardar no aparelho nesta entrega; sincronizar pelo iCloud em funcionalidade posterior, depois de definir a conta Apple e o armazenamento.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -84,6 +85,9 @@ cartão", escolher dias, tentar dias iguais e concluir com dias diferentes.
 3. **Given** "Sim, tenho cartão" escolhido, **When** a pessoa aciona Continuar, **Then** vê "Datas do cartão {nome da conta}", com dias de 1 a 31 para "Fecha no dia" e "Vence no dia", pré-selecionados em 3 e 10.
 4. **Given** dias diferentes, **When** a pessoa observa a etapa, **Then** vê "Compras a partir do dia {fechamento} entram na fatura seguinte. Parcelas são distribuídas automaticamente pelos próximos meses." e pode continuar.
 5. **Given** fechamento e vencimento no mesmo dia, **When** a pessoa observa a etapa, **Then** vê "Fechamento e vencimento precisam ser em dias diferentes." e Continuar fica indisponível.
+6. **Given** a pessoa ainda não escolheu o vencimento, **When** escolhe o fechamento, **Then** o vencimento é sugerido sete dias depois (fecha 25, vence 2), podendo ser alterado; depois de escolhido, o vencimento não é mais sugerido.
+7. **Given** vencimento com número menor que o fechamento, **When** a pessoa observa o aviso, **Then** ele informa que a fatura vence no mês seguinte.
+8. **Given** uma distância fora de 5 a 15 dias entre fechamento e vencimento, **When** a pessoa observa a etapa, **Then** vê "Costuma haver de 5 a 15 dias entre o fechamento e o vencimento. Confira as datas na sua fatura." e ainda pode continuar.
 
 ---
 
@@ -136,7 +140,7 @@ voltar da conclusão e acionar Ver meu mês.
 - **FR-006**: Os objetivos DEVEM ser "Entender para onde vai meu dinheiro", "Juntar dinheiro para um objetivo", "Organizar as faturas do cartão" e "Deixar a planilha de lado", com seleção múltipla. Nesta entrega, as escolhas não alteram outros fluxos.
 - **FR-007**: A conta DEVE ter tipo Conta corrente, Poupança ou Dinheiro em espécie (rotulado Carteira), nome e saldo inicial. A conta do tipo Carteira sem apelido DEVE se chamar "Carteira".
 - **FR-008**: O saldo inicial DEVE ser representado em centavos exatos e exibido em reais no formato brasileiro, sem arredondamentos.
-- **FR-009**: Responder "Sim, tenho cartão" DEVE criar um cartão de crédito distinto da conta, identificado pelo nome da conta e com dias de fechamento e vencimento. Pagar ou acompanhar faturas está fora desta entrega.
+- **FR-009**: Responder "Sim, tenho cartão" DEVE criar um cartão de crédito distinto da conta, identificado pelo nome da conta e com dias de fechamento e vencimento. Pagar ou acompanhar faturas está fora desta entrega. O vencimento DEVE ser sugerido sete dias após o fechamento até a pessoa escolhê-lo; distância fora de 5 a 15 dias DEVE gerar aviso sem bloquear; vencimento com número menor que o fechamento cai no mês seguinte.
 - **FR-010**: A conclusão DEVE resumir todas as contas e cartões configurados na sessão, distinguindo visualmente conta e cartão, e oferecer "Ver meu mês" e "Adicionar outra conta".
 - **FR-011**: "Adicionar outra conta" DEVE reiniciar somente os campos de conta e cartão, preservando nome, objetivos e os itens já configurados.
 - **FR-012**: "Ver meu mês" DEVE levar a um destino provisório que informa "O resumo do seu mês vem na próxima etapa do protótipo." e oferece "Voltar ao resumo", retornando à conclusão.

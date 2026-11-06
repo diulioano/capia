@@ -42,6 +42,8 @@ public struct SetupDraft: Equatable, Sendable {
     public var hasCard: Bool?
     public var closingDay = SetupDraft.defaultClosingDay
     public var dueDay = SetupDraft.defaultDueDay
+    /// Depois que a pessoa escolhe o vencimento, mudar o fechamento não o sugere mais.
+    public private(set) var dueDayChosen = false
 
     public init() {}
 
@@ -53,6 +55,11 @@ public struct SetupDraft: Equatable, Sendable {
     public var isNameOneShort: Bool { trimmedName.count == 1 }
     public var isAccountValid: Bool { accountKind == .wallet || trimmedAccountName.count >= 2 }
     public var areCardDaysValid: Bool { closingDay != dueDay }
+    /// Aviso não bloqueante quando a distância foge da faixa usual dos bancos.
+    public var isCardGapUnusual: Bool {
+        areCardDaysValid && !CreditCard.typicalGap.contains(CreditCard.gap(closingDay: closingDay, dueDay: dueDay))
+    }
+    public var dueIsNextMonth: Bool { CreditCard.dueIsNextMonth(closingDay: closingDay, dueDay: dueDay) }
 
     /// Nome exibido da conta: aparado; Carteira sem apelido vira "Carteira".
     public var accountDisplayName: String {
@@ -73,12 +80,18 @@ public struct SetupDraft: Equatable, Sendable {
         balance = balance.adding(Cents(reais: reais))
     }
 
+    /// Escolhe o fechamento e, enquanto a pessoa não escolheu o vencimento, sugere
+    /// o vencimento sete dias depois.
     public mutating func setClosingDay(_ day: Int) {
-        if CreditCard.days.contains(day) { closingDay = day }
+        guard CreditCard.days.contains(day) else { return }
+        closingDay = day
+        if !dueDayChosen { dueDay = CreditCard.suggestedDueDay(closingDay: day) }
     }
 
     public mutating func setDueDay(_ day: Int) {
-        if CreditCard.days.contains(day) { dueDay = day }
+        guard CreditCard.days.contains(day) else { return }
+        dueDay = day
+        dueDayChosen = true
     }
 
     /// Limpa somente a conta e o cartão, preservando nome e objetivos.
@@ -89,6 +102,7 @@ public struct SetupDraft: Equatable, Sendable {
         hasCard = nil
         closingDay = Self.defaultClosingDay
         dueDay = Self.defaultDueDay
+        dueDayChosen = false
     }
 }
 
