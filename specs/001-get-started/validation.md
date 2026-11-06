@@ -231,3 +231,17 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   não foi observado pelo usuário nesse percurso da build 3.
 - Permanecem pendentes a conferência da composição em tamanho padrão após o ajuste,
   VoiceOver e SC-001. T016 continua aberta; US2 ainda não iniciada.
+
+## Tamanho padrão e VoiceOver aprovados — 2026-11-06
+
+- O usuário respondeu "sim, está de boa" à conferência da cena em tamanho padrão e
+  ao teste com VoiceOver: foco no título ao abrir/trocar de tela, nome acessível da
+  capivara, anúncio do feedback e funcionamento de Começar e Voltar.
+- **Passou por relato do usuário no aparelho**: aparência em tamanho padrão e os
+  comportamentos de VoiceOver solicitados, na build 3.
+- O conjunto já tem relatos positivos para imagens, carinho e renovação, saída e retorno,
+  redução de movimento, uso sem rede, maior texto acessível e VoiceOver. O teste de texto
+  ampliado foi repetido e aprovado após a correção da build 3.
+- **Pendente para fechar T016**: SC-001 (entender a proposta e iniciar em até 15 segundos
+  sem orientação). O critério foi perguntado explicitamente ao usuário; não foi inferido
+  a partir da aprovação das outras verificações. US2 ainda não iniciada.
