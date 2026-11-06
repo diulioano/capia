@@ -1,7 +1,7 @@
 import CapiaFlow
 import SwiftUI
 
-/// Aba Início: cabeçalho, cartão do saldo, indicadores e capivara do quadro "Resumo do mês".
+/// Aba Início: cabeçalho, cartão do saldo, indicadores, capivara e seções do quadro "Resumo do mês".
 @MainActor
 struct MonthView: View {
     let summary: MonthSummary
@@ -25,6 +25,7 @@ struct MonthView: View {
                     .padding(.top, -4)
                     .padding(.bottom, -6)
                     .modifier(HomeEnter(appeared: appeared, delay: 0.15))
+                MonthSectionsView(categoryTab: home.categoryTab, appeared: appeared, send: send)
             }
             .padding(.horizontal, 18)
             .padding(.top, 12)

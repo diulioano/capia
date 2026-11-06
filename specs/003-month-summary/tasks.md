@@ -67,7 +67,7 @@ force-push. Sem aparelho, salvar como `wip(usN): ...` e manter a validação abe
 
 **Branch**: `feat/003-month-summary-us2-sections`.
 
-- [ ] T012 [US2] Criar `ios/Capia/Sources/Capia/Home/MonthSectionsView.swift` com "Previstos para este mês", "Para onde foi" (abas Gastos/Receitas ligadas a `HomeFlow`, barra vazia) e "Registros recentes", com os estados vazios do contrato; inserir em `MonthView.swift`.
+- [X] T012 [US2] Criar `ios/Capia/Sources/Capia/Home/MonthSectionsView.swift` com "Previstos para este mês", "Para onde foi" (abas Gastos/Receitas ligadas a `HomeFlow`, barra vazia) e "Registros recentes", com os estados vazios do contrato; inserir em `MonthView.swift`.
 - [ ] T013 [US2] Validar no iPhone a linha Seções de `quickstart.md`, com VoiceOver e texto ampliado; registrar e commitar só a US2.
 
 ## Phase 5: User Story 3 - Ocultar os valores (P2)

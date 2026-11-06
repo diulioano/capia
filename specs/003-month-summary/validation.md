@@ -39,7 +39,15 @@ US3, junto com o comportamento de ocultar; a contagem do saldo usa a curva do qu
 
 ## US2 — Seções do mês sem registros
 
-Pendente.
+Branch `feat/003-month-summary-us2-sections`. T012 implementada em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou |
+| T013: percurso Seções no iPhone, com VoiceOver e texto ampliado | Pendente: depende do aparelho e da conferência do usuário |
+
+Adaptação: os botões das abas de "Para onde foi" têm 38 pt em vez de 34, para que o
+controle chegue a 44 pt de alvo de toque.
 
 ## US3 — Ocultar os valores
 
