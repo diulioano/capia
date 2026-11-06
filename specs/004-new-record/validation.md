@@ -42,7 +42,7 @@ Branch `feat/004-new-record-us1-expense`. T011–T015 implementadas em 2026-11-0
 | `xtool dev run --usb` no "Gremio" (udid `00008120-0006390A0E38C01E`), revisão `4c93e85` | Passou em 2026-11-06 na 2ª tentativa: instalação e verificação concluídas. Telas ainda não conferidas |
 | Conferência do usuário no iPhone (revisão `82612b8`) | Parcial em 2026-11-06: "de resto tá certo", mas a sugestão de categoria não aparecia de forma consistente |
 | Correção da sugestão | A primeira versão exigia o início da palavra e não sugeria em "Supermercado", "hipermercado" ou "medicamento". Passou a procurar os trechos do quadro dentro de cada palavra (research §7). 133 testes passam. Reinstalação: o xtool esperou o aparelho até o limite de 300 s, sem instalar; com o iPhone desbloqueado, passou na tentativa seguinte (revisão `46f8064`) |
-| T016: linhas da US1 de `quickstart.md` no iPhone, com VoiceOver, texto ampliado e redução de movimento | Pendente: depende da instalação e do aceite do usuário |
+| T016: linhas da US1 de `quickstart.md` no iPhone, com VoiceOver, texto ampliado e redução de movimento | Passou: aceite do usuário em 2026-11-06 após uso no iPhone ("está funcional"), depois da correção da sugestão. VoiceOver, texto ampliado e redução de movimento não foram registrados separadamente |
 
 Adaptações e decisões da US1:
 
