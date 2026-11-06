@@ -97,7 +97,7 @@ em 2026-11-06, depois de aprovar US1–US4.
 - [X] T023 [US5] Derivar `SalaryStatus` e os totais do salário em `MonthSummary.swift` e criar `AppFlow.confirmSalary(in:now:)`, um por mês, gravado pela raiz; testar em `MonthSummaryTests.swift` e `AppFlowTests.swift`.
 - [X] T024 [US5] Criar `ios/Capia/Sources/Capia/Setup/SalaryStepView.swift`, textos em `SetupCopy.swift` e a linha do salário na conclusão (`SpaceSummaryList.swift`).
 - [X] T025 [US5] No Início: "Em contas hoje" em `BalanceCardView.swift`; linha do salário com "Recebi"/"Recebido", receita em "Para onde foi" e registro recente em `MonthSectionsView.swift`; resposta da capivara em `MonthView.swift`.
-- [ ] T026 [US5] Validar no iPhone os cenários da US5 da spec, inclusive reabertura e outra conta; registrar e commitar só a US5.
+- [X] T026 [US5] Validar no iPhone os cenários da US5 da spec, inclusive reabertura e outra conta; registrar e commitar só a US5.
 
 ## Phase 8: Validação integrada
 
