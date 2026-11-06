@@ -21,3 +21,15 @@ As instruções para os agentes estão em [AGENTS.md](AGENTS.md). A implementaç
 ## Estado do projeto
 
 O repositório contém o design, os recursos visuais e a documentação. A implementação do app ainda não começou. O próximo passo técnico é validar a compilação e a instalação de um app mínimo no iPhone pelo xtool, a partir do Windows.
+
+## Spec Kit
+
+O Spec Kit está inicializado para o Codex, com scripts PowerShell. A configuração, os templates e o workflow estão em `.specify/`; as skills estão em `.agents/skills/`.
+
+Em uma sessão do Codex que carregue as skills deste projeto, siga a sequência:
+
+1. `$speckit-constitution`: registrar os princípios a partir de `AGENTS.md` e das decisões existentes. A constituição instalada ainda é um template.
+2. `$speckit-specify`: especificar a entrega com base em `design/` e na documentação do produto.
+3. `$speckit-plan`: preparar o plano de implementação.
+4. `$speckit-tasks`: gerar as tarefas.
+5. `$speckit-implement`: executar as tarefas.
