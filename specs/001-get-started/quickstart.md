@@ -1,8 +1,8 @@
 # Validar o Get Started do Capia
 
-US1 e US2 aceitas no iPhone, com os relatos registrados. A build 5 acrescenta o ícone
-do Capia; compilação, recursos e testes passaram. Essa build foi instalada e seus
-metadados confirmados. Conferência visual do ícone, reabertura e validação integrada ainda pendentes.
+As três histórias e a conferência integrada foram aprovadas pelo usuário no iPhone
+na build 5, em 2026-11-06. Compilação, recursos, metadados e seis testes de navegação
+passaram. Este guia permite repetir os percursos da funcionalidade.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente
@@ -102,7 +102,7 @@ real produzido com `xtool install` apenas quando optar pela instalação separad
 Nunca registre conta Apple, senha, token, certificado ou perfil de assinatura no Git.
 
 Resultado final esperado após US3: Capia aparece na tela inicial, com o ícone da capivara.
-Na build 5, o ícone está empacotado e aguarda essa conferência no aparelho. Abra o app
+Na build 5, o ícone foi instalado e aprovado pelo usuário no aparelho. Abra o app
 pelo ícone e confirme as boas-vindas. Registre modelo do aparelho, versão do iOS,
 identificador do bundle e versão do build. O alvo mínimo planejado é iOS 17.
 
@@ -148,13 +148,15 @@ uma captura do HTML não substitui a validação da tela SwiftUI.
 
 ## Registrar a evidência real
 
-Na implementação, criar `specs/001-get-started/validation.md` com data, revisão testada,
+O registro `specs/001-get-started/validation.md` contém data, revisão testada,
 versões efetivas, comandos, resultados dos percursos e capturas nativas quando disponíveis.
 Cada verificação deve constar como passou, falhou ou pendente, com motivo. Identificar
 adaptações visuais, sem marcar como concluído o que não foi observado no aparelho.
 
-## Estado no fim do planejamento
+## Validação concluída
 
-Ferramentas e SDK conferidos em 2026-11-06; relato do app padrão preservado. Testes,
-compilação do Capia, assinatura deste bundle, instalação e percursos acima ainda não
-executados. Nenhum hook de planejamento está configurado em `.specify/extensions.yml`.
+Concluída em 2026-11-06 no iPhone15,2 / iOS 26.7.2, build 5. As verificações de
+compilação/recursos e os testes são automatizados; os resultados dos percursos nativos
+e de acessibilidade são relatos do usuário. Capturas e vídeo disponíveis dos defeitos
+intermediários estão registrados, assim como as correções e seus retestes. Não há
+captura automatizada da versão final: o serviço screenshotr não estava disponível.

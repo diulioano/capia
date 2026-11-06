@@ -80,4 +80,4 @@ O necessário para delimitar o protótipo foi discutido. A continuação está d
 
 Pontos a resolver antes da versão funcional: fórmula e horizonte do planejador, manutenção e retirada de valores reservados, tratamento de faturas anteriores ao início do acompanhamento, transferências entre contas, estornos, reconciliação de recorrências com importações, datas e limites dos ciclos de fatura, formato da exportação, serviço de IA e seus custos/retenção, comportamento sem iCloud e caminho de compilação/distribuição iOS. Esses pontos não precisam ser simulados como integrações reais no protótipo.
 
-Nenhuma implementação iniciada. As intenções acima não constituem escopo fechado.
+O Get Started foi implementado e validado no iPhone em 2026-11-06, conforme `prototipo.md` e `../specs/001-get-started/validation.md`. As demais intenções acima não constituem escopo fechado nem funcionalidades já implementadas.

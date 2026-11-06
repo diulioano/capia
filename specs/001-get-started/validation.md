@@ -401,3 +401,57 @@ Verificações:
   e nova execução em welcome. SC-006 aprovado; T030 concluída.
 - US3 aceita no iPhone15,2 / iOS 26.7.2. Integração na branch base será por fast-forward,
   sem mudanças adicionais de implementação e sem merge em master.
+
+## Verificações da revisão integrada — 2026-11-06
+
+- Branch base `feat/001-get-started` avançada por fast-forward até `d8d85e2`, preservando
+  as branches e commits de cada US. Nenhum merge em master nem publicação realizado.
+- T031 executada na revisão integrada:
+  - `python scripts/prepare-design-assets.py --check`: passou.
+  - `swift test --package-path ios/CapiaFlow`: seis testes passaram, zero falhas.
+  - `xtool dev build` em `ios/Capia`: passou; artefato `ios/Capia/xtool/Capia.app`.
+- Inspeção real do `.app`: nome Capia, CFBundleVersion 5, CFBundleIconFile AppIcon,
+  ícone RGB opaco 1024 × 1024 no bundle principal, imagens/fontes/licenças presentes
+  uma única vez e iguais byte a byte às origens versionadas.
+- `git diff --quiet 9158daf -- ios assets scripts` passou: implementação e recursos
+  integrados são idênticos aos da revisão instalada na build 5. Não foi necessária
+  nova instalação para a conferência integrada.
+- T032 solicitada ao usuário na build 5: carinho/renovação/saída, três etapas e retornos,
+  Pular/origens, configuração e reabertura, sem rede e com os ajustes de acessibilidade
+  já usados nos testes anteriores. Resultado integrado ainda pendente.
+
+## Aceite integrado e conclusão — 2026-11-06
+
+- O usuário respondeu "Sim, conferi o conjunto e está tudo certo" à repetição na build 5
+  de carinho/renovação/saída, três etapas, Voltar/Pular, origem da configuração e reabertura,
+  sem rede e com texto máximo, VoiceOver e Reduzir Movimento.
+- **T032 passou por relato do usuário no aparelho**. A revisão integrada `d8d85e2` tem
+  implementação e recursos idênticos à revisão instalada `9158daf`; os commits de
+  integração/documentação posteriores não alteram essa implementação.
+- Aparelho: iPhone15,2, iOS 26.7.2; app 0.1.0, build 5. Nome Capia e ícone próprio
+  confirmados no aparelho. Assinatura usa o identificador instalado com prefixo xtool.
+
+| Critério | Resultado e evidência |
+|----------|-----------------------|
+| SC-001 | Passou: usuário confirmou entender a proposta e iniciar em até 15 segundos, sem orientação. |
+| SC-002 | Passou: usuário confirmou apresentação em até um minuto; percurso integrado repetido. |
+| SC-003 | Passou: avanço, retornos, Pular de cada origem, configuração, toques rápidos e uso sem rede aprovados. |
+| SC-004 | Passou: percurso com VoiceOver e Reduzir Movimento aprovado nas novas telas e no conjunto. |
+| SC-005 | Passou por aceite visual do usuário: painéis, aparência padrão e adaptações para texto máximo aprovados após os retestes. |
+| SC-006 | Passou: nome, rosto/toalha no ícone e reabertura nas boas-vindas aprovados. |
+
+Os tempos de SC-001/SC-002 são informados pelo usuário, sem medição instrumental.
+A evidência visual final é o relato de aceite: as capturas/vídeo guardados mostram
+estados intermediários e falhas corrigidas. A captura automatizada no iPhone não estava
+disponível; isso não foi registrado como uma captura realizada. A alternativa das poses
+da folha de expressões e a reorganização para acessibilidade estão documentadas no contrato.
+
+- T033: README, descoberta, protótipo e quickstart atualizados com estado final, caminhos
+  e comandos reais. Contrato conferido: fluxo local, exemplos identificados, fontes e
+  imagens locais, sem persistência, autenticação ou captura real.
+- Todos os requisitos FR-001 a FR-015 cobertos pelas três histórias e verificações
+  registradas; 33 tarefas concluídas. O destino da configuração continua provisório por escopo.
+- `.specify/extensions.yml` ausente na conferência final: nenhum hook de pós-implementação
+  registrado para executar.
+- Resultado salvo no commit final que contém este registro, na branch base
+  `feat/001-get-started`. Branches das três US preservadas; nenhum push, PR ou merge em master.

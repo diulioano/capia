@@ -1,4 +1,4 @@
-<img src="assets/icon.svg" width="64" height="64" alt="">
+<img src="ios/Capia/Resources/AppIcon.png" width="64" height="64" alt="Ícone do Capia">
 
 # Capia
 
@@ -14,15 +14,18 @@ As instruções para os agentes estão em [AGENTS.md](AGENTS.md). A implementaç
 
 - `design/`: protótipo de referência exportado do Claude.
 - `assets/`: imagens, ícone e prompts usados na exploração visual.
+- `ios/Capia/`: app SwiftUI e configuração do xtool.
+- `ios/CapiaFlow/`: navegação pura e testes XCTest.
+- `scripts/`: preparação e conferência reproduzível dos recursos.
 - [CONTEXT.md](CONTEXT.md): vocabulário financeiro do app.
 - [docs/descoberta.md](docs/descoberta.md): decisões e questões de produto.
 - [docs/prototipo.md](docs/prototipo.md): escopo e caminho técnico da primeira entrega.
 
 ## Estado do projeto
 
-O projeto xtool está em `ios/Capia`, com navegação pura e testes em `ios/CapiaFlow`. As boas-vindas (US1), as três introduções e a entrada provisória da configuração (US2) foram aceitas no iPhone. O ícone está preparado e empacotado na build 5; falta validar sua identificação instalada e a integração final.
+O Get Started está concluído e validado no iPhone na build 5: boas-vindas com carinho na capivara, três introduções, entrada provisória da configuração e ícone próprio. O app funciona sem rede e mantém o estado somente durante a sessão. Cadastro, contas e demais fluxos financeiros continuam fora desta funcionalidade.
 
-Consulte os [comandos de preparação, teste e instalação](specs/001-get-started/quickstart.md) e os [resultados e pendências](specs/001-get-started/validation.md). O relato anterior de execução do app padrão permanece válido; o Capia ainda precisa da própria validação no aparelho.
+Consulte os [comandos de preparação, teste e instalação](specs/001-get-started/quickstart.md) e o [registro de validação](specs/001-get-started/validation.md). Compilação e seis testes automatizados passaram; os percursos nativos foram aprovados pelo usuário, incluindo texto ampliado, VoiceOver, redução de movimento, uso sem rede, ícone e reabertura.
 
 ## Spec Kit
 
