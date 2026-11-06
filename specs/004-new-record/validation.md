@@ -63,11 +63,15 @@ Branch `feat/004-new-record-us2-income`. T017–T018 implementadas em 2026-11-06
 |-------------|-----------|
 | `xtool dev build` | Passou, sem avisos |
 | `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
-| T019: linhas Receita e Receita sem descrição de `quickstart.md`, com VoiceOver | Pendente: aceite do usuário |
+| T019: linhas Receita e Receita sem descrição de `quickstart.md`, com VoiceOver | Passou: aceite do usuário em 2026-11-06 após uso no iPhone ("está funcional também"). VoiceOver não foi registrado separadamente |
 
 "Para onde foi" › Receitas passou a listar todas as receitas do mês pelo nome, com o salário
 recebido como "Salário", nas cores do quadro em sequência. A receita no formulário já seguia a
 base: "Entrou em" só com contas, sem categorias, e o aviso com "+ R$".
+
+Durante a US2, o usuário perguntou por que usar o teclado do quadro em vez do teclado do
+iPhone. Foi mantido o do quadro (identidade da tela, tecla "00", sem depender de foco); o
+campo de valor do formulário continua com o teclado numérico do sistema.
 
 ## US3 — Gastar no cartão, à vista ou parcelado
 
