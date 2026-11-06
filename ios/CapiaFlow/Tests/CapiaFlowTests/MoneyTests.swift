@@ -52,4 +52,18 @@ final class MoneyTests: XCTestCase {
         XCTAssertThrowsError(try JSONDecoder().decode([Cents].self, from: Data("[-1]".utf8)))
         XCTAssertThrowsError(try JSONDecoder().decode([Cents].self, from: Data("[100000000000]".utf8)))
     }
+
+    func testSignedFormatUsesMinusSignAndNeverSignsZero() {
+        XCTAssertEqual(BRL.format(signed: 0), "R$ 0,00")
+        XCTAssertEqual(BRL.format(signed: 2_350), "R$ 23,50")
+        XCTAssertEqual(BRL.format(signed: -2_350), "\u{2212} R$ 23,50")
+        XCTAssertEqual(BRL.format(signed: -123_456_78), "\u{2212} R$ 123.456,78")
+        XCTAssertEqual(BRL.format(signed: .min), "\u{2212} R$ 999.999.999,99")
+        XCTAssertEqual(BRL.format(signed: .max), "R$ 999.999.999,99")
+    }
+
+    func testHiddenValueRevealsNoDigits() {
+        XCTAssertEqual(BRL.hidden, "R$ ••••")
+        XCTAssertFalse(BRL.hidden.contains { $0.isNumber })
+    }
 }

@@ -58,6 +58,16 @@ public enum BRL {
         return "R$ \(grouped(reais)),\(rest < 10 ? "0" : "")\(rest)"
     }
 
+    /// Valor com sinal, como nos registros do design: `− R$ 23,50`. Zero não leva sinal.
+    /// O sinal é U+2212 seguido de espaço. O módulo é limitado a `Cents.max`.
+    public static func format(signed cents: Int64) -> String {
+        let magnitude = cents == .min ? Cents.max : Cents(Swift.abs(cents))
+        return cents < 0 ? "\u{2212} " + format(magnitude) : format(magnitude)
+    }
+
+    /// Forma exibida no lugar de qualquer valor quando a pessoa oculta os valores.
+    public static let hidden = "R$ ••••"
+
     /// Rótulo dos atalhos do saldo, sem `,00`: `+ R$ 1.000`.
     public static func shortcutLabel(reais: Int64) -> String {
         "+ R$ \(grouped(reais))"

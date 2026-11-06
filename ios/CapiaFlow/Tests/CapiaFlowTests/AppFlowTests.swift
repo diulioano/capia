@@ -85,36 +85,85 @@ final class AppFlowTests: XCTestCase {
         XCTAssertEqual(space?.accounts.map(\.name), ["Banco Aurora", "Carteira"])
     }
 
-    func testMonthAndBackToSummary() {
+    func testViewMonthOpensHomeOnMonthTab() {
         var app = appAtCardQuestion()
         app.editDraft { $0.hasCard = false }
-        _ = next(&app)
+        let saved = next(&app)
         XCTAssertNil(app.send(.init(.viewMonth, from: .done), now: now))
-        XCTAssertEqual(app.screen, .month)
+        XCTAssertEqual(app.screen, .home(.month))
+        XCTAssertEqual(app.space, saved)
         app.editDraft { $0.accountName = "Ignored" }
         XCTAssertEqual(app.setup?.draft.accountName, "Banco Aurora")
-        app.returnFromMonth()
-        XCTAssertEqual(app.screen, .setup(.done))
-        XCTAssertTrue(app.setup?.canGoBack ?? false)
+        XCTAssertNil(app.send(.init(.back, from: .done), now: now), "Sem conclusão visível, nada muda")
+        XCTAssertEqual(app.screen, .home(.month))
     }
 
-    func testSavedSpaceOpensMonthAndRestoresSummary() {
-        let saved = ConfiguredSpace(
-            profile: Profile(name: "Diuli", goals: [.saveForGoal]),
-            accounts: [Account(kind: .checking, name: "Banco Aurora", initialBalance: Cents(99))],
-            cards: [], completedAt: now)
-        var app = AppFlow(saved: saved)
-        XCTAssertEqual(app.screen, .month)
+    func testSavedSpaceOpensHomeAndIgnoresGetStarted() {
+        var app = AppFlow(saved: savedSpace)
+        XCTAssertEqual(app.screen, .home(.month))
+        XCTAssertEqual(app.space, savedSpace)
         app.send(.init(.start, from: .welcome))
-        XCTAssertEqual(app.screen, .month)
-        app.returnFromMonth()
-        XCTAssertEqual(app.screen, .setup(.done))
-        XCTAssertFalse(app.setup?.canGoBack ?? true)
-        XCTAssertEqual(app.currentSpace(now: now), saved)
+        XCTAssertEqual(app.screen, .home(.month))
+    }
 
-        app.send(.init(.addAnotherAccount, from: .done), now: now)
+    func testHomeActionsChangeTabsOnlyInsideHome() {
+        var app = AppFlow(saved: nil)
+        app.send(.select(.goals))
+        XCTAssertEqual(app.screen, .getStarted(.welcome))
+        XCTAssertEqual(app.home, HomeFlow())
+
+        app = AppFlow(saved: savedSpace)
+        app.send(.select(.goals))
+        XCTAssertEqual(app.screen, .home(.goals))
+        app.send(.openBill)
+        XCTAssertEqual(app.screen, .home(.accounts))
+        app.send(.select(.month))
+        XCTAssertEqual(app.screen, .home(.month))
+    }
+
+    func testAnotherAccountFromAccountsTabSavesAndReturnsHome() {
+        var app = AppFlow(saved: savedSpace)
+        app.addAnotherAccountFromHome()
+        XCTAssertEqual(app.screen, .home(.month), "Só a partir da aba Contas")
+
+        app.send(.toggleValuesHidden)
+        app.send(.select(.accounts))
+        app.addAnotherAccountFromHome()
         XCTAssertEqual(app.screen, .setup(.account))
+        app.editDraft { $0.accountKind = .savings; $0.accountName = "Banco Seiva" }
+        XCTAssertNil(next(&app))
+        XCTAssertNil(next(&app))
+        app.editDraft { $0.hasCard = false }
+        let space = next(&app)
+        XCTAssertEqual(app.screen, .setup(.done))
+        XCTAssertEqual(space?.accounts.map(\.name), ["Banco Aurora", "Banco Seiva"])
+        XCTAssertEqual(space?.profile, savedSpace.profile)
+
+        app.send(.init(.viewMonth, from: .done), now: now)
+        XCTAssertEqual(app.screen, .home(.month))
+        XCTAssertEqual(app.space?.accounts.map(\.name), ["Banco Aurora", "Banco Seiva"])
+        XCTAssertEqual(app.space?.completedAt, savedSpace.completedAt)
+        XCTAssertTrue(app.home.valuesHidden, "Ocultar valores vale para a sessão")
+    }
+
+    func testCancellingAnotherAccountKeepsItems() {
+        var app = AppFlow(saved: savedSpace)
+        app.send(.select(.accounts))
+        app.addAnotherAccountFromHome()
         app.send(.init(.back, from: .account), now: now)
         XCTAssertEqual(app.screen, .setup(.done))
+        XCTAssertFalse(app.setup?.canGoBack ?? true)
+        XCTAssertEqual(app.currentSpace(now: now), savedSpace)
+        app.send(.init(.viewMonth, from: .done), now: now)
+        XCTAssertEqual(app.screen, .home(.month))
+        XCTAssertEqual(app.space, savedSpace)
+    }
+
+    private var savedSpace: ConfiguredSpace {
+        ConfiguredSpace(
+            profile: Profile(name: "Diuli", goals: [.saveForGoal]),
+            accounts: [Account(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
+                               kind: .checking, name: "Banco Aurora", initialBalance: Cents(99))],
+            cards: [], completedAt: now)
     }
 }

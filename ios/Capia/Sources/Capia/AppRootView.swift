@@ -2,7 +2,7 @@ import CapiaFlow
 import Foundation
 import SwiftUI
 
-/// Raiz do app: abre nas boas-vindas ou, com espaço guardado, no mês provisório.
+/// Raiz do app: abre nas boas-vindas ou, com espaço guardado, no Início.
 /// Grava o espaço no aparelho ao chegar à conclusão da configuração.
 @MainActor
 struct AppRootView: View {
@@ -11,7 +11,9 @@ struct AppRootView: View {
 
     @State private var app = AppFlow(saved: AppRootView.store.load())
     @State private var saveFailed = false
+    @State private var now = Date()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         Group {
@@ -26,15 +28,27 @@ struct AppRootView: View {
                               retrySave: { save(app.currentSpace()) })
                     .transition(.opacity)
                 }
-            case .month:
-                MonthPlaceholderView { app.returnFromMonth() }
+            case .home:
+                if let space = app.space {
+                    HomeView(home: app.home,
+                             summary: MonthSummary(space: space,
+                                                   calendar: MonthCalendar(date: now, timeZone: .current)),
+                             space: space,
+                             send: { app.send($0) },
+                             addAnotherAccount: { app.addAnotherAccountFromHome() })
                     .transition(.opacity)
+                }
             }
         }
         .background(CapiaTheme.cream)
         .foregroundStyle(CapiaTheme.ink)
         .font(CapiaFonts.body())
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: app.screen)
+        // Saudação e mês acompanham o relógio ao entrar no Início e ao voltar ao app.
+        .onChange(of: app.screen) { now = Date() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { now = Date() }
+        }
     }
 
     private func send(_ action: SetupAction) {

@@ -100,69 +100,7 @@ struct SetupDoneView: View {
     // MARK: Resumo
 
     private var summary: some View {
-        VStack(spacing: 0) {
-            ForEach(Array(flow.accounts.enumerated()), id: \.element.id) { index, account in
-                row(title: account.name, detail: SetupCopy.kindDescription(account.kind)) {
-                    Text(BRL.format(account.initialBalance))
-                        .font(CapiaFonts.body(16, weight: .bold))
-                        .monospacedDigit()
-                }
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel("Conta \(account.name), \(SetupCopy.kindDescription(account.kind)), saldo inicial \(BRL.format(account.initialBalance))")
-                divider(after: index, total: flow.accounts.count + max(flow.cards.count, 1))
-            }
-            if flow.cards.isEmpty {
-                Text("Sem cartão por enquanto.")
-                    .font(CapiaFonts.body(14, relativeTo: .subheadline))
-                    .foregroundStyle(CapiaTheme.muted)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 14)
-            } else {
-                ForEach(Array(flow.cards.enumerated()), id: \.element.id) { index, card in
-                    row(title: "Cartão \(card.name)",
-                        detail: "Fecha dia \(card.closingDay) · vence dia \(card.dueDay)") {
-                        Text("Separado")
-                            .font(CapiaFonts.body(13, relativeTo: .caption, weight: .bold))
-                            .foregroundStyle(CapiaTheme.notice)
-                            .padding(.vertical, 6)
-                            .padding(.horizontal, 10)
-                            .background(CapiaTheme.selection, in: RoundedRectangle(cornerRadius: 10))
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Cartão de crédito \(card.name), fecha dia \(card.closingDay), vence dia \(card.dueDay), separado da conta")
-                    divider(after: flow.accounts.count + index, total: flow.accounts.count + flow.cards.count)
-                }
-            }
-        }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 18)
-        .background(CapiaTheme.paper, in: RoundedRectangle(cornerRadius: 22))
-        .shadow(color: Color(red: 80/255, green: 60/255, blue: 40/255).opacity(0.08), radius: 12, y: 8)
-    }
-
-    private func row<Trailing: View>(title: String, detail: String,
-                                     @ViewBuilder trailing: () -> Trailing) -> some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(CapiaFonts.body(16, weight: .bold))
-                Text(detail)
-                    .font(CapiaFonts.body(14, relativeTo: .subheadline))
-                    .foregroundStyle(CapiaTheme.muted)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 8)
-            trailing()
-        }
-        .foregroundStyle(CapiaTheme.ink)
-        .padding(.vertical, 14)
-    }
-
-    @ViewBuilder
-    private func divider(after index: Int, total: Int) -> some View {
-        if index < total - 1 {
-            Rectangle().fill(Color(hex: 0xF4EBDC)).frame(height: 1)
-        }
+        SpaceSummaryList(accounts: flow.accounts, cards: flow.cards)
     }
 
     private var saveWarning: some View {

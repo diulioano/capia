@@ -1,28 +1,33 @@
 import Foundation
 
-/// Destino único da raiz do app: Get Started, configuração ou mês provisório.
+/// Destino único da raiz do app: Get Started, configuração ou Início.
 public struct AppFlow: Sendable {
     public enum Screen: Equatable, Sendable {
         case getStarted(GetStartedScreen)
         case setup(SetupStep)
-        case month
+        case home(HomeTab)
     }
 
     public private(set) var getStarted: GetStartedFlow
     /// Presente enquanto a configuração está aberta ou após concluída na sessão.
     public private(set) var setup: SetupFlow?
-    private var showingMonth: Bool
+    /// Estado do Início na sessão: aba atual, aba de categorias e valores ocultos.
+    public private(set) var home = HomeFlow()
+    /// Espaço exibido no Início: o guardado ou o da última conclusão da sessão.
+    public private(set) var space: ConfiguredSpace?
+    private var showingHome: Bool
 
-    /// Com espaço guardado, abre no mês; caso contrário, nas boas-vindas.
+    /// Com espaço guardado, abre no Início; caso contrário, nas boas-vindas.
     public init(saved: ConfiguredSpace?) {
         // Um espaço guardado nunca volta à apresentação; o Get Started fica na configuração.
         getStarted = saved == nil ? GetStartedFlow() : .atSetup()
         setup = saved.map(SetupFlow.init(restoring:))
-        showingMonth = saved != nil
+        space = saved
+        showingHome = saved != nil
     }
 
     public var screen: Screen {
-        if showingMonth { return .month }
+        if showingHome { return .home(home.tab) }
         if case .setup = getStarted.screen, let setup { return .setup(setup.step) }
         return .getStarted(getStarted.screen)
     }
@@ -55,17 +60,28 @@ public struct AppFlow: Sendable {
             getStarted.send(.init(.returnFromSetup, from: getStarted.screen))
             setup = nil
         case .month?:
-            showingMonth = true
+            if let current = flow.space(completedAt: space?.completedAt ?? now) { space = current }
+            home.showMonth()
+            showingHome = true
         case nil:
             if before != .done, flow.step == .done { return flow.space(completedAt: now) }
         }
         return nil
     }
 
-    /// "Voltar ao resumo": do mês para a conclusão do espaço atual.
-    public mutating func returnFromMonth() {
-        guard showingMonth, setup?.step == .done else { return }
-        showingMonth = false
+    /// Aplica uma ação do Início. Fora do Início, não faz nada.
+    public mutating func send(_ action: HomeAction) {
+        guard showingHome else { return }
+        home.send(action)
+    }
+
+    /// "Adicionar outra conta" na aba Contas: abre o cadastro de conta da configuração.
+    /// Ao concluir, a conclusão grava o espaço e "Ver meu mês" volta ao Início.
+    public mutating func addAnotherAccountFromHome() {
+        guard showingHome, home.tab == .accounts, var flow = setup, flow.step == .done else { return }
+        flow.send(.init(.addAnotherAccount, from: .done))
+        setup = flow
+        showingHome = false
     }
 
     /// Espaço atual, para tentar gravar de novo após uma falha.
