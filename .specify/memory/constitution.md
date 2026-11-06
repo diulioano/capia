@@ -1,50 +1,131 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Constituição do app de finanças pessoais
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. App nativo com cadeia de compilação comprovada
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+O app para iPhone DEVE ser desenvolvido em Swift com SwiftUI. O HTML de referência
+orienta a interface e não define a tecnologia de implementação.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+Antes de construir as telas, a equipe DEVE comprovar a compilação, a instalação e a
+abertura de um app mínimo no iPhone pelo xtool a partir do ambiente Windows atual.
+Essa validação DEVE registrar os comandos, os requisitos do ambiente e o resultado
+observado. Uma tentativa de compilação ou a geração de um pacote, isoladamente,
+não comprova instalação e execução.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Se houver necessidade de backend próprio, ele DEVE usar Java com Spring Boot.
+A existência dessa escolha não exige criar um servidor para o protótipo.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. Design de referência e acessibilidade nativa
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Todo desenvolvimento de interface DEVE partir de `design/`. A referência atual é
+`design/App de finanças onsen — protótipo iPhone.html`, exportada do Claude.
+Antes de implementar ou alterar uma tela, a equipe DEVE identificar o fluxo
+correspondente e consultar sua composição, cores, tipografia, espaçamentos,
+componentes, mascote e interações.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+A implementação DEVE preservar essa direção visual ao adaptá-la aos componentes
+nativos do iOS e à acessibilidade. As animações DEVEM respeitar a preferência de
+redução de movimento e não podem bloquear registro ou revisão. A capivara orienta
+e comemora sem repreender a pessoa nem exigir cuidados.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Ao concluir uma tela, a equipe DEVE compará-la à referência. Estados ausentes do
+HTML DEVEM seguir o mesmo sistema visual e as regras de produto. Complementos e
+adaptações DEVEM ser registrados no plano ou na documentação da funcionalidade.
+Os recursos correspondentes em `assets/` DEVEM ser reutilizados. O HTML original
+e seus avisos de licença DEVEM ser preservados.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. Significados financeiros preservados
+
+`CONTEXT.md` define o vocabulário obrigatório do domínio. Modelos, dados de exemplo,
+cálculos e textos da interface DEVEM manter suas distinções:
+
+- Conta e cartão de crédito são entidades distintas, mesmo quando pertencem ao mesmo banco.
+- O resumo mensal considera as parcelas nas respectivas faturas. O detalhe da compra
+  preserva o valor total.
+- Pagar uma fatura reduz o saldo da conta e quita a fatura sem gerar um segundo gasto.
+- Uma recorrência prevista só altera o saldo após confirmar recebimento ou pagamento.
+- Saldo em conta, sobra do período e valor reservado para meta têm significados distintos.
+  Uma reserva não é gasto nem transferência bancária executada pelo app.
+- A sugestão para metas considera compromissos e prioridades, sem atribuir a mesma
+  sobra integralmente a várias metas.
+- Voz e imagem produzem rascunhos para revisão. Nada é salvo como registro confirmado
+  sem confirmação explícita. Possíveis duplicatas são sinalizadas para decisão da pessoa.
+
+Questões financeiras ainda abertas em `docs/descoberta.md` DEVEM permanecer explícitas.
+Uma simulação no protótipo não pode ser apresentada como regra definitiva do produto.
+
+### IV. Protótipo navegável antes de integrações reais
+
+A primeira entrega DEVE ser um protótipo nativo navegável, com dados de exemplo e
+sem backend. As ações DEVEM atualizar o estado da sessão para permitir avaliar os
+fluxos documentados em `docs/prototipo.md`.
+
+Reconhecimento por voz e imagem e sugestões de planejamento DEVEM ser identificados
+como simulações. Integração bancária, reconhecimento real por IA e recuperação real
+por iCloud ficam fora desta entrega. O protótipo não pode alegar usar dados bancários
+reais nem enviar voz ou imagens a um serviço de IA.
+
+O esqueleto DEVE conter apenas a estrutura necessária aos fluxos previstos. Serviços,
+camadas e dependências de produção exigem uma necessidade concreta da etapa em curso.
+
+### V. Estrutura primeiro, tarefas separadas e entregas verificáveis
+
+O trabalho DEVE separar tarefas de estrutura e comportamento das tarefas de interface
+e fidelidade visual, com dependências explícitas entre elas. Essa separação organiza
+a execução e não permite declarar um fluxo concluído antes de verificar ambos.
+
+Depois de validar o app mínimo, a equipe DEVE preparar o esqueleto necessário à
+navegação, aos modelos do domínio, ao estado da sessão e aos dados de exemplo.
+O esqueleto DEVE permitir abrir o app e percorrer as entradas dos fluxos planejados.
+Telas provisórias servem à validação dessa estrutura e não contam como telas finalizadas.
+
+Cada tarefa DEVE indicar um resultado observável, suas dependências e uma forma de
+verificação. Telas e fluxos DEVEM ser implementados em unidades que possam ser
+avaliadas no app. Mudanças em cálculos e transições financeiras DEVEM ter testes
+automatizados de comportamento. A validação visual e de interação DEVE ocorrer no
+app nativo, incluindo redução de movimento nos fluxos animados.
+
+## Restrições de produto
+
+Antes de desenvolver funcionalidades, a equipe DEVE ler `CONTEXT.md`,
+`docs/descoberta.md` e `docs/prototipo.md`, além das instruções de `AGENTS.md`.
+Esses documentos registram o vocabulário, as decisões e o escopo que orientam
+especificações e planos. Intenções ainda abertas não são requisitos confirmados.
+
+O nome do produto permanece em aberto. Nomes presentes no repositório ou no HTML
+são provisórios e não autorizam consolidar uma marca definitiva.
+
+## Fluxo de desenvolvimento
+
+Especificações, planos e tarefas DEVEM seguir esta sequência de dependências:
+
+1. Delimitar a entrega e seus critérios de aceitação a partir da documentação e do design.
+2. Comprovar compilação, instalação e abertura do app mínimo pelo xtool no iPhone.
+3. Construir e verificar o esqueleto com navegação e dados de exemplo.
+4. Implementar cada fluxo com tarefas separadas para comportamento e interface.
+   As tarefas de interface DEVEM apontar a tela ou interação de referência em `design/`.
+5. Verificar o fluxo completo, as regras financeiras afetadas, a fidelidade visual e
+   a acessibilidade antes de marcá-lo como concluído.
+
+O plano DEVE registrar a conformidade com estes princípios e justificar eventuais
+exceções. As tarefas DEVEM refletir os limites do protótipo. Uma validação bloqueada
+DEVE ser registrada como pendente, com seu motivo, sem ser marcada como concluída.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Esta constituição registra os princípios do projeto e orienta o trabalho do Spec Kit.
+Uma instrução posterior do usuário prevalece sobre estas regras. Quando uma decisão
+mudar, a equipe DEVE atualizar a constituição e a documentação afetada antes de tratar
+a nova orientação como regra permanente.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Cada alteração DEVE registrar sua motivação, o impacto sobre o trabalho existente e
+a nova versão. A versão segue o formato MAJOR.MINOR.PATCH: MAJOR para remoção ou
+redefinição incompatível de princípios, MINOR para novas regras ou ampliação material
+e PATCH para esclarecimentos sem mudança de obrigação.
+
+Na revisão de especificações, planos, tarefas e implementação, a equipe DEVE conferir
+conformidade com a constituição. Exceções DEVEM identificar a regra afetada, a razão
+e o alcance. Não é permitido omitir uma verificação exigida e declarar a entrega concluída.
+
+**Version**: 1.0.0 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06
