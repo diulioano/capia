@@ -9,6 +9,9 @@ struct CapiaApp: App {
     var body: some Scene {
         WindowGroup {
             AppRootView()
+                // O design só tem a aparência clara. Sem isto, no Modo Escuro os controles do
+                // sistema (calendário, teclado, campos) desenham texto claro sobre o creme.
+                .preferredColorScheme(.light)
         }
     }
 }

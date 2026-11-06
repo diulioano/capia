@@ -353,6 +353,7 @@ private struct OtherDateSheet: View {
                 }
         }
         .presentationDetents([.large])
+        .preferredColorScheme(.light)
     }
 }
 

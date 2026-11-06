@@ -81,6 +81,8 @@ Branch `feat/004-new-record-us3-card`. T020–T021 implementadas em 2026-11-06.
 |-------------|-----------|
 | `xtool dev build` | Passou, sem avisos |
 | `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
+| Conferência do usuário no iPhone (revisão `715cc74`) | Falhou em 2026-11-06: no calendário de "Outra data" não dava para enxergar nada. Causa: o app não declarava a aparência, e no Modo Escuro os controles do sistema desenhavam texto claro sobre o fundo creme |
+| Correção | O app passou a usar sempre a aparência clara (`preferredColorScheme(.light)` na raiz e na folha do calendário), já que o design só tem essa versão. Reinstalado no "Gremio" |
 | T022: linhas Cartão à vista, Parcelado, Resto, Troca de fonte e Sem cartão de `quickstart.md` | Pendente: aceite do usuário |
 
 T021 não exigiu código novo: o indicador Fatura já lia `totals.bill` desde a base, e o
