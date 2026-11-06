@@ -129,11 +129,9 @@ struct NewRecordView: View {
         case (.type, .details):
             RecordFormView(flow: flow, send: forward, save: save)
                 .transition(enter)
-        default:
-            Text(RecordCopy.modePlaceholder(flow.mode))
-                .font(CapiaFonts.body(16))
-                .padding(22)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        case (.speak, _), (.photo, _):
+            RecordModePlaceholderView(mode: flow.mode, send: forward)
+                .transition(enter)
         }
     }
 

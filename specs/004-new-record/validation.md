@@ -118,7 +118,17 @@ Decisões que complementam o quadro:
 
 ## US5 — Saber que Falar e Foto ainda vêm
 
-Pendente.
+Branch `feat/004-new-record-us5-modes`. T026 implementada em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou, sem avisos |
+| Permissões | O app não declara uso de microfone, câmera nem fotos e não chama essas APIs |
+| `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
+| T027: linha Falar e Foto de `quickstart.md` | Pendente: aceite do usuário |
+
+"Digitar" volta à fase em que a pessoa estava, com tudo o que já tinha preenchido: o teclado,
+ou o formulário se ela já tinha acionado Continuar.
 
 ## Validação integrada
 

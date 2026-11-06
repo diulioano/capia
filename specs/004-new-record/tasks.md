@@ -122,7 +122,7 @@ arquivos de tela (`RecordFormView.swift`, `NewRecordView.swift`).
 
 **Branch**: `feat/004-new-record-us5-modes`.
 
-- [ ] T026 [US5] Criar `ios/Capia/Sources/Capia/Record/RecordModePlaceholderView.swift` (capivara calma 150, texto de Falar ou Foto, botão "Digitar") e ligá-la às abas em `NewRecordView.swift`, voltando ao teclado com tipo e valor.
+- [X] T026 [US5] Criar `ios/Capia/Sources/Capia/Record/RecordModePlaceholderView.swift` (capivara calma 150, texto de Falar ou Foto, botão "Digitar") e ligá-la às abas em `NewRecordView.swift`, voltando ao teclado com tipo e valor.
 - [ ] T027 [US5] Validar no iPhone a linha Falar e Foto de `quickstart.md`, confirmando que nenhuma permissão é pedida; registrar e commitar só a US5.
 
 ## Phase 8: Validação integrada
