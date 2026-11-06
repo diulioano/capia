@@ -391,3 +391,13 @@ Verificações:
 - **T030 pendente**: conferência visual do ícone/nome na tela inicial e reabertura após
   encerrar o processo a partir de uma introdução. Teste solicitado ao usuário; metadados
   instalados não comprovam aparência do ícone nem execução.
+
+## Aceite da US3 — 2026-11-06
+
+- O usuário respondeu "Ícone e reabertura estão corretos" ao teste de identificar
+  nome Capia, rosto e toalha na tela inicial, abrir pelo ícone, avançar à introdução,
+  encerrar o processo e reabrir nas boas-vindas.
+- **Passou por relato do usuário no aparelho, build 5 (`9158daf`)**: identidade instalada
+  e nova execução em welcome. SC-006 aprovado; T030 concluída.
+- US3 aceita no iPhone15,2 / iOS 26.7.2. Integração na branch base será por fast-forward,
+  sem mudanças adicionais de implementação e sem merge em master.
