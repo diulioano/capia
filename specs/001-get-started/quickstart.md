@@ -1,16 +1,19 @@
 # Validar o Get Started do Capia
 
 Os pacotes, o script de recursos US1 e os testes já existem. O esqueleto e as boas-vindas
-compilaram; seis testes de navegação passaram. A instalação do Capia e a validação visual
-continuam pendentes. As introduções finais e o ícone ainda não foram implementados.
+compilaram; seis testes de navegação passaram. O Capia foi instalado no iPhone em
+2026-11-06; abertura e validação visual continuam pendentes. As introduções finais e o
+ícone ainda não foram implementados.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente
 
 Use a distribuição Ubuntu no WSL. Ela já tem Swift 6.4.2, xtool 1.24.0 e SDK Darwin.
 O teste do app padrão no iPhone já foi confirmado pelo usuário e não precisa ser repetido.
-Para a instalação do Capia, disponibilize o iPhone ao WSL pelo caminho já usado no teste
-anterior, com pareamento, modo de desenvolvimento e assinatura configurados.
+Para instalar o Capia, mantenha o iPhone desbloqueado, com pareamento, modo de
+desenvolvimento e assinatura configurados. Nesta máquina, o caminho validado usa
+Apple Devices no Windows e sua porta local 27015, acessível pelo WSL em modo mirrored.
+O encaminhamento direto por usbipd falhou durante a transferência, mesmo listando o aparelho.
 
 No PowerShell, entre no Bash:
 
@@ -22,6 +25,7 @@ Dentro do Bash, confira o ambiente e a conexão:
 
 ```bash
 cd /mnt/c/Users/Diuli/.t3/projects/i-dont-the-name-yet
+export USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015
 swift --version
 xtool --version
 xtool sdk status
@@ -31,6 +35,13 @@ xtool devices --no-wait
 Se nenhum aparelho aparecer, a compilação e os testes de estado podem continuar;
 a validação de instalação deve ficar pendente até conectar o aparelho. Não registrar
 sucesso de instalação a partir da geração de um pacote.
+
+Se o aparelho estiver associado ao usbipd com `Shared (forced)`, libere-o no PowerShell
+como administrador com `usbipd unbind --busid <BUSID-do-iPhone>`. Consulte `usbipd list`
+para obter o BUSID atual. Depois confira `xtool devices --no-wait` com a variável acima.
+O socket local existente foi suficiente nesta máquina, sem configurar encaminhamento
+de portas ou regras de firewall. Outros modos de rede WSL precisam de configuração própria.
+Referência: [issue do xtool sobre a etapa Connecting](https://github.com/xtool-org/xtool/issues/19).
 
 ## Preparar e conferir os recursos
 
@@ -76,7 +87,7 @@ A compilação final repete esse passo após a implementação completa do fluxo
 Ainda em `ios/Capia`, com o aparelho disponível:
 
 ```bash
-xtool dev run
+USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 ```
 
 Se for necessário um arquivo para instalação separada:
@@ -89,7 +100,8 @@ O segundo comando produz um IPA assinado; não comprova instalação. Use o cami
 real produzido com `xtool install` apenas quando optar pela instalação separada.
 Nunca registre conta Apple, senha, token, certificado ou perfil de assinatura no Git.
 
-Resultado esperado: Capia aparece na tela inicial, com o ícone da capivara. Abra o app
+Resultado final esperado após US3: Capia aparece na tela inicial, com o ícone da capivara.
+Na US1 atual, o ícone final ainda não existe. Abra o app
 pelo ícone e confirme as boas-vindas. Registre modelo do aparelho, versão do iOS,
 identificador do bundle e versão do build. O alvo mínimo planejado é iOS 17.
 

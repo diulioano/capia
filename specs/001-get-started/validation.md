@@ -52,3 +52,37 @@ python scripts/prepare-design-assets.py --check
 - **T016 pendente**: nenhum iPhone listado em nova execução de `xtool devices --no-wait`. Sem instalação, execução, capturas nativas, VoiceOver, maior texto acessível, redução de movimento ou observação de SC-001. O comportamento de renovação/saída foi implementado, mas não observado no aparelho.
 - US1 salva como parcial. US2, US3 e validação integrada permanecem abertas; `tasks.md` exige o checkpoint T016 antes da história seguinte. SC-002 a SC-006 também pendentes.
 - Não há `.specify/extensions.yml`: nenhum hook de implementação registrado.
+
+## Instalação da US1 no iPhone — 2026-11-06
+
+- Revisão instalada: `364091f`, branch `feat/001-get-started-us1-welcome`.
+- Aparelho identificado por `ideviceinfo`: `iPhone15,2`, iOS `26.7.2`.
+- A conexão direta via usbipd listou o aparelho e validou o pareamento após desbloqueio,
+  mas duas instalações pararam em `[Connecting] 100%`. O serviço usbmuxd registrou
+  `asyncReadComplete, message was too large (65536 bytes, max = 65535)`.
+- Reiniciar usbmuxd e reconectar o USB restaurou a enumeração, mas não resolveu a transferência.
+  O erro voltou no mesmo estágio. Não houve alteração no código Swift para tratar essa falha.
+- Contorno testado: liberar a associação `Shared (forced)` do iPhone por
+  `usbipd unbind --busid 2-5` (executado com privilégio de administrador), devolvendo-o ao
+  Apple Devices no Windows. O processo AppleMobileDeviceProcess já escutava em
+  `127.0.0.1:27015`; WSL usa rede mirrored. Nenhum firewall ou portproxy foi alterado.
+- A causa e o contorno correspondem ao [relato upstream do xtool](https://github.com/xtool-org/xtool/issues/19)
+  e à [falha de transferência reportada ao usbmuxd](https://github.com/libimobiledevice/usbmuxd/issues/247).
+
+Comando executado em `ios/Capia`, pelo Bash:
+
+```bash
+USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
+```
+
+- **Passou**: compilação, assinatura, instalação e verificação pelo aparelho, todas concluídas.
+  Processo terminou com código zero e `[Installing] 100%`, `[Verifying] 100%`.
+- **Passou**: consulta dos apps instalados por `ideviceinstaller list`, filtrada para Capia,
+  confirma nome Capia. A assinatura xtool acrescenta `XTL-<equipe>.` ao identificador
+  `com.diuli.capia`; o identificador do pacote sem assinatura permanece conforme o plano.
+- `ideviceinstaller` 1.2.0 instalado no Ubuntu para conferir a instalação real; não é dependência do app.
+- **Falhou**: `xtool launch` com o identificador instalado chega a `Launching Capia...`,
+  mas retorna `DebugserverClient.Error.unknown`. Abertura manual pelo ícone solicitada ao usuário.
+- **T016 permanece pendente**: instalação comprovada, mas abertura, interação, fidelidade visual,
+  VoiceOver, maior texto acessível, redução de movimento e SC-001 ainda não observados.
+  Este registro atualiza o estado de conexão e instalação relatado nas seções anteriores.
