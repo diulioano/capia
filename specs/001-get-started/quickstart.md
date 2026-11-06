@@ -2,7 +2,8 @@
 
 US1 aceita no iPhone na build 3, com os relatos de validação registrados. A build 4
 implementa as três introduções e a entrada provisória da configuração; os testes de
-navegação passaram e seu aceite no aparelho está pendente. O ícone final ainda não existe.
+navegação passaram, a instalação no iPhone foi confirmada e seu aceite no aparelho está
+pendente. O ícone final ainda não existe.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente

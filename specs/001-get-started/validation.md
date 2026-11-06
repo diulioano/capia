@@ -298,3 +298,17 @@ Verificações:
 - **T025 pendente**: instalação e percurso da US2 no iPhone, comparação dos painéis,
   retornos, toques rápidos, acessibilidade e SC-002 a SC-005. Conexão Apple não listava
   aparelho; reconexão solicitada ao usuário. US3 não iniciada.
+
+## Instalação da US2, build 4 — 2026-11-06
+
+- Revisão instalada: `7a1a421`, branch `feat/001-get-started-us2-introduction`.
+- Após o usuário confirmar o aparelho visível, `xtool devices --no-wait` pelo socket
+  Apple do Windows voltou a listar o mesmo iPhone.
+- Executado em `ios/Capia`: `USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb`.
+- **Passou**: compilação, assinatura, instalação e verificação. Processo terminou com
+  código zero após `[Installing] 100%` e `[Verifying] 100%`.
+- **Passou**: consulta `ideviceinstaller list` restrita ao Capia confirma CFBundleVersion
+  `4` e CFBundleDisplayName `Capia` no aparelho.
+- **Pendente**: abrir pelo ícone e validar o percurso completo, painéis e retorno da
+  configuração em até um minuto; solicitado ao usuário. Os demais cenários da US2
+  também permanecem abertos. Instalação não conclui T025; US3 não iniciada.
