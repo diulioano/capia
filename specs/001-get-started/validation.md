@@ -324,3 +324,15 @@ Verificações:
 - **Pendente**: Voltar de todas as etapas, Pular de cada origem e retornar corretamente,
   uso sem rede, toques rápidos, maior texto acessível, VoiceOver e redução de movimento
   nas novas telas. T025 continua aberta; US3 ainda não iniciada.
+
+## Retornos, Pular e navegação sem rede aprovados — 2026-11-06
+
+- O usuário respondeu "Tudo funcionou" ao teste com modo avião e Wi-Fi desligado:
+  Voltar nas três etapas, retorno às boas-vindas pela primeira, Pular de cada etapa,
+  Voltar à apresentação preservando cada origem e toques rápidos em Continuar.
+- **Passou por relato do usuário no aparelho, build 4**: caminhos alternativos,
+  preservação das origens e navegação sem rede, sem saltos inesperados ou telas vazias.
+  SC-003 aprovado nos percursos solicitados, em conjunto com o percurso principal anterior.
+- **Pendente**: maior texto acessível, VoiceOver e redução de movimento nas novas telas.
+  Solicitada a conferência conjunta desses ajustes, com legibilidade dos exemplos,
+  controles alcançáveis, foco no título e progresso sem duplicação. T025 permanece aberta.
