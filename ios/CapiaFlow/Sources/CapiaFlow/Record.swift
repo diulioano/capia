@@ -23,9 +23,10 @@ public enum RecordCategory: String, CaseIterable, Codable, Hashable, Sendable {
         }
     }
 
-    /// Palavras do quadro: prefixos de palavra e, para termos curtos que casariam dentro
-    /// de outras palavras, palavras inteiras. A ordem decide quando mais de uma casa.
-    private static let rules: [(category: RecordCategory, prefixes: [String], words: [String])] = [
+    /// Trechos do quadro, procurados dentro de cada palavra ("supermercado" casa "mercad"),
+    /// e palavras inteiras para termos curtos que casariam por acaso ("barato", "1999").
+    /// A ordem decide quando mais de uma casa.
+    private static let rules: [(category: RecordCategory, fragments: [String], words: [String])] = [
         (.market, ["mercad", "feira", "hortifruti", "sacol"], []),
         (.restaurants, ["caf", "restaur", "padaria", "lanche", "almo", "jantar", "pizza", "ifood"], []),
         (.transport, ["uber", "onibus", "metr", "posto", "gasolina", "combust"], ["99"]),
@@ -45,7 +46,7 @@ public enum RecordCategory: String, CaseIterable, Codable, Hashable, Sendable {
         guard !words.isEmpty else { return nil }
         for rule in rules {
             for word in words {
-                if rule.words.contains(word) || rule.prefixes.contains(where: { word.hasPrefix($0) }) {
+                if rule.words.contains(word) || rule.fragments.contains(where: { word.contains($0) }) {
                     return rule.category
                 }
             }

@@ -79,16 +79,18 @@ Somas de `Int64` não estouram no protótipo: o limite por registro é R$ 999.99
 
 **Decisão**: `RecordCategory.suggestion(for:)` dobra caixa e acentos
 (`folding(options: [.caseInsensitive, .diacriticInsensitive])`), separa a descrição em
-palavras e procura, na ordem do quadro, palavras que comecem por um dos prefixos. Os termos
-curtos `bar`, `99` e `luz` só valem como palavra inteira, para "barato" ou "1999" não
-casarem. Prefixos: Mercado
+palavras e procura, na ordem do quadro, os trechos dentro de cada palavra, como as
+expressões do quadro ("supermercado" casa `mercad`). Os termos curtos `bar`, `99` e `luz` só
+valem como palavra inteira, para "barato" ou "1999" não casarem. Trechos: Mercado
 (`mercad`, `feira`, `hortifruti`, `sacol`), Restaurantes (`caf`, `restaur`, `padaria`,
 `lanche`, `almo`, `jantar`, `pizza`, `ifood`), Transporte (`uber`, `99`, `onibus`, `metr`,
 `posto`, `gasolina`, `combust`), Saúde (`farm`, `medic`, `consulta`, `dentista`), Casa
 (`aluguel`, `luz`, `agua`, `internet`, `condom`), Lazer (`cinema`, `show`, `stream`, `bar`,
 `viagem`, `jogo`) e Compras (`loja`, `roupa`, `tenis`, `livro`). **Motivo**: o quadro usa
 expressões regulares por trecho, em que "bar " exige espaço e "luz" casaria dentro de outras
-palavras; o início de palavra preserva a intenção e é determinístico no Linux e no iPhone.
+palavras. Trechos dentro da palavra preservam o comportamento do quadro, e a palavra inteira
+evita os falsos positivos dos termos curtos. Ajuste de 2026-11-06: a primeira versão exigia o
+início da palavra e não sugeria em "Supermercado", o que o usuário notou no iPhone.
 
 ## 8. Estado do registro e apresentação
 

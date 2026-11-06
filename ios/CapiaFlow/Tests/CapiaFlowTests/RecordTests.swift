@@ -77,6 +77,14 @@ final class RecordTests: XCTestCase {
         XCTAssertEqual(RecordCategory.suggestion(for: "FARMACIA"), .health)
     }
 
+    func testFragmentsMatchInsideWords() {
+        XCTAssertEqual(RecordCategory.suggestion(for: "Supermercado Sol Nascente"), .market)
+        XCTAssertEqual(RecordCategory.suggestion(for: "hipermercado"), .market)
+        XCTAssertEqual(RecordCategory.suggestion(for: "Cafeteria"), .restaurants)
+        XCTAssertEqual(RecordCategory.suggestion(for: "medicamento"), .health)
+        XCTAssertEqual(RecordCategory.suggestion(for: "mensalidade do streaming"), .leisure)
+    }
+
     func testShortWordsMatchOnlyWhole() {
         XCTAssertNil(RecordCategory.suggestion(for: "barato"), "\"bar\" só como palavra inteira")
         XCTAssertNil(RecordCategory.suggestion(for: "reluz"))
