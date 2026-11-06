@@ -110,7 +110,7 @@ arquivos de tela (`RecordFormView.swift`, `NewRecordView.swift`).
 
 **Branch**: `feat/004-new-record-us4-undo`.
 
-- [X] T023 [US4] Acrescentar "Desfazer" a `RecordToastView.swift` e o caminho em `AppRootView.swift` (gravar o espaço sem o registro, depois `undoLastRecord()`); expirar o aviso em 4,2 s, mantê-lo com VoiceOver até a próxima ação e descartar aviso e rascunho ao fechar.
+- [X] T023 [US4] Acrescentar "Desfazer" a `RecordToastView.swift` e o caminho em `AppRootView.swift` (gravar o espaço sem o registro, depois `undoLastRecord()`); expirar o aviso em 3 s (era 4,2 s; ajuste do usuário), mantê-lo com VoiceOver até a próxima ação e descartar aviso e rascunho ao fechar.
 - [X] T024 [US4] Mostrar o aviso de falha ("Não deu para salvar agora. Tente de novo." e "Tentar de novo") ao falhar a gravação do registro ou do desfazer, preservando o formulário; cobrir em `AppFlowTests.swift`.
 - [ ] T025 [US4] Validar no iPhone as linhas da US4 de `quickstart.md`, inclusive reabertura após desfazer; registrar a falha de gravação como coberta só por testes; commitar só a US4.
 

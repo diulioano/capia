@@ -15,8 +15,8 @@ struct NewRecordView: View {
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @AccessibilityFocusState private var titleFocused: Bool
 
-    /// Duração do aviso no quadro.
-    private static let toastDuration: Duration = .milliseconds(4200)
+    /// Duração do aviso: 3 s, mais curta que os 4,2 s do quadro, a pedido do usuário.
+    private static let toastDuration: Duration = .seconds(3)
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,7 +30,7 @@ struct NewRecordView: View {
         .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: flow.phase)
         .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: flow.mode)
         .task(id: toastTimer) {
-            // O aviso some em 4,2 s. Com VoiceOver, fica até a próxima ação, para dar tempo de
+            // O aviso some em 3 s. Com VoiceOver, fica até a próxima ação, para dar tempo de
             // alcançar "Desfazer"; com falha, o registro guardado espera "Tentar de novo".
             guard flow.toast != nil, flow.failure == nil, !voiceOver else { return }
             try? await Task.sleep(for: Self.toastDuration)
@@ -144,9 +144,8 @@ struct NewRecordView: View {
 
     // MARK: Aviso
 
-    @ViewBuilder
     private var toast: some View {
-        Group {
+        ZStack {
             if let failure = flow.failure {
                 // Mesmo lugar e estilo, com a capivara pensativa no lugar da comemorando.
                 RecordToastView(image: CapiaImages.thinkingCapybara, title: RecordCopy.saveFailed, subtitle: nil,
@@ -157,17 +156,31 @@ struct NewRecordView: View {
                     }
                 }
                 .id("failure-\(String(describing: failure))")
+                .transition(toastTransition)
             } else if let saved = flow.toast {
                 RecordToastView(image: CapiaImages.celebratingCapybara, title: RecordCopy.saved,
                                 subtitle: RecordCopy.toastSubtitle(saved.record, accounts: flow.accounts,
                                                                    cards: flow.cards),
                                 actionTitle: RecordCopy.undo, action: undo)
                 .id(saved.record.id)
+                .transition(toastTransition)
             }
         }
         .padding(.horizontal, 14)
         .padding(.bottom, flow.phase == .details ? 104 : 24)
-        .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+        // Entra subindo e sai descendo, com a curva do quadro; com Reduzir Movimento, só esmaece.
+        .animation(reduceMotion ? .easeOut(duration: 0.2) : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.4),
+                   value: toastIdentity)
+    }
+
+    /// Muda quando o aviso aparece, troca ou some, para animar a entrada e a saída.
+    private var toastIdentity: String {
+        if let failure = flow.failure { return "failure-\(String(describing: failure))" }
+        return flow.toast?.record.id.uuidString ?? "none"
+    }
+
+    private var toastTransition: AnyTransition {
+        reduceMotion ? .opacity : .offset(y: 160).combined(with: .opacity)
     }
 }
 

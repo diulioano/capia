@@ -101,7 +101,7 @@ o registro está aberto. Ele substitui `HomeFlow.showingNewRecord`. `HomeView` m
 oculto para o VoiceOver. **Alternativa descartada**: `fullScreenCover`, cuja animação de
 subida não segue o quadro nem é desligada pela redução de movimento sem contornos.
 
-O aviso "Registro salvo" dura 4,2 s, como no quadro. O tempo corre na interface, que envia
+O aviso "Registro salvo" dura 3 s, menos que os 4,2 s do quadro (decisão do usuário em 2026-11-06), e entra subindo e sai descendo em 0,4 s. O tempo corre na interface, que envia
 `dismissToast`; com VoiceOver ativo, o aviso fica até a próxima ação, para dar tempo de
 alcançar "Desfazer".
 

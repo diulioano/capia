@@ -50,7 +50,7 @@ Execute sem rede. Compare com o quadro "Novo registro" e com
 | Troca de fonte | Cartão em 3×, depois Conta Aurora | Parcelas somem; volta a à vista |
 | Sem cartão | Espaço sem cartão | Pago com só contas; nunca há Parcelas |
 | Desfazer | Salvar; Desfazer | Formulário restaurado; Início e reabertura sem o registro |
-| Aviso expira | Salvar; esperar | Some em cerca de 4 s; registro permanece |
+| Aviso expira | Salvar; esperar | Some descendo em cerca de 3 s; registro permanece |
 | Falar e Foto | Acionar cada aba; Digitar | Avisos provisórios; nenhuma permissão; volta com tipo e valor |
 | Toques rápidos | Salvar e Continuar repetidos | Nenhum registro duplicado nem tela empilhada |
 | Ocultar | Olho no Início com registros | Recentes e categorias em "R$ ••••" |

@@ -52,7 +52,7 @@ quadro "Resumo do mês" em sequência: `#5C6B34`, `#6FA798`, `#C9A472`, depois `
 Posição: 14 das laterais, 24 acima da base (104 quando há barra de ações). Fundo `#2E2A25`,
 raio 22, recuo 8/10/8/6, sombra `0 14 30 rgba(40,30,20,.3)`. Capivara comemorando 52; título
 15 bold `#FBF7F0`; subtítulo 13 `#D8CFC2`; "Desfazer" 44 de altura, raio 12,
-`rgba(255,255,255,.12)`, 14 bold `#F2C9A7`. Entra subindo 120% em 0,4 s; some após 4,2 s.
+`rgba(255,255,255,.12)`, 14 bold `#F2C9A7`. Entra subindo 120% em 0,4 s; some após 3 s, descendo e esmaecendo em 0,4 s (o quadro usa 4,2 s; decisão do usuário em 2026-11-06). Com Reduzir Movimento, só esmaece.
 
 Subtítulo: `{+ }R$ valor · {nome exibido} · {conta ou Cartão nome}`; "+ " só na receita.
 Complemento: falha de gravação usa o mesmo lugar e estilo, com a capivara pensativa no lugar da

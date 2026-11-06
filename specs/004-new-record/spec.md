@@ -119,7 +119,7 @@ Início.
 **Acceptance Scenarios**:
 
 1. **Given** o aviso "Registro salvo", **When** a pessoa aciona "Desfazer", **Then** o registro é removido do aparelho, o aviso some e o formulário volta com os valores que tinha antes de salvar.
-2. **Given** o aviso, **When** passam cerca de 4 segundos sem ação, **Then** o aviso some, e o registro permanece.
+2. **Given** o aviso, **When** passam cerca de 3 segundos sem ação, **Then** o aviso some, e o registro permanece.
 3. **Given** um registro salvo e o aviso visível, **When** a pessoa fecha e volta ao Início, **Then** o registro aparece no Início, e o aviso não é mais oferecido.
 4. **Given** valores digitados, **When** a pessoa fecha o registro, **Then** nada é salvo, e o próximo "Adicionar registro" começa do zero.
 
@@ -177,7 +177,7 @@ reconhecimento simulado pertence à próxima funcionalidade.
 - **FR-007**: "Pago com" DEVE listar as contas e os cartões do espaço, distinguindo conta e cartão como em Contas ("Cartão {nome}"), com a primeira conta selecionada.
 - **FR-008**: Num cartão, o gasto DEVE ter de 1 a 12 parcelas, com o texto da fatura ou das parcelas descrito na US3. As parcelas DEVEM somar o total em centavos, com o resto na 1ª.
 - **FR-009**: A data DEVE oferecer "Hoje", "Ontem" e "Outra data" (calendário até hoje). "Hoje" vem selecionado.
-- **FR-010**: "Salvar" DEVE guardar o registro no aparelho, junto do espaço, mostrar o aviso "Registro salvo" com o resumo, a capivara comemorando e "Desfazer" por cerca de 4 segundos, e voltar ao teclado zerado. "Desfazer" DEVE remover o registro e restaurar o formulário.
+- **FR-010**: "Salvar" DEVE guardar o registro no aparelho, junto do espaço, mostrar o aviso "Registro salvo" com o resumo, a capivara comemorando e "Desfazer" por cerca de 3 segundos, e voltar ao teclado zerado. "Desfazer" DEVE remover o registro e restaurar o formulário.
 - **FR-011**: Um gasto numa conta DEVE reduzir, e uma receita numa conta DEVE aumentar, "Em contas hoje". Um gasto no cartão NÃO DEVE alterar o dinheiro em contas. O pagamento da fatura não faz parte desta entrega.
 - **FR-012**: Os totais do mês DEVEM contar as receitas e os gastos em conta com data no mês, as parcelas de cartão cujo mês é o mês atual e o salário recebido. O saldo inicial continua fora dos totais (FR-004 da 003).
 - **FR-013**: O indicador Fatura DEVE mostrar a soma das parcelas das faturas abertas, conforme os casos de borda, e continuar distinto de Gastos.
