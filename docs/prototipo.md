@@ -31,7 +31,7 @@ O protótipo funciona sem backend. Se a versão funcional precisar de um servido
 
 ## Limites desta entrega
 
-Sem integração bancária, reconhecimento real por IA ou recuperação real por iCloud. Esses recursos pertencem à etapa funcional. O protótipo será testado como app nativo no iPhone pelo xtool; a distribuição a convidados e a publicação ficam para uma etapa posterior. A exportação é uma decisão do produto; seu formato será definido antes de implementá-la.
+Sem integração bancária, reconhecimento real por IA ou recuperação real por iCloud. Por decisão do usuário em 2026-11-06, a configuração inicial concluída é guardada somente no aparelho; os demais dados de exemplo continuam restritos à sessão até nova decisão. Esses recursos pertencem à etapa funcional. O protótipo será testado como app nativo no iPhone pelo xtool; a distribuição a convidados e a publicação ficam para uma etapa posterior. A exportação é uma decisão do produto; seu formato será definido antes de implementá-la.
 
 O protótipo exportado do Claude em `../design/` define a referência visual para todo desenvolvimento. A implementação em SwiftUI deve seguir suas telas, componentes e fluxos, conforme `../AGENTS.md`. Os recursos visuais existentes estão em `../assets/`.
 
@@ -44,3 +44,7 @@ Get Started concluído em 2026-11-06 na build 5. O projeto foi criado por `xtool
 A implementação começa pelo fluxo Get Started: boas-vindas e três etapas de apresentação, conforme o primeiro quadro do HTML. O ícone do Capia usará `../assets/capybara-onsen.png` como base, com adaptação de enquadramento para identificação na tela inicial do iPhone.
 
 A especificação está em `../specs/001-get-started/spec.md`. O cadastro de nome da pessoa, preferências, primeira conta e cartão pertence ao próximo fluxo. As tarefas de estrutura e comportamento serão separadas das tarefas de interface e fidelidade visual no planejamento.
+
+## Segunda funcionalidade especificada
+
+Configuração inicial do espaço: nome, objetivos, primeira conta com saldo inicial, cartão de crédito separado com fechamento e vencimento e conclusão com resumo, conforme o quadro "Configuração inicial" do HTML. Substitui a entrada provisória do Get Started. A especificação está em `../specs/002-initial-setup/spec.md`.

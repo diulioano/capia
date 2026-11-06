@@ -41,6 +41,7 @@ O app substituirá a planilha, com exportação dos registros para uso fora do a
 - Confirmar um valor reservado registra sua destinação à meta no app; não constitui gasto nem movimentação bancária executada pelo app.
 - A leitura por imagem incluirá comprovantes e recibos individuais, além de prints de extratos e faturas com vários gastos.
 - A v1 não exigirá uma conta própria do app; usará iCloud para recuperação dos dados ao trocar de iPhone. A solução técnica e seu comportamento sem iCloud ainda precisam ser definidos.
+- Em 2026-11-06, o usuário decidiu que a configuração inicial será guardada no aparelho já no protótipo, com sincronização pelo iCloud em funcionalidade posterior. O recurso iCloud costuma exigir Apple Developer Program pago, ainda não confirmado.
 - Voz e imagens poderão ser enviadas a um serviço de IA para reconhecimento, com informação clara sobre o envio. Provedor, custo e retenção dos arquivos ainda não foram definidos.
 - Possíveis duplicatas serão sinalizadas para decisão da pessoa; não serão descartadas automaticamente.
 - Haverá categorias iniciais prontas, com opção de criar e editar. O reconhecimento sugere uma categoria que a pessoa pode corrigir.
