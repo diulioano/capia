@@ -312,3 +312,15 @@ Verificações:
 - **Pendente**: abrir pelo ícone e validar o percurso completo, painéis e retorno da
   configuração em até um minuto; solicitado ao usuário. Os demais cenários da US2
   também permanecem abertos. Instalação não conclui T025; US3 não iniciada.
+
+## Percurso principal da US2 aprovado — 2026-11-06
+
+- O usuário respondeu "Sim, tudo funcionou" ao percurso Começar → Continuar →
+  Continuar → Configurar meu espaço, incluindo aparência correta dos três painéis,
+  conclusão em até um minuto e Voltar à apresentação retornando à etapa de metas.
+- **Passou por relato do usuário no aparelho, build 4**: percurso principal e retorno
+  da configuração aberta pela ação final. SC-002 aprovado pelo tempo informado,
+  sem medição instrumental. Aparência dos três painéis aprovada no percurso observado.
+- **Pendente**: Voltar de todas as etapas, Pular de cada origem e retornar corretamente,
+  uso sem rede, toques rápidos, maior texto acessível, VoiceOver e redução de movimento
+  nas novas telas. T025 continua aberta; US3 ainda não iniciada.
