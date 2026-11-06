@@ -41,12 +41,11 @@ Branch `feat/002-initial-setup-us1-profile`. Implementação de T011–T014 conc
 |-------------|-----------|
 | `xtool dev build` | Passou |
 | `xtool dev run --usb` no aparelho "Gremio" (via Apple Devices, porta 27015) | Passou: instalação e verificação concluídas em 2026-11-06 |
-| Entrada por Pular e Configurar meu espaço; Voltar à origem | Pendente: conferência do usuário no iPhone |
-| Nome: vazio, uma letra ("Só mais uma letrinha."), válido; teclado e Continuar | Pendente |
-| Objetivos: marcar, desmarcar, Continuar só com um marcado | Pendente |
-| Capivara calma → pensando → feliz; dicas; barra 1 e 2 de 6 | Pendente |
-| VoiceOver, maior texto, Reduzir Movimento | Pendente |
-| Comparação com as etapas 1–2 do quadro | Pendente |
+| Percurso da US1 no iPhone (entrada, nome, objetivos, retorno) | Passou: aprovado pelo usuário em 2026-11-06 ("está ok", "está muito bom") |
+| Acessibilidade e comparação com as etapas 1–2 | Aprovado no mesmo relato, sem verificações individuais detalhadas |
+
+Observação do usuário: o app "ainda não está estilizado 100%", conforme o combinado de fazer
+primeiro o esqueleto. As etapas 3–6 e a conclusão seguem provisórias até as US2–US4.
 
 Adaptações registradas: Voltar usa o mesmo chevron do Get Started; o rótulo "Nome ou apelido"
 é o nome acessível do campo; Continuar indisponível usa o estado desativado nativo.
