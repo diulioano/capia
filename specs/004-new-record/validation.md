@@ -33,7 +33,24 @@ Decisões tomadas na implementação:
 
 ## US1 — Registrar um gasto digitado
 
-Pendente.
+Branch `feat/004-new-record-us1-expense`. T011–T015 implementadas em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou, sem avisos |
+| `xtool dev run --usb` no "Gremio" (porta 27015) | Falhou em 2026-11-06: compilou e ficou esperando o aparelho até o limite de 200 s, sem instalar. O iPhone não estava visível ao Windows, como nas primeiras tentativas da 003 |
+| T016: linhas da US1 de `quickstart.md` no iPhone, com VoiceOver, texto ampliado e redução de movimento | Pendente: depende da instalação e do aceite do usuário |
+
+Adaptações e decisões da US1:
+
+- Receita aparece no seletor de tipo, desabilitada, até a US2; "Pago com" mostra só contas até a US3.
+- O aviso "Registro salvo" já some após 4,2 s nesta US, para não ficar preso na tela; Desfazer,
+  a permanência com VoiceOver e o aviso de falha continuam na US4.
+- Falar e Foto mostram por enquanto só o texto provisório; a tela final é da US5.
+- A inicial dos registros usa as cores do quadro para receita, Mercado, Restaurantes e Saúde;
+  Transporte, Casa, Lazer, Compras e Outros receberam pares de fundo claro e texto escuro da
+  mesma família de cor, com contraste legível.
+- O topo de 58 pt do quadro vira área segura + 12, como no Início.
 
 ## US2 — Registrar uma receita digitada
 

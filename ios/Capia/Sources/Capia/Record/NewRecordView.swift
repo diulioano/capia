@@ -1,8 +1,8 @@
 import CapiaFlow
 import SwiftUI
 
-/// Novo registro sobre o Início. Esqueleto provisório da base: texto e botões simples
-/// ligados a `RecordFlow`. As telas finais do quadro chegam nas US.
+/// Novo registro do quadro "Novo registro", aberto sobre o Início: fechar, título, abas
+/// Digitar, Falar e Foto, a fase atual e o aviso de registro salvo.
 @MainActor
 struct NewRecordView: View {
     let flow: RecordFlow
@@ -11,106 +11,171 @@ struct NewRecordView: View {
     let undo: () -> Void
     let close: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AccessibilityFocusState private var titleFocused: Bool
+
+    /// Duração do aviso no quadro.
+    private static let toastDuration: Duration = .milliseconds(4200)
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Button(RecordCopy.closeLabel, action: close)
-                Spacer()
-            }
-            Text(RecordCopy.title(flow)).font(CapiaFonts.title(20)).accessibilityAddTraits(.isHeader)
-            Picker("Forma de registro", selection: .init(get: { flow.mode }, set: { send(.selectMode($0)) })) {
-                ForEach(RecordMode.allCases, id: \.self) { Text(RecordCopy.modeLabel($0)).tag($0) }
-            }
-            .pickerStyle(.segmented)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    if flow.mode != .type {
-                        Text(RecordCopy.modePlaceholder(flow.mode))
-                    } else if flow.phase == .amount {
-                        amount
-                    } else {
-                        details
-                    }
-                    if flow.saveFailed {
-                        Text(RecordCopy.saveFailed)
-                        Button(RecordCopy.retry, action: save)
-                    }
-                    if let toast = flow.toast {
-                        Text("\(RecordCopy.saved) · \(RecordCopy.toastSubtitle(toast.record, accounts: flow.accounts, cards: flow.cards))")
-                        Button(RecordCopy.undo, action: undo)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
+        VStack(spacing: 0) {
+            header
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .foregroundStyle(CapiaTheme.ink)
         .background(CapiaTheme.cream.ignoresSafeArea())
-    }
-
-    private var amount: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                ForEach(RecordKind.allCases, id: \.self) { kind in
-                    Button(RecordCopy.kindLabel(kind)) { send(.selectKind(kind)) }
-                        .bold(flow.draft.kind == kind)
-                }
-            }
-            Text(RecordCopy.padHint(flow.draft.kind))
-            Text(BRL.format(flow.draft.amount)).font(CapiaFonts.title(40)).monospacedDigit()
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3)) {
-                ForEach(1...9, id: \.self) { digit in key("\(digit)", .digit(digit)) }
-                key("00", .doubleZero)
-                key("0", .digit(0))
-                key("⌫", .delete)
-            }
-            Button("Continuar") { send(.continueToDetails) }.disabled(!flow.canContinue)
+        .overlay(alignment: .bottom) { toast }
+        .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: flow.phase)
+        .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: flow.mode)
+        .task(id: flow.toast?.record.id) {
+            guard flow.toast != nil else { return }
+            try? await Task.sleep(for: Self.toastDuration)
+            guard !Task.isCancelled else { return }
+            send(.dismissToast)
+        }
+        .task {
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            titleFocused = true
         }
     }
 
-    private func key(_ label: String, _ key: PadKey) -> some View {
-        Button(label) { send(.press(key)) }.frame(maxWidth: .infinity, minHeight: 44)
+    // MARK: Cabeçalho
+
+    private var header: some View {
+        VStack(spacing: 14) {
+            HStack {
+                Button(action: close) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(CapiaTheme.ink)
+                        .frame(width: 44, height: 44)
+                        .background(CapiaTheme.sand, in: RoundedRectangle(cornerRadius: 14))
+                }
+                .buttonStyle(CapiaTapStyle())
+                .accessibilityLabel(RecordCopy.closeLabel)
+                Spacer(minLength: 8)
+                Text(RecordCopy.title(flow))
+                    .font(CapiaFonts.title(20))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityFocused($titleFocused)
+                Spacer(minLength: 8)
+                Color.clear.frame(width: 44, height: 44)
+            }
+            modeTabs
+        }
+        .padding(.horizontal, 18)
+        .padding(.top, 12)
+        .padding(.bottom, 12)
+        .background(CapiaTheme.cream)
     }
 
-    private var details: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            CentsField(value: flow.draft.amount, accessibilityLabel: "Valor", maxValue: Record.maxAmount,
-                       fontSize: 32, focusOnAppear: false) { send(.setAmount($0)) }
-                .frame(height: 50)
-            TextField("Ex.: mercado, café, farmácia",
-                      text: .init(get: { flow.draft.description }, set: { send(.setDescription($0)) }))
-            if flow.draft.kind == .expense {
-                Text("Categoria")
-                ForEach(RecordCategory.allCases, id: \.self) { category in
-                    Button(category.name + (flow.suggestedCategory == category ? " · sugerido" : "")) {
-                        send(.chooseCategory(category))
+    private var modeTabs: some View {
+        HStack(spacing: 4) {
+            ForEach(RecordMode.allCases, id: \.self) { mode in
+                let selected = flow.mode == mode
+                Button { send(.selectMode(mode)) } label: {
+                    HStack(spacing: 6) {
+                        RecordModeIcon(mode: mode)
+                            .stroke(CapiaTheme.ink, style: StrokeStyle(lineWidth: 1.8 * 18 / 24, lineCap: .round,
+                                                                        lineJoin: .round))
+                            .frame(width: 18, height: 18)
+                            .accessibilityHidden(true)
+                        Text(RecordCopy.modeLabel(mode))
+                            .font(CapiaFonts.body(14, relativeTo: .subheadline, weight: .bold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
-                    .bold(flow.effectiveCategory == category)
+                    .frame(maxWidth: .infinity, minHeight: 40)
+                    .background(selected ? CapiaTheme.paper : .clear, in: RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: selected ? CapiaTheme.shadow.opacity(0.10) : .clear, radius: 4, y: 2)
+                    .contentShape(Rectangle())
+                    .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: selected)
                 }
-            }
-            Text(RecordCopy.sourceLabel(flow.draft.kind))
-            ForEach(flow.availableSources, id: \.self) { source in
-                Button(RecordCopy.sourceName(source, accounts: flow.accounts, cards: flow.cards)) {
-                    send(.chooseSource(source))
-                }
-                .bold(flow.draft.source == source)
-            }
-            if flow.showsInstallments, let card = flow.selectedCard {
-                Stepper("Parcelas: \(flow.draft.installments)×",
-                        onIncrement: { send(.stepInstallments(1)) },
-                        onDecrement: { send(.stepInstallments(-1)) })
-                Text(RecordCopy.installmentsText(card: card, amount: flow.draft.amount, count: flow.draft.installments,
-                                                 purchase: RecordCopy.day(for: flow.draft.date)))
-            }
-            HStack {
-                Button("Hoje") { send(.chooseDate(.today)) }.bold(flow.draft.date == .today)
-                Button("Ontem") { send(.chooseDate(.yesterday)) }.bold(flow.draft.date == .yesterday)
-            }
-            HStack {
-                Button("Voltar") { send(.back) }
-                Button("Salvar", action: save).disabled(!flow.canSave)
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selected ? [.isSelected] : [])
             }
         }
+        .padding(4)
+        .background(CapiaTheme.sand, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Forma de registro")
+    }
+
+    // MARK: Conteúdo
+
+    @ViewBuilder
+    private var content: some View {
+        switch (flow.mode, flow.phase) {
+        case (.type, .amount):
+            AmountPadView(flow: flow, send: send)
+                .transition(enter)
+        case (.type, .details):
+            RecordFormView(flow: flow, send: send, save: save)
+                .transition(enter)
+        default:
+            Text(RecordCopy.modePlaceholder(flow.mode))
+                .font(CapiaFonts.body(16))
+                .padding(22)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    /// `.enter` do quadro: sobe 14 pt e aparece.
+    private var enter: AnyTransition {
+        reduceMotion ? .identity : .asymmetric(insertion: .opacity.combined(with: .offset(y: 14)), removal: .opacity)
+    }
+
+    // MARK: Aviso
+
+    @ViewBuilder
+    private var toast: some View {
+        if let saved = flow.toast {
+            RecordToastView(title: RecordCopy.saved,
+                            subtitle: RecordCopy.toastSubtitle(saved.record, accounts: flow.accounts, cards: flow.cards))
+                .padding(.horizontal, 14)
+                .padding(.bottom, flow.phase == .details ? 104 : 24)
+                .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+                .id(saved.record.id)
+        }
+    }
+}
+
+/// Ícones das abas, desenhados na grade 24 × 24 dos SVGs do quadro.
+private struct RecordModeIcon: Shape {
+    let mode: RecordMode
+
+    func path(in rect: CGRect) -> Path {
+        let s = min(rect.width, rect.height) / 24
+        func p(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: rect.minX + x * s, y: rect.minY + y * s) }
+        var path = Path()
+        switch mode {
+        case .type:
+            // Teclado: `M2 6h20v13H2zM6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 15h10`
+            path.addRoundedRect(in: CGRect(origin: p(2, 6), size: CGSize(width: 20 * s, height: 13 * s)),
+                                cornerSize: CGSize(width: 2 * s, height: 2 * s))
+            for x in [CGFloat(6), 10, 14, 18] {
+                path.move(to: p(x, 10)); path.addLine(to: p(x + 0.01, 10))
+            }
+            path.move(to: p(7, 15)); path.addLine(to: p(17, 15))
+        case .speak:
+            // Microfone: `M9 3h6v11H9zM5 11a7 7 0 0 0 14 0M12 18v3`
+            path.addRoundedRect(in: CGRect(origin: p(9, 3), size: CGSize(width: 6 * s, height: 11 * s)),
+                                cornerSize: CGSize(width: 3 * s, height: 3 * s))
+            path.move(to: p(5, 11))
+            path.addArc(center: p(12, 11), radius: 7 * s, startAngle: .degrees(180), endAngle: .degrees(0),
+                        clockwise: true)
+            path.move(to: p(12, 18)); path.addLine(to: p(12, 21))
+        case .photo:
+            // Câmera: `M4 8h3l2-3h6l2 3h3v11H4zM12 10a3 3 0 1 0 0 6a3 3 0 1 0 0-6`
+            path.move(to: p(4, 8)); path.addLine(to: p(7, 8)); path.addLine(to: p(9, 5))
+            path.addLine(to: p(15, 5)); path.addLine(to: p(17, 8)); path.addLine(to: p(20, 8))
+            path.addLine(to: p(20, 19)); path.addLine(to: p(4, 19)); path.closeSubpath()
+            path.addEllipse(in: CGRect(origin: p(9, 10), size: CGSize(width: 6 * s, height: 6 * s)))
+        }
+        return path
     }
 }

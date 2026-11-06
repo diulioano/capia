@@ -11,10 +11,12 @@ enum HomeCopy {
         }
     }
 
-    static func capybaraMessage(firstName: String, salary: SalaryStatus?) -> String {
+    static func capybaraMessage(firstName: String, salary: SalaryStatus?, hasRecords: Bool) -> String {
         if case .pending = salary {
             return "Oi, \(firstName)! Seu salário já está previsto. Quando ele cair, é só tocar em Recebi."
         }
+        // Complemento da 004: orienta sem comentar o tamanho dos gastos.
+        if hasRecords { return "Seu mês está tomando forma, \(firstName)." }
         return "Oi, \(firstName)! Seu mês começa aqui. Conforme você registra, eu mostro para onde o dinheiro vai."
     }
 

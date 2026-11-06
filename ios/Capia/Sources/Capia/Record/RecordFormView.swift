@@ -1,0 +1,346 @@
+import CapiaFlow
+import SwiftUI
+
+/// Formulário "Só alguns detalhes" do quadro: capivara, valor, descrição, categoria,
+/// conta, data e a barra Voltar/Salvar.
+@MainActor
+struct RecordFormView: View {
+    let flow: RecordFlow
+    let send: (RecordAction) -> Void
+    let save: () -> Void
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @FocusState private var descriptionFocused: Bool
+    @State private var pickingDate = false
+
+    private var draft: RecordDraft { flow.draft }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                top
+                amount
+                description
+                if draft.kind == .expense { categories }
+                sources
+                date
+            }
+            .padding(.horizontal, 18)
+            .padding(.top, 4)
+            .padding(.bottom, 24)
+        }
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.interactively)
+        .safeAreaInset(edge: .bottom, spacing: 0) { actions }
+        .sheet(isPresented: $pickingDate) {
+            OtherDateSheet(initial: currentOtherDay) { day in
+                send(.chooseDate(.other(day)))
+                pickingDate = false
+            } cancel: {
+                pickingDate = false
+            }
+        }
+    }
+
+    // MARK: Topo
+
+    private var top: some View {
+        HStack(spacing: 10) {
+            Image(uiImage: flow.canSave ? CapiaImages.happyCapybara : CapiaImages.thinkingCapybara)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Só alguns detalhes")
+                    .font(CapiaFonts.body(17, relativeTo: .headline, weight: .bold))
+                Text(RecordCopy.formSubtitle(draft.kind))
+                    .font(CapiaFonts.body(14, relativeTo: .subheadline))
+                    .foregroundStyle(CapiaTheme.muted)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    // MARK: Valor e descrição
+
+    private var amount: some View {
+        VStack(spacing: 2) {
+            Text("Valor")
+                .font(CapiaFonts.body(14, relativeTo: .subheadline))
+                .foregroundStyle(CapiaTheme.muted)
+            CentsField(value: draft.amount, accessibilityLabel: "Valor", maxValue: Record.maxAmount,
+                       fontSize: 46, focusOnAppear: false) { send(.setAmount($0)) }
+                .frame(maxWidth: .infinity, minHeight: 66)
+            if draft.amount == .zero {
+                Text("Informe um valor maior que zero.")
+                    .font(CapiaFonts.body(14, relativeTo: .subheadline))
+                    .foregroundStyle(CapiaTheme.alert)
+                    .transition(.opacity)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 6)
+        .padding(.bottom, 4)
+    }
+
+    private var description: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            fieldLabel("Descrição")
+            TextField("", text: .init(get: { draft.description }, set: { send(.setDescription($0)) }),
+                      prompt: Text("Ex.: mercado, café, farmácia").foregroundStyle(CapiaTheme.placeholder))
+                .font(CapiaFonts.title(22))
+                .focused($descriptionFocused)
+                .submitLabel(.done)
+                .textInputAutocapitalization(.sentences)
+                .padding(.bottom, 4)
+                .frame(minHeight: 48)
+                .capiaUnderline(focused: descriptionFocused)
+                .accessibilityLabel("Descrição")
+        }
+    }
+
+    // MARK: Categoria
+
+    private var categories: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            fieldLabel("Categoria")
+            FlowLayout(spacing: 8) {
+                ForEach(RecordCategory.allCases, id: \.self) { category in
+                    let selected = flow.effectiveCategory == category
+                    let suggested = flow.suggestedCategory == category
+                    Button { send(.chooseCategory(category)) } label: {
+                        HStack(spacing: 6) {
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(CapiaTheme.category(category))
+                                .frame(width: 8, height: 8)
+                            Text(category.name)
+                            if suggested {
+                                Text("· sugerido")
+                                    .font(CapiaFonts.body(11, relativeTo: .caption2, weight: .bold))
+                                    .foregroundStyle(CapiaTheme.errorText)
+                            }
+                        }
+                        .modifier(ChipLabel(selected: selected, height: 40, radius: 20))
+                    }
+                    .buttonStyle(CapiaTapStyle())
+                    .accessibilityLabel(category.name + (suggested ? ", sugerido" : ""))
+                    .accessibilityAddTraits(selected ? [.isSelected] : [])
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    // MARK: Conta
+
+    private var sources: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            fieldLabel(RecordCopy.sourceLabel(draft.kind))
+            FlowLayout(spacing: 8) {
+                // Os cartões chegam na US3.
+                ForEach(flow.availableSources.filter { !$0.isCard }, id: \.self) { source in
+                    let selected = draft.source == source
+                    Button { send(.chooseSource(source)) } label: {
+                        Text(RecordCopy.sourceName(source, accounts: flow.accounts, cards: flow.cards))
+                            .modifier(ChipLabel(selected: selected, height: 44, radius: 14))
+                    }
+                    .buttonStyle(CapiaTapStyle())
+                    .accessibilityAddTraits(selected ? [.isSelected] : [])
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    // MARK: Data
+
+    private var currentOtherDay: CalendarDay {
+        if case .other(let day) = draft.date { return day }
+        return CalendarDay.yesterday(now: Date(), timeZone: .current)
+    }
+
+    private var date: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            fieldLabel("Data")
+            FlowLayout(spacing: 8) {
+                dateChip("Hoje", selected: draft.date == .today) { send(.chooseDate(.today)) }
+                dateChip("Ontem", selected: draft.date == .yesterday) { send(.chooseDate(.yesterday)) }
+                if case .other(let day) = draft.date {
+                    dateChip(day.dayMonthText, selected: true, hint: "Escolher outra data") { pickingDate = true }
+                } else {
+                    dateChip("Outra data", selected: false) { pickingDate = true }
+                }
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private func dateChip(_ label: String, selected: Bool, hint: String? = nil,
+                          action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(label).modifier(ChipLabel(selected: selected, height: 44, radius: 14, horizontal: 16))
+        }
+        .buttonStyle(CapiaTapStyle())
+        .accessibilityAddTraits(selected ? [.isSelected] : [])
+        .accessibilityHint(hint ?? "")
+    }
+
+    // MARK: Ações
+
+    private var actions: some View {
+        HStack(spacing: 10) {
+            Button { send(.back) } label: {
+                Text("Voltar")
+                    .font(CapiaFonts.body(16, relativeTo: .headline, weight: .bold))
+                    .foregroundStyle(CapiaTheme.ink)
+                    .padding(.horizontal, 18)
+                    .frame(minHeight: 56)
+                    .background(CapiaTheme.sand, in: RoundedRectangle(cornerRadius: 18))
+            }
+            .buttonStyle(CapiaTapStyle())
+            Button("Salvar", action: save)
+                .buttonStyle(SaveButtonStyle())
+                .disabled(!flow.canSave)
+        }
+        .padding(.horizontal, 18)
+        .padding(.top, 14)
+        .padding(.bottom, 8)
+        .background {
+            CapiaTheme.cream
+                .overlay(alignment: .top) { Rectangle().fill(CapiaTheme.track).frame(height: 1) }
+                .ignoresSafeArea(edges: .bottom)
+        }
+    }
+
+    private func fieldLabel(_ text: String) -> some View {
+        Text(text)
+            .font(CapiaFonts.body(14, relativeTo: .subheadline, weight: .bold))
+            .foregroundStyle(CapiaTheme.tipText)
+            .accessibilityAddTraits(.isHeader)
+    }
+}
+
+/// Ficha do quadro: creme com borda areia; selecionada, verde claro com borda verde.
+private struct ChipLabel: ViewModifier {
+    let selected: Bool
+    let height: CGFloat
+    let radius: CGFloat
+    var horizontal: CGFloat = 14
+
+    func body(content: Content) -> some View {
+        content
+            .font(CapiaFonts.body(14, relativeTo: .subheadline, weight: .semibold))
+            .foregroundStyle(CapiaTheme.ink)
+            .padding(.horizontal, horizontal)
+            .frame(minHeight: height)
+            .capiaOption(selected: selected, cornerRadius: radius)
+            .contentShape(Rectangle())
+    }
+}
+
+/// Salvar: como Continuar, com 56 pt e raio 18.
+private struct SaveButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(CapiaFonts.body(17, relativeTo: .headline, weight: .bold))
+            .foregroundStyle(isEnabled ? CapiaTheme.actionText : CapiaTheme.muted)
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .background(isEnabled ? CapiaTheme.action : CapiaTheme.inactive, in: RoundedRectangle(cornerRadius: 18))
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.96 : 1)
+            .animation(.easeOut(duration: 0.2), value: isEnabled)
+    }
+}
+
+/// "Outra data": calendário do iOS até hoje (adaptação do quadro, que usa uma data fixa).
+private struct OtherDateSheet: View {
+    let choose: (CalendarDay) -> Void
+    let cancel: () -> Void
+    @State private var selection: Date
+
+    init(initial: CalendarDay, choose: @escaping (CalendarDay) -> Void, cancel: @escaping () -> Void) {
+        self.choose = choose
+        self.cancel = cancel
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let date = calendar.date(from: DateComponents(year: initial.year, month: initial.month,
+                                                      day: initial.day, hour: 12)) ?? Date()
+        _selection = State(initialValue: date)
+    }
+
+    var body: some View {
+        NavigationStack {
+            DatePicker("Data do registro", selection: $selection, in: ...Date(), displayedComponents: .date)
+                .datePickerStyle(.graphical)
+                .tint(CapiaTheme.action)
+                .environment(\.locale, Locale(identifier: "pt_BR"))
+                .padding(.horizontal, 18)
+                .frame(maxHeight: .infinity, alignment: .top)
+                .background(CapiaTheme.cream.ignoresSafeArea())
+                .navigationTitle("Outra data")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) { Button("Cancelar", action: cancel) }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Escolher") { choose(CalendarDay(date: selection, timeZone: .current)) }
+                            .bold()
+                    }
+                }
+        }
+        .presentationDetents([.large])
+    }
+}
+
+/// Fichas que quebram linha, como o `flex-wrap` do quadro.
+struct FlowLayout: Layout {
+    var spacing: CGFloat = 8
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let rows = arrange(subviews, width: proposal.width ?? .infinity)
+        let height = rows.reduce(0) { $0 + $1.height } + spacing * CGFloat(max(rows.count - 1, 0))
+        let width = rows.map(\.width).max() ?? 0
+        return CGSize(width: proposal.width ?? width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in arrange(subviews, width: bounds.width) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(.init(width: bounds.width, height: nil))
+                subviews[index].place(at: CGPoint(x: x, y: y), proposal: .init(width: min(size.width, bounds.width),
+                                                                                height: size.height))
+                x += min(size.width, bounds.width) + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row {
+        var indices: [Int] = []
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+    }
+
+    private func arrange(_ subviews: Subviews, width: CGFloat) -> [Row] {
+        var rows: [Row] = []
+        var current = Row()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.init(width: width, height: nil))
+            let itemWidth = min(size.width, width)
+            if !current.indices.isEmpty, current.width + spacing + itemWidth > width {
+                rows.append(current)
+                current = Row()
+            }
+            current.width += (current.indices.isEmpty ? 0 : spacing) + itemWidth
+            current.height = max(current.height, size.height)
+            current.indices.append(index)
+        }
+        if !current.indices.isEmpty { rows.append(current) }
+        return rows
+    }
+}

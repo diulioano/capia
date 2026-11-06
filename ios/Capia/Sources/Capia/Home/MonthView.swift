@@ -30,7 +30,8 @@ struct MonthView: View {
                     .padding(.top, -4)
                     .padding(.bottom, -6)
                     .modifier(HomeEnter(appeared: appeared, delay: 0.15))
-                MonthSectionsView(categoryTab: home.categoryTab, salary: summary.salary, hidden: hidden,
+                MonthSectionsView(categoryTab: home.categoryTab, salary: summary.salary,
+                                  expenses: summary.expenseBreakdown, recentItems: summary.recent, hidden: hidden,
                                   appeared: appeared, send: send, confirmSalary: receiveSalary)
             }
             .padding(.horizontal, 18)
@@ -150,7 +151,8 @@ struct MonthView: View {
                 .frame(width: 76, height: 76)
                 .accessibilityHidden(true)
             Text(justReceived ? HomeCopy.salaryReceivedMessage
-                              : HomeCopy.capybaraMessage(firstName: summary.firstName, salary: summary.salary))
+                              : HomeCopy.capybaraMessage(firstName: summary.firstName, salary: summary.salary,
+                                                        hasRecords: summary.hasRecords))
                 .id(justReceived)
                 .transition(.opacity)
                 .font(CapiaFonts.body(14, relativeTo: .subheadline))
