@@ -132,4 +132,14 @@ ou o formulário se ela já tinha acionado Continuar.
 
 ## Validação integrada
 
-Pendente.
+Branch `feat/004-new-record`, atualizada com `git merge --ff-only` de
+`feat/004-new-record-us5-modes` (`eb4d9f9`) em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `swift test` em `ios/CapiaFlow` | Passou: 137 testes |
+| `xtool dev build` | Passou, sem avisos |
+| `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas |
+| `quickstart.md` completo no iPhone, com Toques rápidos e Ocultar | Pendente: aceite do usuário |
+| Acessibilidade (VoiceOver, Reduzir Movimento, texto ampliado) | Pendente: aceite do usuário |
+| Revisão de layout do fluxo inteiro, adiada pelo usuário na US3 | Pendente |
