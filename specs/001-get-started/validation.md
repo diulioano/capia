@@ -140,3 +140,14 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   uso sem rede, redução de movimento, maior texto acessível e VoiceOver.
   Resultados ainda pendentes. T012/T014 permanecem reabertas até a conferência completa;
   T016 segue pendente e a US2 não foi iniciada.
+
+## Interação da capivara confirmada — 2026-11-06
+
+- Na build 2, o usuário respondeu "Tudo funcionou" ao percurso de tocar na capivara,
+  conferir a mensagem, tocar novamente após aproximadamente um segundo para renovar
+  a duração, acionar Começar durante o feedback e voltar sem balão antigo.
+- **Passou por relato do usuário no aparelho**: mensagem, renovação, navegação disponível
+  durante o feedback e limpeza ao sair/retornar. Não foi medido o tempo exato do balão.
+- O usuário informou "Ainda não testei" para os cenários sem rede, Reduzir Movimento,
+  maior tamanho de texto acessível e VoiceOver. Esses quatro cenários permanecem pendentes,
+  assim como a comparação visual completa e SC-001. T016 não foi concluída.
