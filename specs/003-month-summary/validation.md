@@ -109,7 +109,7 @@ US5 (revisão `fe2b05d`, que inclui US1–US5 e a correção dos campos de valor
 | `xtool dev build` | Passou |
 | `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06 na 3ª tentativa. Nas duas primeiras, o iPhone não estava visível ao Windows e o xtool encerrou após compilar, sem instalar |
 | Percursos funcionais do Início (`quickstart.md`) | Passou: o usuário informou que a tela do mês está funcional |
-| Acessibilidade (VoiceOver, Reduzir Movimento, maior tamanho de texto) | Pendente: não conferida na integração |
-| Comparação com o quadro "Resumo do mês" no tamanho base | Pendente: não conferida na integração |
+| Acessibilidade (VoiceOver, Reduzir Movimento, maior tamanho de texto) | Passou: conferida pelo usuário no iPhone em 2026-11-06 |
+| Comparação com o quadro "Resumo do mês" no tamanho base | Passou no estado desta entrega (sem registros, com salário previsto e recebido), conferida pelo usuário. O Início com gastos não pode ser conferido: registros estão fora desta entrega (spec, "Não fazem parte"); a conferência passa para a funcionalidade de registro |
 
-T020 continua aberta até as duas conferências pendentes.
+T020 concluída em 2026-11-06. Pendência transferida: conferir saldo do mês, Gastos, "Para onde foi" e "Registros recentes" com gastos reais quando existir o registro.

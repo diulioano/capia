@@ -6,7 +6,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Implemented; validação integrada parcial (acessibilidade e comparação visual pendentes)
+**Status**: Implemented
 
 **Input**: User description: "vamos, continuar para o resumo do mês". Próximo fluxo após a
 configuração inicial: o destino de "Ver meu mês", que hoje é provisório.
