@@ -378,3 +378,16 @@ Verificações:
   abrir pelo ícone, encerrar o processo e confirmar reabertura nas boas-vindas. SC-006
   ainda não aprovado. O socket Apple não listava aparelho; reconexão solicitada ao usuário.
 - Validação integrada T031–T033 aguarda o aceite da US3.
+
+## Instalação da build 5 — 2026-11-06
+
+- Revisão instalada: `9158daf`, branch `feat/001-get-started-us3-app-identity`.
+- O usuário confirmou o iPhone visível; o mesmo aparelho foi listado pelo socket Apple.
+- Executado em `ios/Capia`: `USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb`.
+- **Passou**: compilação, assinatura, instalação e verificação, com código zero após
+  `[Installing] 100%` e `[Verifying] 100%`.
+- **Passou**: consulta `ideviceinstaller list` restrita ao Capia retornou CFBundleVersion
+  `5`, CFBundleDisplayName `Capia` e CFBundleIconFile `AppIcon` no aparelho.
+- **T030 pendente**: conferência visual do ícone/nome na tela inicial e reabertura após
+  encerrar o processo a partir de uma introdução. Teste solicitado ao usuário; metadados
+  instalados não comprovam aparência do ícone nem execução.

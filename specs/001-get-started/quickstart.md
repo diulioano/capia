@@ -1,8 +1,8 @@
 # Validar o Get Started do Capia
 
 US1 e US2 aceitas no iPhone, com os relatos registrados. A build 5 acrescenta o ícone
-do Capia; compilação, recursos e testes passaram. Instalação dessa build, identificação
-do ícone e validação integrada ainda pendentes.
+do Capia; compilação, recursos e testes passaram. Essa build foi instalada e seus
+metadados confirmados. Conferência visual do ícone, reabertura e validação integrada ainda pendentes.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente
