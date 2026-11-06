@@ -100,4 +100,16 @@ edição. Passaram a usar `CentsField` (`UITextField`) com a regra `Cents.editin
 
 ## Validação integrada
 
-Pendente.
+Data: 2026-11-06. Branch `feat/003-month-summary`, integrada por `git merge --ff-only` da
+US5 (revisão `fe2b05d`, que inclui US1–US5 e a correção dos campos de valor `3562e20`).
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `swift test --package-path ios/CapiaFlow` | Passou: 77 testes, 0 falhas |
+| `xtool dev build` | Passou |
+| `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06 na 3ª tentativa. Nas duas primeiras, o iPhone não estava visível ao Windows e o xtool encerrou após compilar, sem instalar |
+| Percursos funcionais do Início (`quickstart.md`) | Passou: o usuário informou que a tela do mês está funcional |
+| Acessibilidade (VoiceOver, Reduzir Movimento, maior tamanho de texto) | Pendente: não conferida na integração |
+| Comparação com o quadro "Resumo do mês" no tamanho base | Pendente: não conferida na integração |
+
+T020 continua aberta até as duas conferências pendentes.

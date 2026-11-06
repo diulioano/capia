@@ -101,4 +101,4 @@ em 2026-11-06, depois de aprovar US1–US4.
 
 ## Phase 8: Validação integrada
 
-- [ ] T020 Integrar as US1–US5 na base, executar `quickstart.md` completo no iPhone, comparar com o quadro, atualizar `docs/prototipo.md` e o status da spec; commitar.
+- [ ] T020 (parcial: acessibilidade e comparação visual pendentes) Integrar as US1–US5 na base, executar `quickstart.md` completo no iPhone, comparar com o quadro, atualizar `docs/prototipo.md` e o status da spec; commitar.
