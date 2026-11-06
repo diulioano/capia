@@ -125,7 +125,7 @@ Branch `feat/004-new-record-us5-modes`. T026 implementada em 2026-11-06.
 | `xtool dev build` | Passou, sem avisos |
 | Permissões | O app não declara uso de microfone, câmera nem fotos e não chama essas APIs |
 | `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
-| T027: linha Falar e Foto de `quickstart.md` | Pendente: aceite do usuário |
+| T027: linha Falar e Foto de `quickstart.md` | Aceito pelo usuário no "Gremio" em 2026-11-06 ("tá funcionando tudo"), sem pedido de permissão |
 
 "Digitar" volta à fase em que a pessoa estava, com tudo o que já tinha preenchido: o teclado,
 ou o formulário se ela já tinha acionado Continuar.
