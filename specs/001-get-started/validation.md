@@ -151,3 +151,12 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 - O usuário informou "Ainda não testei" para os cenários sem rede, Reduzir Movimento,
   maior tamanho de texto acessível e VoiceOver. Esses quatro cenários permanecem pendentes,
   assim como a comparação visual completa e SC-001. T016 não foi concluída.
+
+## Reduzir Movimento confirmado — 2026-11-06
+
+- O usuário respondeu "deu bom" ao teste de ativar Reduzir Movimento nos Ajustes,
+  conferir a cena estática e testar carinho, Começar e Voltar na build 2.
+- **Passou por relato do usuário no aparelho**: preferência de redução de movimento
+  respeitada, com as interações disponíveis.
+- Próximo cenário: uso sem rede. Maior tamanho de texto acessível, VoiceOver,
+  comparação visual completa e SC-001 continuam pendentes; T016 permanece aberta.
