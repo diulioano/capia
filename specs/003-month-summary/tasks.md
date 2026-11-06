@@ -58,9 +58,9 @@ force-push. Sem aparelho, salvar como `wip(usN): ...` e manter a validação abe
 
 **Branch**: `feat/003-month-summary-us1-overview`.
 
-- [ ] T008 [US1] Acrescentar em `ios/Capia/Sources/Capia/Design/CapiaTheme.swift` as cores do quadro (água `#9CC7BA`, espuma `#BEDCD2`, divisória `#F4EBDC`, chip de gasto `#FBE3CF`, barra `#F6F0E6`, selo `#FFFDF8`, texto `#3E3A34`).
-- [ ] T009 [US1] Criar `ios/Capia/Sources/Capia/Home/BalanceCardView.swift`: cartão 214 pt, água no nível, ondas e vapor animados, contagem do valor, selo e leitura acessível única; tudo estático com redução de movimento.
-- [ ] T010 [US1] Criar `ios/Capia/Sources/Capia/Home/MonthView.swift` e `HomeCopy.swift` com cabeçalho (saudação, mês, olho visual), cartão do saldo, indicadores (Fatura como botão; "Sem cartão"; coluna única com texto ampliado) e capivara calma com balão; recalcular saudação e mês ao voltar ao primeiro plano; depende de T008–T009.
+- [X] T008 [US1] Acrescentar em `ios/Capia/Sources/Capia/Design/CapiaTheme.swift` as cores do quadro (água `#9CC7BA`, espuma `#BEDCD2`, divisória `#F4EBDC`, chip de gasto `#FBE3CF`, barra `#F6F0E6`, selo `#FFFDF8`, texto `#3E3A34`).
+- [X] T009 [US1] Criar `ios/Capia/Sources/Capia/Home/BalanceCardView.swift`: cartão 214 pt, água no nível, ondas e vapor animados, contagem do valor, selo e leitura acessível única; tudo estático com redução de movimento.
+- [X] T010 [US1] Criar `ios/Capia/Sources/Capia/Home/MonthView.swift` e `HomeCopy.swift` com cabeçalho (saudação, mês, olho visual), cartão do saldo, indicadores (Fatura como botão; "Sem cartão"; coluna única com texto ampliado) e capivara calma com balão; recalcular saudação e mês ao voltar ao primeiro plano; depende de T008–T009.
 - [ ] T011 [US1] Validar no iPhone as linhas Entrada, Reabertura, Cabeçalho, Saldo, Indicadores e Capivara de `quickstart.md`, com VoiceOver, texto ampliado e redução de movimento; registrar e commitar só a US1.
 
 ## Phase 4: User Story 2 - Seções do mês sem registros (P1)

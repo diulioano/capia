@@ -25,6 +25,16 @@ enum CapiaTheme {
     static let errorText = Color(hex: 0x84401E)
     static let celebration = Color(hex: 0xF1E8DA)
     static let caret = terracotta
+
+    // Resumo do mês (quadro 333f2428-5004-43ff-b703-276a4524089b).
+    static let water = Color(hex: 0x9CC7BA)
+    static let foam = Color(hex: 0xBEDCD2)
+    static let divider = Color(hex: 0xF4EBDC)
+    static let expenseChip = Color(hex: 0xFBE3CF)
+    static let tabBar = Color(hex: 0xF6F0E6)
+    static let badge = Color(hex: 0xFFFDF8)
+    static let balanceText = Color(hex: 0x3E3A34)
+    static let shadow = Color(red: 80/255, green: 60/255, blue: 40/255)
 }
 
 extension Color {

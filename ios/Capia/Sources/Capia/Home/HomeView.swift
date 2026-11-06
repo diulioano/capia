@@ -15,7 +15,7 @@ struct HomeView: View {
         VStack(spacing: 16) {
             switch home.tab {
             case .month:
-                Text("\(summary.calendar.monthName): saldo do mês \(BRL.format(signed: summary.totals.balance))")
+                MonthView(summary: summary, home: home, send: send)
                 Button("Adicionar registro") { send(.openNewRecord) }
             case .accounts:
                 SpaceSummaryList(accounts: space.accounts, cards: space.cards)
@@ -29,7 +29,7 @@ struct HomeView: View {
                 Button("Metas") { send(.select(.goals)) }
             }
         }
-        .padding(24)
+        .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(CapiaTheme.cream.ignoresSafeArea())
         .sheet(isPresented: .init(get: { home.showingNewRecord },
