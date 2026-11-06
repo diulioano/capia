@@ -105,7 +105,7 @@ atalhos e avançar com zero até a pergunta do cartão.
 
 - [X] T016 [P] [US2] Implementar `ios/Capia/Sources/Capia/Setup/AccountStepView.swift`: grade de três tipos com ícones desenhados a partir dos traços SVG do quadro (research §5), rótulo do campo conforme o tipo, placeholder "Ex.: Banco Aurora", sem autocorreção, foco automático e "Você pode adicionar outras contas depois."; ícones decorativos para VoiceOver.
 - [X] T017 [P] [US2] Implementar `ios/Capia/Sources/Capia/Setup/BalanceStepView.swift`: "Quanto tem hoje em {conta}?", valor central em Zen Maru Gothic cinza quando zero, teclado numérico com a conversão de `Money` (digitar e apagar da direita), atalhos `+ R$ 500`, `+ R$ 1.000`, `+ R$ 2.500` em pílulas 44 pt e o texto de apoio; valor anunciado em reais.
-- [ ] T018 [US2] Executar no iPhone as linhas Conta e Saldo de `specs/002-initial-setup/quickstart.md`, teclado aberto, VoiceOver e texto ampliado, comparando com as etapas 3–4 do quadro; registrar em `specs/002-initial-setup/validation.md`, atualizar este arquivo e commitar só a US2; depende de T016–T017.
+- [X] T018 [US2] Executar no iPhone as linhas Conta e Saldo de `specs/002-initial-setup/quickstart.md`, teclado aberto, VoiceOver e texto ampliado, comparando com as etapas 3–4 do quadro; registrar em `specs/002-initial-setup/validation.md`, atualizar este arquivo e commitar só a US2; depende de T016–T017.
 
 **Checkpoint**: Conta e saldo finais; cartão e conclusão podem seguir provisórios.
 

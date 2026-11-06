@@ -13,6 +13,7 @@
 - Integração bancária somente para leitura, possivelmente em uma v2.
 - Ajustes da aparência do mascote e das animações durante a validação do protótipo. A referência visual atual está em `../design/`.
 - Fórmula detalhada e horizonte da previsão usada para sugerir quanto poupar.
+- Sugerido pelo usuário em 2026-11-06 para uma V2: oferecer bancos existentes ao cadastrar contas e cartões, aplicando o tema de cada banco no botão e no cartão. Exige avaliar o uso de marcas e cores de terceiros.
 
 ## Público inicial
 

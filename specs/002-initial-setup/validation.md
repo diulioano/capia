@@ -58,9 +58,11 @@ Branch `feat/002-initial-setup-us2-account`. Implementação de T016–T017 conc
 |-------------|-----------|
 | `xtool dev build` | Passou |
 | `xtool dev run --usb` no aparelho "Gremio" | Passou: instalação e verificação concluídas em 2026-11-06 |
-| Tipos Corrente, Poupança e Carteira; validação do nome; rótulo "Apelido (opcional)" | Pendente: conferência do usuário no iPhone |
-| Saldo: digitar 123456, apagar, atalhos, zero avança | Pendente |
-| Teclado aberto, VoiceOver, texto ampliado; comparação com as etapas 3–4 | Pendente |
+| Percurso da US2 no iPhone (tipos, nome da conta, saldo, atalhos) | Passou: aprovado pelo usuário em 2026-11-06 ("está certo") |
+| Teclado, acessibilidade e comparação com as etapas 3–4 | Aprovado no mesmo relato, sem verificações individuais detalhadas |
+
+Sugestão do usuário para uma V2, fora desta entrega: escolher bancos existentes e aplicar
+o tema de cada um no botão e no cartão. Registrada em `docs/descoberta.md`.
 
 Adaptações: ícones dos tipos desenhados a partir dos traços SVG do quadro; atalhos passam
 para coluna quando não cabem na largura com texto ampliado; valor reduz até 50% para caber.
