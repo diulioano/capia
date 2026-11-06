@@ -25,7 +25,7 @@ As instruções para os agentes estão em [AGENTS.md](AGENTS.md). A implementaç
 
 O Get Started está concluído e validado no iPhone na build 5: boas-vindas com carinho na capivara, três introduções e ícone próprio.
 
-A configuração inicial do espaço foi implementada e aprovada pelo usuário no iPhone em 2026-11-06: nome, objetivos, primeira conta com saldo inicial, cartão de crédito separado com datas e conclusão com resumo. O espaço concluído fica guardado somente no aparelho; ao reabrir, o app vai à tela provisória do mês. Resumo do mês, registros e demais fluxos financeiros ainda não existem. Pendências da validação integrada estão em [specs/002-initial-setup/validation.md](specs/002-initial-setup/validation.md).
+A configuração inicial do espaço foi implementada e aprovada pelo usuário no iPhone em 2026-11-06: nome, objetivos, primeira conta com saldo inicial, cartão de crédito separado com datas e conclusão com resumo. O espaço concluído fica guardado somente no aparelho; ao reabrir, o app vai à tela provisória do mês. Resumo do mês, registros e demais fluxos financeiros ainda não existem. Evidências em [specs/002-initial-setup/validation.md](specs/002-initial-setup/validation.md).
 
 Consulte os [comandos de preparação, teste e instalação](specs/001-get-started/quickstart.md) e o [registro de validação](specs/001-get-started/validation.md). A configuração inicial tem seu [guia de validação](specs/002-initial-setup/quickstart.md); 46 testes automatizados passam. No Get Started, compilação e seis testes automatizados passaram; os percursos nativos foram aprovados pelo usuário, incluindo texto ampliado, VoiceOver, redução de movimento, uso sem rede, ícone e reabertura.
 

@@ -118,4 +118,11 @@ O código integrado é o mesmo aprovado pelo usuário na US4.
 | Percurso completo sem rede, numa única sessão | Pendente: não confirmado explicitamente |
 | VoiceOver, maior texto e Reduzir Movimento item a item | Aprovados de forma geral pelo usuário, sem registro individual |
 
-T027 permanece aberta até a medição de SC-001 e a confirmação sem rede.
+Encerramento em 2026-11-06, por decisão do usuário ("acredito que da para atualizar todas"):
+T027 foi marcada como concluída com base nos aceites das US1–US4 sobre o mesmo código. O tempo
+de SC-001 e o percurso completo sem rede não foram medidos nem confirmados separadamente.
+
+Limpeza no mesmo dia, autorizada pelo usuário: removidos de `assets/` os recursos de exploração
+não usados (`capybara-chest-1024.png`, `capybara-pixel-face-white-1024.png`,
+`capybara-front-calm-1024.png`, `icon.svg` e seus prompts); removido `Profile.greeting`, sem
+uso; sublinhado dos campos unificado em `capiaUnderline`. Testes e compilação repetidos depois.

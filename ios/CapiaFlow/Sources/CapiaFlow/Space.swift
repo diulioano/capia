@@ -18,11 +18,6 @@ public struct Profile: Codable, Equatable, Sendable {
         self.name = name
         self.goals = goals
     }
-
-    /// Primeira palavra do nome, usada nos cumprimentos.
-    public var greeting: String {
-        name.split(whereSeparator: \.isWhitespace).first.map(String.init) ?? ""
-    }
 }
 
 /// Origem ou destino de dinheiro, com saldo inicial na data em que passa a ser acompanhada.

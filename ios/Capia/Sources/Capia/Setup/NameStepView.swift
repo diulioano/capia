@@ -39,12 +39,7 @@ struct NameStepView: View {
             }
             .frame(minHeight: 60)
             .padding(.trailing, 4)
-            .overlay(alignment: .bottom) {
-                Rectangle()
-                    .fill(focused ? CapiaTheme.action : CapiaTheme.border)
-                    .frame(height: 2)
-                    .animation(.easeOut(duration: 0.2), value: focused)
-            }
+            .capiaUnderline(focused: focused)
             .animation(reduceMotion ? nil : .spring(response: 0.4, dampingFraction: 0.55), value: draft.isNameValid)
             if draft.isNameOneShort {
                 Text("Só mais uma letrinha.")

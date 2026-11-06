@@ -116,15 +116,3 @@ struct AccountKindIcon: Shape {
             .concatenating(CGAffineTransform(translationX: rect.minX, y: rect.minY)))
     }
 }
-
-extension View {
-    /// Sublinhado de 2 pt dos campos do quadro: areia; verde com foco.
-    func capiaUnderline(focused: Bool) -> some View {
-        overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(focused ? CapiaTheme.action : CapiaTheme.border)
-                .frame(height: 2)
-                .animation(.easeOut(duration: 0.2), value: focused)
-        }
-    }
-}

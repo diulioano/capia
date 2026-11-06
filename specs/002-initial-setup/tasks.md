@@ -143,7 +143,7 @@ fast-forward até a ponta da US4.
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 - [X] T026 Na branch base, executar `python scripts/prepare-design-assets.py --check`, `swift test --package-path ios/CapiaFlow` e `xtool dev build` em `ios/Capia/`, inspecionar o bundle (imagens, fontes, ícone) e registrar em `specs/002-initial-setup/validation.md`; correções de uma US vão em commit com o prefixo dela.
-- [ ] T027 Executar integralmente `specs/002-initial-setup/quickstart.md` no iPhone sem rede, com VoiceOver, redução de movimento, maior texto e comparação com o quadro; registrar SC-001 a SC-008, aparelho, iOS, revisão e pendências em `specs/002-initial-setup/validation.md`.
+- [X] T027 Executar integralmente `specs/002-initial-setup/quickstart.md` no iPhone sem rede, com VoiceOver, redução de movimento, maior texto e comparação com o quadro; registrar SC-001 a SC-008, aparelho, iOS, revisão e pendências em `specs/002-initial-setup/validation.md`.
 - [X] T028 Atualizar `README.md`, `docs/prototipo.md` e `specs/002-initial-setup/spec.md` (status) com o estado real; conferir conformidade com `specs/002-initial-setup/contracts/initial-setup-ui.md`, marcar só as tarefas comprovadas e fazer o commit de integração na base, sem merge em `master`.
 
 ## Dependencies & Execution Order

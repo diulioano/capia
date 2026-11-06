@@ -6,7 +6,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Implemented; integrated validation partially pending (see validation.md)
+**Status**: Implemented
 
 **Input**: User description: "Vamos começar agora com a segunda US já que finalizamos a primeira." Confirmado pelo usuário: o próximo fluxo é a configuração inicial do espaço, com nome, preferências, primeira conta e cartão. "Continue na próxima fase."
 
@@ -182,7 +182,7 @@ voltar da conclusão e acionar Ver meu mês.
 - Com o tipo Carteira, a pergunta do cartão usa o nome da conta, como no design. A identificação do emissor de cartões não vinculados a um banco cadastrado fica para o fluxo de contas e cartões.
 - O texto sobre a fatura seguinte é orientação do design. Datas-limite, meses curtos e atribuição de parcelas continuam como questões abertas em `docs/descoberta.md` e não são calculados nesta entrega.
 - Contas com saldo negativo, como cheque especial, não fazem parte desta entrega.
-- As poses da capivara reutilizam as imagens já preparadas no Get Started e os recursos de `assets/`, como a capivara calma; novas poses só serão preparadas se a referência exigir.
+- As poses da capivara reutilizam as imagens já preparadas no Get Started e a pose calma da folha de expressões em `assets/`; novas poses só serão preparadas se a referência exigir.
 - Decisão do usuário em 2026-11-06: guardar a configuração no aparelho nesta entrega e tratar a sincronização pelo iCloud como funcionalidade posterior. O recurso iCloud costuma exigir Apple Developer Program pago, ainda não confirmado; a escolha do armazenamento deve permitir sincronizar depois sem perder dados.
 - Nesta entrega não há ação para apagar ou recomeçar a configuração; remover o app do iPhone apaga os dados guardados. Adicionar outra conta a partir do resumo guarda o novo item ao chegar novamente à conclusão.
 - Os objetivos escolhidos ficam registrados no perfil, mas a personalização de outros fluxos a partir deles não faz parte desta entrega.
