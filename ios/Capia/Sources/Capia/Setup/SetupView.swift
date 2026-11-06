@@ -132,6 +132,11 @@ struct SetupView: View {
                              submit: { send(.init(.continueStep, from: source)) })
             case .goals:
                 GoalsStepView(draft: flow.draft, edit: edit)
+            case .account:
+                AccountStepView(draft: flow.draft, edit: edit,
+                                submit: { send(.init(.continueStep, from: source)) })
+            case .balance:
+                BalanceStepView(draft: flow.draft, edit: edit)
             default:
                 ProvisionalStepContent(flow: flow, saveFailed: saveFailed, edit: edit,
                                        send: { send(.init($0, from: source)) },
@@ -164,7 +169,7 @@ private struct ProgressTrack: View {
 }
 
 /// Conteúdo provisório das etapas ainda não finalizadas. Substituído por arquivo
-/// próprio em cada US (conta e saldo na US2, cartão na US3, conclusão na US4).
+/// próprio em cada US (cartão na US3, conclusão na US4).
 @MainActor
 private struct ProvisionalStepContent: View {
     let flow: SetupFlow
@@ -175,31 +180,10 @@ private struct ProvisionalStepContent: View {
 
     private var draft: SetupDraft { flow.draft }
 
-    private func binding<Value>(_ keyPath: WritableKeyPath<SetupDraft, Value>) -> Binding<Value> {
-        Binding(get: { draft[keyPath: keyPath] },
-                set: { value in edit { $0[keyPath: keyPath] = value } })
-    }
-
     var body: some View {
         switch flow.step {
-        case .name, .goals:
+        case .name, .goals, .account, .balance:
             EmptyView()
-        case .account:
-            Picker("Tipo", selection: binding(\.accountKind)) {
-                ForEach(AccountKind.allCases, id: \.self) { Text($0.rawValue).tag($0) }
-            }
-            .pickerStyle(.segmented)
-            TextField("Nome do banco ou apelido", text: binding(\.accountName))
-        case .balance:
-            TextField("Saldo inicial", text: Binding(
-                get: { BRL.format(draft.balance) },
-                set: { text in edit { $0.balance = Cents(typed: text) } }))
-                .keyboardType(.numberPad)
-            HStack {
-                ForEach(SetupDraft.balanceShortcutsInReais, id: \.self) { reais in
-                    Button(BRL.shortcutLabel(reais: reais)) { edit { $0.addToBalance(reais: reais) } }
-                }
-            }
         case .cardQuestion:
             Button("\(draft.hasCard == true ? "●" : "○") Sim, tenho cartão") { edit { $0.hasCard = true } }
             Button("\(draft.hasCard == false ? "●" : "○") Agora não") { edit { $0.hasCard = false } }
@@ -213,7 +197,7 @@ private struct ProvisionalStepContent: View {
             if !draft.areCardDaysValid { Text("Fechamento e vencimento precisam ser em dias diferentes.") }
         case .done:
             ForEach(flow.accounts) { account in
-                Text("\(account.name) · \(account.kind.rawValue) · \(BRL.format(account.initialBalance))")
+                Text("\(account.name) · \(SetupCopy.kindDescription(account.kind)) · \(BRL.format(account.initialBalance))")
             }
             ForEach(flow.cards) { card in
                 Text("Cartão \(card.name) · Fecha dia \(card.closingDay) · vence dia \(card.dueDay) · Separado")

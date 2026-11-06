@@ -42,6 +42,28 @@ enum SetupCopy {
         }
     }
 
+    /// Rótulo curto da opção de tipo.
+    static func kindLabel(_ kind: AccountKind) -> String {
+        switch kind {
+        case .checking: "Corrente"
+        case .savings: "Poupança"
+        case .wallet: "Carteira"
+        }
+    }
+
+    /// Tipo por extenso, usado no resumo da conclusão.
+    static func kindDescription(_ kind: AccountKind) -> String {
+        switch kind {
+        case .checking: "Conta corrente"
+        case .savings: "Poupança"
+        case .wallet: "Dinheiro em espécie"
+        }
+    }
+
+    static func accountFieldLabel(_ kind: AccountKind) -> String {
+        kind == .wallet ? "Apelido (opcional)" : "Nome do banco ou apelido"
+    }
+
     @MainActor
     static func image(for mood: SetupMood) -> UIImage {
         switch mood {
