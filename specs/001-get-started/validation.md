@@ -207,3 +207,16 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 - **Pendente**: instalar a build 3 e conferir texto máximo, rolagem, cena, feedback e
   regressão em tamanho padrão no iPhone. O socket Apple não listava aparelho na tentativa
   de conexão desta etapa. Solicitada reconexão ao usuário. T012/T014/T016 continuam abertas.
+
+## Instalação da build 3 — 2026-11-06
+
+- Revisão instalada: `e65e5e5`, branch `feat/001-get-started-us1-welcome`.
+- Após o usuário reconectar, o iPhone voltou a ser listado pelo socket Apple do Windows.
+- Executado em `ios/Capia`: `USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb`.
+- **Passou**: compilação, instalação e verificação do pacote no aparelho,
+  com `[Installing] 100%`, `[Verifying] 100%` e término com código zero.
+- **Passou**: `ideviceinstaller list`, restrito ao Capia, confirma CFBundleVersion `3`
+  e CFBundleDisplayName `Capia` no aparelho.
+- **Pendente**: conferência da build 3 com texto máximo (rolagem, cena, botão fixo e carinho),
+  regressão visual em tamanho padrão e demais verificações ainda abertas da US1.
+  O resultado foi solicitado ao usuário; T012/T014/T016 continuam abertas.
