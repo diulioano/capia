@@ -70,6 +70,7 @@ Branch `feat/003-month-summary-us4-navigation`. T016–T018 implementadas em 202
 |-------------|-----------|
 | `swift test --package-path ios/CapiaFlow` | Passou: 65 testes, 0 falhas |
 | `xtool dev build` | Passou |
+| `xtool dev run --usb` no "Gremio" (porta 27015), revisão `b38a6c5` com US1–US4 | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
 | T019: percursos Novo registro, Contas, Outra conta, Metas e Toques rápidos no iPhone | Pendente: depende do aparelho e da conferência do usuário |
 
 Adaptações: a barra inferior fica na área segura (itens de 52 pt, recuo de 10 pt no topo);
