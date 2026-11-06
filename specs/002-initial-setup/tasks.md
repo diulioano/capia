@@ -118,7 +118,10 @@ dias iguais e conclui com dias diferentes.
 
 - [X] T019 [P] [US3] Implementar `ios/Capia/Sources/Capia/Setup/CardQuestionStepView.swift` com as duas opções de 76 pt, ícones de cartão e círculo desenhados a partir do quadro, títulos e subtítulos exatos e estado selecionado anunciado.
 - [X] T020 [P] [US3] Implementar `ios/Capia/Sources/Capia/Setup/CardDatesStepView.swift`: "Datas do cartão {conta}", fileiras horizontais de 1 a 31 (48 × 52, "Dia N") rolando até o selecionado, aviso verde com o dia de fechamento ou erro com tremor (omitido com redução de movimento) quando os dias coincidem.
-- [ ] T021 [US3] Executar no iPhone as linhas Sem cartão, Com cartão e Voltar de `specs/002-initial-setup/quickstart.md`, com VoiceOver na rolagem de dias e texto ampliado, comparando com as etapas 5–6 do quadro; registrar, atualizar este arquivo e commitar só a US3; depende de T019–T020.
+- [X] T021 [US3] Executar no iPhone as linhas Sem cartão, Com cartão e Voltar de `specs/002-initial-setup/quickstart.md`, com VoiceOver na rolagem de dias e texto ampliado, comparando com as etapas 5–6 do quadro; registrar, atualizar este arquivo e commitar só a US3; depende de T019–T020.
+
+Execução: a regra das datas (sugestão de 7 dias, aviso fora de 5–15, mês seguinte) foi
+acrescentada durante a validação, por decisão do usuário, com testes em `CardDatesTests`.
 
 **Checkpoint**: Todas as seis etapas finais; conclusão ainda provisória.
 

@@ -75,14 +75,14 @@ Branch `feat/002-initial-setup-us3-card`. Implementação de T019–T020 conclu�
 |-------------|-----------|
 | `xtool dev build` | Passou |
 | `xtool dev run --usb` no aparelho "Gremio" | 1ª tentativa falhou: `connectTimeout` ao registrar o aparelho em `api.appstoreconnect.apple.com`; 2ª tentativa passou em 2026-11-06 |
-| "Agora não" conclui sem datas; "Sim" abre as datas 3 e 10 | Pendente: conferência do usuário no iPhone |
-| Dias iguais: erro, tremor e Continuar indisponível; dias diferentes: aviso verde | Pendente |
-| VoiceOver nas fileiras de dias, texto ampliado; comparação com as etapas 5–6 | Pendente |
+| Percurso da US3 no iPhone (sem cartão, com cartão, dias iguais, voltar) | Passou: "está funcional" |
+| Regra das datas (sugestão, mês seguinte, aviso fora de 5–15) | Passou: aprovado pelo usuário em 2026-11-06 ("está ok") |
+| Acessibilidade e comparação com as etapas 5–6 | Aprovado nos mesmos relatos, sem verificações individuais detalhadas |
 
 Retorno do usuário em 2026-11-06: "está funcional", com dúvida sobre a distância entre fechamento
 e vencimento. Decisão: sugerir vencimento 7 dias após o fechamento, avisar sem bloquear fora de
 5 a 15 dias e informar vencimento no mês seguinte. 46 testes passaram (`CardDatesTests` +5);
-nova build compilada e instalada no "Gremio". Conferência da regra no iPhone: pendente.
+nova build compilada e instalada no "Gremio" e aprovada.
 
 Adaptações: ícones de cartão e "Agora não" desenhados a partir dos traços do quadro; dias
 anunciados como "Fecha no dia N" / "Vence no dia N"; tremor omitido com Reduzir Movimento.
