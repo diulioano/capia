@@ -40,11 +40,19 @@ struct RecordFormView: View {
         .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: flow.showsInstallments)
         .sheet(isPresented: $showingCalendar) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Outra data")
-                    .font(CapiaFonts.body(17, relativeTo: .headline, weight: .bold))
-                    .foregroundStyle(CapiaTheme.ink)
-                    .accessibilityAddTraits(.isHeader)
-                    .padding(.horizontal, 8)
+                HStack {
+                    Text("Outra data")
+                        .font(CapiaFonts.body(17, relativeTo: .headline, weight: .bold))
+                        .foregroundStyle(CapiaTheme.ink)
+                        .accessibilityAddTraits(.isHeader)
+                    Spacer()
+                    // Fecha a folha quando a escolha não foi um toque num dia (mês e ano na roda).
+                    Button("Pronto") { showingCalendar = false }
+                        .font(CapiaFonts.body(16, relativeTo: .body, weight: .bold))
+                        .foregroundStyle(CapiaTheme.action)
+                        .frame(minHeight: 44)
+                }
+                .padding(.horizontal, 8)
                 DatePicker("Data do registro", selection: calendarSelection, in: ...Date(), displayedComponents: .date)
                     .datePickerStyle(.graphical)
                     .tint(CapiaTheme.action)
@@ -241,18 +249,37 @@ struct RecordFormView: View {
             return calendar.date(from: DateComponents(year: day.year, month: day.month, day: day.day, hour: 12)) ?? Date()
         } set: { date in
             let now = Date()
+            let previous = RecordCopy.day(for: draft.date)
             let day = CalendarDay(date: date, timeZone: .current)
-            if day == CalendarDay.today(now: now, timeZone: .current) {
+            let today = CalendarDay.today(now: now, timeZone: .current)
+            if day == today {
                 send(.chooseDate(.today))
             } else if day == CalendarDay.yesterday(now: now, timeZone: .current) {
                 send(.chooseDate(.yesterday))
             } else {
                 send(.chooseDate(.other(day)))
             }
-            // Escolher o dia fecha a folha.
-            showingCalendar = false
-            AccessibilityNotification.Announcement("Data escolhida: \(day.dayMonthText)").post()
+            if Self.isDayTap(from: previous, to: day, today: today) {
+                // Tocar num dia fecha a folha.
+                showingCalendar = false
+                AccessibilityNotification.Announcement("Data escolhida: \(day.dayMonthText)").post()
+            }
         }
+    }
+
+    /// Distingue o toque num dia da roda de mês e ano, que também muda a data mas mantém o
+    /// dia (ou o ajusta ao fim do mês ou a hoje). Nesses casos a folha fica aberta.
+    private static func isDayTap(from previous: CalendarDay, to day: CalendarDay, today: CalendarDay) -> Bool {
+        guard day != previous else { return false }
+        if day.yearMonth == previous.yearMonth { return true }
+        if day.day == previous.day { return false }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let start = calendar.date(from: DateComponents(year: day.year, month: day.month, day: 1)) ?? Date()
+        let lastDay = calendar.range(of: .day, in: .month, for: start)?.count ?? 31
+        let clampedToMonthEnd = day.day == lastDay && previous.day > lastDay
+        let clampedToToday = day == today
+        return !(clampedToMonthEnd || clampedToToday)
     }
 
     private var date: some View {
