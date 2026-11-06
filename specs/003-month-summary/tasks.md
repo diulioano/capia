@@ -81,9 +81,9 @@ force-push. Sem aparelho, salvar como `wip(usN): ...` e manter a validação abe
 
 **Branch**: `feat/003-month-summary-us4-navigation`.
 
-- [ ] T016 [US4] Finalizar em `HomeView.swift` a barra inferior (ícones desenhados do quadro, aba atual anunciada) e o botão + (posição, sombra, entrada com giro omitida com redução de movimento), sem cobrir o conteúdo.
-- [ ] T017 [P] [US4] Criar `ios/Capia/Sources/Capia/Home/AccountsTabView.swift` com `SpaceSummaryList`, aviso provisório e "Adicionar outra conta" ligado à raiz.
-- [ ] T018 [P] [US4] Criar `ios/Capia/Sources/Capia/Home/PlaceholderTabView.swift` para Metas e novo registro, com "Voltar ao início" no novo registro.
+- [X] T016 [US4] Finalizar em `HomeView.swift` a barra inferior (ícones desenhados do quadro, aba atual anunciada) e o botão + (posição, sombra, entrada com giro omitida com redução de movimento), sem cobrir o conteúdo.
+- [X] T017 [P] [US4] Criar `ios/Capia/Sources/Capia/Home/AccountsTabView.swift` com `SpaceSummaryList`, aviso provisório e "Adicionar outra conta" ligado à raiz.
+- [X] T018 [P] [US4] Criar `ios/Capia/Sources/Capia/Home/PlaceholderTabView.swift` para Metas e novo registro, com "Voltar ao início" no novo registro.
 - [ ] T019 [US4] Validar no iPhone as linhas Novo registro, Contas, Outra conta, Metas e Toques rápidos de `quickstart.md`; registrar e commitar só a US4.
 
 ## Phase 7: Validação integrada

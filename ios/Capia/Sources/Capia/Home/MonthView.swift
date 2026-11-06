@@ -29,7 +29,7 @@ struct MonthView: View {
             }
             .padding(.horizontal, 18)
             .padding(.top, 12)
-            .padding(.bottom, 24)
+            .padding(.bottom, 100) // espaço para o botão +, como os 130 pt do quadro
         }
         .scrollIndicators(.hidden)
         .background(CapiaTheme.cream.ignoresSafeArea())

@@ -64,7 +64,17 @@ quadro, com o mesmo botão de 44 pt, raio 14 e fundo areia.
 
 ## US4 — Navegar a partir do Início
 
-Pendente.
+Branch `feat/003-month-summary-us4-navigation`. T016–T018 implementadas em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `swift test --package-path ios/CapiaFlow` | Passou: 65 testes, 0 falhas |
+| `xtool dev build` | Passou |
+| T019: percursos Novo registro, Contas, Outra conta, Metas e Toques rápidos no iPhone | Pendente: depende do aparelho e da conferência do usuário |
+
+Adaptações: a barra inferior fica na área segura (itens de 52 pt, recuo de 10 pt no topo);
+o botão + fica 20 pt acima da barra, como no quadro (112 − 92), e só aparece no Início;
+o destino de novo registro abre como folha sobre o Início.
 
 ## Validação integrada
 
