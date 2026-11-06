@@ -245,3 +245,13 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 - **Pendente para fechar T016**: SC-001 (entender a proposta e iniciar em até 15 segundos
   sem orientação). O critério foi perguntado explicitamente ao usuário; não foi inferido
   a partir da aprovação das outras verificações. US2 ainda não iniciada.
+
+## Aceite da US1 — 2026-11-06
+
+- SC-001 aprovado por relato do usuário: "Sim, em até 15 segundos", em resposta ao
+  critério de entender a proposta e iniciar a apresentação sem orientação.
+- T012, T014 e T016 concluídas com os resultados registrados nas seções anteriores.
+  Aceite no iPhone15,2 / iOS 26.7.2, build 3 (`e65e5e5`), apoiado nas verificações
+  do usuário para aparência padrão, maior texto, VoiceOver, movimento reduzido,
+  uso sem rede e carinho. O tempo de SC-001 foi informado pelo usuário, sem medição instrumental.
+- US1 aceita; as introduções ainda são provisórias. US2 e US3 não estão concluídas.
