@@ -75,7 +75,17 @@ campo de valor do formulário continua com o teclado numérico do sistema.
 
 ## US3 — Gastar no cartão, à vista ou parcelado
 
-Pendente.
+Branch `feat/004-new-record-us3-card`. T020–T021 implementadas em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou, sem avisos |
+| `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
+| T022: linhas Cartão à vista, Parcelado, Resto, Troca de fonte e Sem cartão de `quickstart.md` | Pendente: aceite do usuário |
+
+T021 não exigiu código novo: o indicador Fatura já lia `totals.bill` desde a base, e o
+subtítulo dos recentes já mostrava "Cartão {nome}" e "n×" desde a US1. Os botões − e + ficam
+esmaecidos e desabilitados nos limites (1× e 12×), e o número de parcelas é anunciado.
 
 ## US4 — Desfazer ou desistir de um registro
 

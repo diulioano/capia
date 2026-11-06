@@ -23,6 +23,10 @@ struct RecordFormView: View {
                 description
                 if draft.kind == .expense { categories }
                 sources
+                if flow.showsInstallments, let card = flow.selectedCard {
+                    installments(card)
+                        .transition(reduceMotion ? .identity : .opacity)
+                }
                 date
             }
             .padding(.horizontal, 18)
@@ -32,6 +36,7 @@ struct RecordFormView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) { actions }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: flow.showsInstallments)
         .sheet(isPresented: $pickingDate) {
             OtherDateSheet(initial: currentOtherDay) { day in
                 send(.chooseDate(.other(day)))
@@ -139,8 +144,7 @@ struct RecordFormView: View {
         VStack(alignment: .leading, spacing: 8) {
             fieldLabel(RecordCopy.sourceLabel(draft.kind))
             FlowLayout(spacing: 8) {
-                // Os cartões chegam na US3.
-                ForEach(flow.availableSources.filter { !$0.isCard }, id: \.self) { source in
+                ForEach(flow.availableSources, id: \.self) { source in
                     let selected = draft.source == source
                     Button { send(.chooseSource(source)) } label: {
                         Text(RecordCopy.sourceName(source, accounts: flow.accounts, cards: flow.cards))
@@ -152,6 +156,63 @@ struct RecordFormView: View {
             }
         }
         .accessibilityElement(children: .contain)
+    }
+
+    // MARK: Parcelas
+
+    /// Bloco do quadro: "Parcelas", texto da fatura e botões − e +, de 1× a 12×.
+    private func installments(_ card: CreditCard) -> some View {
+        let count = draft.installments
+        let text = RecordCopy.installmentsText(card: card, amount: draft.amount, count: count,
+                                               purchase: RecordCopy.day(for: draft.date))
+        return HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Parcelas")
+                    .font(CapiaFonts.body(16, relativeTo: .body, weight: .bold))
+                Text(text)
+                    .font(CapiaFonts.body(13, relativeTo: .caption))
+                    .monospacedDigit()
+                    .foregroundStyle(CapiaTheme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .accessibilityElement(children: .combine)
+            Spacer(minLength: 8)
+            HStack(spacing: 8) {
+                stepButton("−", label: "Menos parcelas", step: -1,
+                           enabled: count > Record.installmentRange.lowerBound)
+                Text("\(count)×")
+                    .font(CapiaFonts.body(18, relativeTo: .headline, weight: .bold))
+                    .monospacedDigit()
+                    .frame(minWidth: 32)
+                    .accessibilityHidden(true)
+                stepButton("+", label: "Mais parcelas", step: 1,
+                           enabled: count < Record.installmentRange.upperBound)
+            }
+        }
+        .padding(.vertical, 14)
+        .padding(.horizontal, 16)
+        .background(CapiaTheme.paper, in: RoundedRectangle(cornerRadius: 18))
+        .accessibilityElement(children: .contain)
+    }
+
+    private func stepButton(_ symbol: String, label: String, step: Int, enabled: Bool) -> some View {
+        Button {
+            send(.stepInstallments(step))
+            let next = min(max(draft.installments + step, Record.installmentRange.lowerBound),
+                           Record.installmentRange.upperBound)
+            AccessibilityNotification.Announcement("\(next) \(next == 1 ? "parcela" : "parcelas")").post()
+        } label: {
+            Text(symbol)
+                .font(.system(size: 22, weight: .bold))
+                .foregroundStyle(CapiaTheme.ink)
+                .frame(width: 44, height: 44)
+                .background(CapiaTheme.sand, in: RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(CapiaTapStyle())
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.45)
+        .accessibilityLabel(label)
+        .accessibilityValue("\(draft.installments)×")
     }
 
     // MARK: Data
