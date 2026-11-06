@@ -100,7 +100,7 @@ arquivos de tela (`RecordFormView.swift`, `NewRecordView.swift`).
 
 - [X] T020 [US3] Acrescentar os cartões a "Pago com" e o bloco Parcelas em `RecordFormView.swift` ("Menos parcelas"/"Mais parcelas" desabilitados nos limites, valor anunciado, texto "À vista, na fatura de {mês}" ou "n× de R$ · até {mês}" vindo de `CardBilling`, entrada `.fade` omitida com redução de movimento).
 - [X] T021 [US3] No Início, ligar o indicador Fatura a `totals.bill` e mostrar "n×" e "Cartão {nome}" nos recentes em `MonthSectionsView.swift`.
-- [ ] T022 [US3] Validar no iPhone as linhas da US3 de `quickstart.md`, com espaço com e sem cartão; registrar e commitar só a US3.
+- [X] T022 [US3] Validar no iPhone as linhas da US3 de `quickstart.md`, com espaço com e sem cartão; registrar e commitar só a US3.
 
 ## Phase 6: User Story 4 - Desfazer ou desistir de um registro (P2)
 
