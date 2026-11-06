@@ -6,7 +6,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Ready for planning
+**Status**: Planned
 
 **Input**: User description: "Vamos começar agora com a segunda US já que finalizamos a primeira." Confirmado pelo usuário: o próximo fluxo é a configuração inicial do espaço, com nome, preferências, primeira conta e cartão. "Continue na próxima fase."
 
@@ -120,6 +120,9 @@ voltar da conclusão e acionar Ver meu mês.
 - Em telas menores ou com texto ampliado, conteúdo e ações continuam alcançáveis, com rolagem quando necessária; a lista horizontal de dias continua navegável.
 - Com redução de movimento, transições, confete e animações da capivara ficam estáticos ou são omitidos, sem perda de conteúdo ou espera para avançar.
 - O fluxo funciona sem conexão e não solicita acesso a câmera, microfone, fotos, contatos ou dados bancários.
+- Durante "Adicionar outra conta", Voltar na etapa da conta retorna à conclusão sem alterar os itens; nome e objetivos não são revisitados.
+- Na conclusão aberta a partir do espaço guardado não há rascunho; Voltar não é oferecido.
+- Se não for possível guardar no aparelho, a conclusão continua disponível com os dados da sessão e informa a falha, com opção de tentar de novo.
 
 ## Requirements *(mandatory)*
 
