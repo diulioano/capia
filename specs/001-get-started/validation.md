@@ -169,3 +169,15 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   incluindo reabertura. A nova execução apresentou as boas-vindas.
 - Maior tamanho de texto acessível, VoiceOver, comparação visual completa e SC-001
   continuam pendentes; T016 permanece aberta.
+
+## Texto ampliado — falha visual relatada em 2026-11-06
+
+- No maior tamanho de texto de acessibilidade, o usuário relatou: "quebrou o layout
+  mas continua funcional, e a imagem ficou estranha".
+- **Falhou visualmente por relato do usuário no aparelho**: a funcionalidade permanece
+  acessível, mas a composição e a apresentação da imagem não foram aceitas.
+- Revisão inicial do código: esse modo usa uma coluna rolável com cena de altura fixa
+  de 360 pontos e um deslocamento vertical próprio. A captura do resultado foi solicitada
+  para identificar o defeito concreto antes de alterar enquadramento ou tipografia.
+- O cenário de maior texto não está aprovado. T012, T014 e T016 continuam abertas;
+  VoiceOver, comparação visual completa e SC-001 também permanecem pendentes.
