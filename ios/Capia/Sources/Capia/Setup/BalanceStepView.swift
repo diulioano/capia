@@ -8,8 +8,6 @@ struct BalanceStepView: View {
     let draft: SetupDraft
     let edit: ((inout SetupDraft) -> Void) -> Void
 
-    @FocusState private var focused: Bool
-
     var body: some View {
         VStack(spacing: 14) {
             Text("Saldo inicial")
@@ -17,20 +15,10 @@ struct BalanceStepView: View {
                 .foregroundStyle(CapiaTheme.muted)
                 .padding(.top, 18)
                 .accessibilityHidden(true)
-            TextField("", text: Binding(get: { BRL.format(draft.balance) },
-                                        set: { text in edit { $0.balance = Cents(typed: text) } }))
-                .font(CapiaFonts.title(48))
-                .monospacedDigit()
-                .multilineTextAlignment(.center)
-                .foregroundStyle(draft.balance == .zero ? CapiaTheme.placeholder : CapiaTheme.ink)
-                .tint(CapiaTheme.caret)
-                .keyboardType(.numberPad)
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-                .focused($focused)
-                .frame(minHeight: 72)
-                .accessibilityLabel("Saldo inicial")
-                .accessibilityValue(BRL.format(draft.balance))
+            CentsField(value: draft.balance, accessibilityLabel: "Saldo inicial") { cents in
+                edit { $0.balance = cents }
+            }
+            .frame(maxWidth: .infinity, minHeight: 72)
             FlowingShortcuts(draft: draft, edit: edit)
                 .padding(.top, 8)
             Text("Pode ser zero ou aproximado. Você ajusta quando quiser.")
@@ -41,10 +29,6 @@ struct BalanceStepView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity)
-        .task {
-            await Task.yield()
-            focused = true
-        }
     }
 }
 

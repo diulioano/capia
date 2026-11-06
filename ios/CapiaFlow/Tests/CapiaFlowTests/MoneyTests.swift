@@ -16,6 +16,32 @@ final class MoneyTests: XCTestCase {
                        ["+ R$ 500", "+ R$ 1.000", "+ R$ 2.500"])
     }
 
+    func testEditingWorksLikeACalculator() {
+        // Digitar 1, 2, 3, 4, 5 vai formatando: 0,01 → 0,12 → 1,23 → 12,34 → 123,45.
+        var cents = Cents.zero
+        var shown: [String] = []
+        for key in ["1", "2", "3", "4", "5"] {
+            cents = cents.editing(insert: key)
+            shown.append(BRL.format(cents))
+        }
+        XCTAssertEqual(shown, ["R$ 0,01", "R$ 0,12", "R$ 1,23", "R$ 12,34", "R$ 123,45"])
+        // Apagar remove o último algarismo.
+        XCTAssertEqual(cents.editing(insert: ""), Cents(1_234))
+        XCTAssertEqual(Cents(5).editing(insert: ""), .zero)
+        XCTAssertEqual(Cents.zero.editing(insert: ""), .zero)
+        // Selecionar tudo e apagar zera; selecionar tudo e digitar substitui.
+        XCTAssertEqual(cents.editing(insert: "", replacingAll: true), .zero)
+        XCTAssertEqual(cents.editing(insert: "7", replacingAll: true), Cents(7))
+        // Depois de um atalho (R$ 1.000,00), digitar continua pela direita.
+        XCTAssertEqual(Cents(reais: 1_000).editing(insert: "1"), Cents(1_000_001))
+        // Colar texto formatado acrescenta só os algarismos.
+        XCTAssertEqual(Cents.zero.editing(insert: "R$ 12,50"), Cents(1_250))
+        // Texto sem algarismos não altera; acima de onze algarismos, ignora o excesso.
+        XCTAssertEqual(Cents(42).editing(insert: "a"), Cents(42))
+        XCTAssertEqual(Cents.max.editing(insert: "1"), .max)
+        XCTAssertEqual(Cents(12_345_678_901).editing(insert: "9"), Cents(12_345_678_901))
+    }
+
     func testTypedDigitsFillFromTheRight() {
         XCTAssertEqual(Cents(typed: ""), .zero)
         XCTAssertEqual(Cents(typed: "1"), Cents(1))

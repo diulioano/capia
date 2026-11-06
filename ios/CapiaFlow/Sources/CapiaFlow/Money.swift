@@ -27,6 +27,21 @@ public struct Cents: Hashable, Comparable, Codable, Sendable {
         self.init(digits.reduce(Int64(0)) { $0 * 10 + $1 })
     }
 
+    /// Aplica uma tecla ao campo de valor, como numa calculadora: algarismos entram pela
+    /// direita, apagar remove o último e apagar o texto inteiro zera. Texto sem algarismos
+    /// não muda o valor; algarismos além do limite de onze são descartados.
+    public func editing(insert replacement: String, replacingAll: Bool = false) -> Cents {
+        if replacement.isEmpty {
+            return replacingAll ? .zero : Cents(value / 10)
+        }
+        let typed = Cents(typed: replacement)
+        let hasDigits = replacement.unicodeScalars.contains { $0.value >= 48 && $0.value <= 57 }
+        guard hasDigits else { return self }
+        if replacingAll { return typed }
+        let current = value == 0 ? "" : String(value)
+        return Cents(typed: current + replacement)
+    }
+
     /// Soma que satura no limite em vez de ultrapassá-lo.
     public func adding(_ other: Cents) -> Cents {
         Cents(value + other.value)

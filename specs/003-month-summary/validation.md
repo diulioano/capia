@@ -92,6 +92,12 @@ Complementos ao design: etapa 5 de 7 da configuração; "Em contas hoje" no cart
 a resposta ao "Recebi" não cita metas, que ainda não existem. Pendências registradas:
 "Recebi" não pode ser desfeito e uma falha ao gravar o recebimento não é avisada.
 
+Correção em 2026-11-06: os campos de saldo inicial e de salário acumulavam os algarismos no
+fim do texto em vez de reformatar, porque o `TextField` do SwiftUI não reescreve o texto em
+edição. Passaram a usar `CentsField` (`UITextField`) com a regra `Cents.editing`.
+`swift test` passou com 77 testes e 0 falhas; `xtool dev build` e `xtool dev run --usb` no
+"Gremio" passaram; digitação conferida pelo usuário no iPhone.
+
 ## Validação integrada
 
 Pendente.
