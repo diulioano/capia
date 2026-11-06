@@ -85,6 +85,7 @@ Branch `feat/003-month-summary-us5-salary`. T021–T025 implementadas em 2026-11
 |-------------|-----------|
 | `swift test --package-path ios/CapiaFlow` | Passou: 76 testes, 0 falhas (salário na configuração, previsto e recebido, um por mês, mês seguinte, outra conta, espaço antigo sem as chaves novas) |
 | `xtool dev build` | Passou |
+| `xtool dev run --usb` no "Gremio", revisão `d9900fa` | Passou em 2026-11-06 na 2ª tentativa (a 1ª excedeu 5 min após compilar). Telas ainda não conferidas |
 | T026: cenários da US5 no iPhone | Pendente: depende do aparelho e da conferência do usuário |
 
 Complementos ao design: etapa 5 de 7 da configuração; "Em contas hoje" no cartão do saldo;
