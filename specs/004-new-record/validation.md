@@ -102,7 +102,7 @@ Branch `feat/004-new-record-us4-undo`. T023–T024 implementadas em 2026-11-06.
 | `xtool dev build` | Passou, sem avisos |
 | `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
 | Ajuste pedido pelo usuário | O aviso durava demais e sumia sem animação. Passou a durar 3 s (era 4,2 s) e a entrar subindo e sair descendo em 0,4 s, com a curva do quadro; com Reduzir Movimento, só esmaece. Compilado sem avisos e instalado no "Gremio" |
-| T025: linhas Desfazer, Aviso expira e Voltar e fechar de `quickstart.md`, com reabertura após desfazer | Pendente: aceite do usuário |
+| T025: linhas Desfazer, Aviso expira e Voltar e fechar de `quickstart.md`, com reabertura após desfazer | Aceito pelo usuário no "Gremio" em 2026-11-06 ("tudo funcionou"), com o aviso de 3 s animado |
 | Falha de gravação | Coberta só por testes em `AppFlowTests`; não reproduzível no aparelho sem ferramentas |
 
 Decisões que complementam o quadro:
