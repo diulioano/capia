@@ -1,0 +1,18 @@
+# Arquivos locais
+.DS_Store
+Thumbs.db
+Desktop.ini
+.env
+.env.*
+!.env.example
+
+# Swift e Xcode
+.build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Credenciais de assinatura
+*.p12
+*.p8
+*.mobileprovision

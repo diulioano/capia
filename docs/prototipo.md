@@ -1,0 +1,38 @@
+# Primeira entrega: protótipo navegável
+
+## Objetivo confirmado
+
+Validar a compreensão das telas, o fluxo de registro e revisão, a personalidade da capivara e a intensidade das animações. Usar dados de exemplo; a primeira versão funcional virá depois, para o usuário e poucos convidados.
+
+## Proposta de execução
+
+Protótipo nativo para iPhone, escrito em Swift com interface em SwiftUI e dados de exemplo. A continuação adota xtool como ferramenta de compilação e instalação a partir do ambiente Windows. Esta decisão substitui a proposta anterior de protótipo web.
+
+O primeiro passo técnico é compilar um app mínimo e instalá-lo no iPhone pelo xtool. Esse teste valida o ambiente, o SDK e a assinatura antes da construção das telas. O uso de Swift está definido; o funcionamento da cadeia de compilação neste ambiente ainda precisa ser comprovado.
+
+O protótipo funciona sem backend. Se a versão funcional precisar de um servidor, ele será desenvolvido em Java com Spring Boot. O envio a um serviço de IA é um possível motivo para essa necessidade, ainda a avaliar.
+
+## Percurso proposto
+
+1. Abrir o resumo mensal com receitas, gastos, faturas, registros recentes e acesso rápido a novo registro.
+2. Escolher registro manual, por voz ou imagem. Voz e imagem usam resultados simulados claramente identificados, sem envio a IA nesta etapa.
+3. Conferir um rascunho individual ou uma lista de gastos extraídos de uma fatura de exemplo. Editar campos, resolver uma possível duplicata, selecionar registros e confirmar a inclusão no resumo.
+4. Consultar contas, cartões e uma compra parcelada; visualizar o efeito do pagamento de uma fatura sem duplicar o gasto.
+5. Criar uma meta com nome e imagem, escolher prazo ou valor mensal, ordenar metas e confirmar uma sugestão de reserva. O progresso e o resumo refletem as ações na sessão.
+
+## Critérios de avaliação
+
+- A pessoa consegue registrar um gasto e identificar seu efeito no mês.
+- A revisão em lote permite corrigir e excluir itens antes de confirmar.
+- Receitas, gastos, previsões, pagamento de fatura e valores reservados são apresentados sem confundir seus significados.
+- A capivara orienta e comemora; os movimentos acompanham as ações sem bloquear o uso e respeitam redução de movimento.
+- Os dados de exemplo incluem conta, cartão, parcelas, recorrência prevista, possível duplicata e metas concorrendo por uma mesma sobra.
+- A interface deixa explícita a simulação de reconhecimento e de planejamento; os resultados não alegam representar dados bancários reais.
+
+## Limites desta entrega
+
+Sem integração bancária, reconhecimento real por IA ou recuperação real por iCloud. Esses recursos pertencem à etapa funcional. O protótipo será testado como app nativo no iPhone pelo xtool; a distribuição a convidados e a publicação ficam para uma etapa posterior. A exportação é uma decisão do produto; seu formato será definido antes de implementá-la.
+
+O protótipo exportado do Claude em `../design/` define a referência visual para todo desenvolvimento. A implementação em SwiftUI deve seguir suas telas, componentes e fluxos, conforme `../AGENTS.md`. Os recursos visuais existentes estão em `../assets/`.
+
+O nome definitivo do produto continua em aberto. Os nomes usados no HTML e no repositório são provisórios.
