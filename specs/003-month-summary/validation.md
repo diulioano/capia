@@ -51,7 +51,16 @@ controle chegue a 44 pt de alvo de toque.
 
 ## US3 — Ocultar os valores
 
-Pendente.
+Branch `feat/003-month-summary-us3-hide-values`. T014 implementada em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `HomeFlowTests` e `AppFlowTests` (alternância, preservação ao trocar de aba e de tela) | Passou na base |
+| `xtool dev build` | Passou |
+| T015: percurso Ocultar no iPhone, com VoiceOver | Pendente: depende do aparelho e da conferência do usuário |
+
+Adaptação: o olho usa os símbolos `eye` e `eye.slash` do sistema, no lugar dos traços do
+quadro, com o mesmo botão de 44 pt, raio 14 e fundo areia.
 
 ## US4 — Navegar a partir do Início
 

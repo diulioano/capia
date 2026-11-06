@@ -56,8 +56,23 @@ struct MonthView: View {
             .accessibilityAddTraits(.isHeader)
             .accessibilityFocused($titleFocused)
             Spacer(minLength: 8)
+            hideButton
         }
         .padding(.horizontal, 4)
+    }
+
+    /// Olho do quadro: alterna entre ocultar e mostrar todos os valores do Início.
+    private var hideButton: some View {
+        Button { send(.toggleValuesHidden) } label: {
+            Image(systemName: hidden ? "eye.slash" : "eye")
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundStyle(CapiaTheme.ink)
+                .frame(width: 44, height: 44)
+                .background(CapiaTheme.sand, in: RoundedRectangle(cornerRadius: 14))
+        }
+        .buttonStyle(CapiaTapStyle())
+        .accessibilityLabel(hidden ? "Mostrar valores" : "Ocultar valores")
+        .accessibilityValue(hidden ? "Valores ocultos" : "Valores visíveis")
     }
 
     // MARK: Indicadores
