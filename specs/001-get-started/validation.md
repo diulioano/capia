@@ -126,3 +126,17 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 - **Pendente**: abertura manual da build 2 e confirmação visual do fundo e da capivara.
   Solicitada ao usuário. T012, T014 e T016 continuam abertas; compilação e instalação
   não confirmam que o problema visual foi resolvido.
+
+## Confirmação do carregamento das imagens — 2026-11-06
+
+- Após a reinstalação da build 2, o usuário confirmou explicitamente que cenário onsen
+  e capivara aparecem nas boas-vindas: "Sim, aparecem os dois".
+- **Passou por relato do usuário no aparelho**: exibição das duas imagens, antes ausentes.
+  A troca da busca por nome por URLs PNG explícitas resolveu o sintoma observado.
+- Nova tentativa de captura por `idevicescreenshot` encontrou o aparelho, mas falhou
+  ao iniciar o serviço: `Could not start screenshotr service: Invalid service`.
+  Não foi obtida captura da build 2 por esse caminho; não há comparação visual completa nova.
+- Solicitados os testes de carinho (mensagem, renovação e saída com retorno sem balão),
+  uso sem rede, redução de movimento, maior texto acessível e VoiceOver.
+  Resultados ainda pendentes. T012/T014 permanecem reabertas até a conferência completa;
+  T016 segue pendente e a US2 não foi iniciada.
