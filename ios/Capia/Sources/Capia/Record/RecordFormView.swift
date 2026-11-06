@@ -11,11 +11,13 @@ struct RecordFormView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var descriptionFocused: Bool
-    @State private var pickingDate = false
+    /// Calendário de "Outra data", aberto no próprio formulário.
+    @State private var showingCalendar = false
 
     private var draft: RecordDraft { flow.draft }
 
     var body: some View {
+        ScrollViewReader { proxy in
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 top
@@ -33,18 +35,16 @@ struct RecordFormView: View {
             .padding(.top, 4)
             .padding(.bottom, 24)
         }
+        .onChange(of: showingCalendar) { _, shown in
+            guard shown else { return }
+            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) { proxy.scrollTo("calendar", anchor: .bottom) }
+        }
+        }
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) { actions }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: flow.showsInstallments)
-        .sheet(isPresented: $pickingDate) {
-            OtherDateSheet(initial: currentOtherDay) { day in
-                send(.chooseDate(.other(day)))
-                pickingDate = false
-            } cancel: {
-                pickingDate = false
-            }
-        }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: showingCalendar)
     }
 
     // MARK: Topo
@@ -217,9 +217,27 @@ struct RecordFormView: View {
 
     // MARK: Data
 
-    private var currentOtherDay: CalendarDay {
-        if case .other(let day) = draft.date { return day }
-        return CalendarDay.yesterday(now: Date(), timeZone: .current)
+    /// Data mostrada no calendário: a escolhida ou a que "Hoje"/"Ontem" representa.
+    private var calendarSelection: Binding<Date> {
+        Binding {
+            let day = RecordCopy.day(for: draft.date)
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = .current
+            return calendar.date(from: DateComponents(year: day.year, month: day.month, day: day.day, hour: 12)) ?? Date()
+        } set: { date in
+            let now = Date()
+            let day = CalendarDay(date: date, timeZone: .current)
+            if day == CalendarDay.today(now: now, timeZone: .current) {
+                send(.chooseDate(.today))
+            } else if day == CalendarDay.yesterday(now: now, timeZone: .current) {
+                send(.chooseDate(.yesterday))
+            } else {
+                send(.chooseDate(.other(day)))
+            }
+            // Escolher o dia fecha o calendário, como ao editar um evento no Calendário.
+            showingCalendar = false
+            AccessibilityNotification.Announcement("Data escolhida: \(day.dayMonthText)").post()
+        }
     }
 
     private var date: some View {
@@ -229,10 +247,20 @@ struct RecordFormView: View {
                 dateChip("Hoje", selected: draft.date == .today) { send(.chooseDate(.today)) }
                 dateChip("Ontem", selected: draft.date == .yesterday) { send(.chooseDate(.yesterday)) }
                 if case .other(let day) = draft.date {
-                    dateChip(day.dayMonthText, selected: true, hint: "Escolher outra data") { pickingDate = true }
+                    dateChip(day.dayMonthText, selected: true, hint: "Escolher outra data") { showingCalendar.toggle() }
                 } else {
-                    dateChip("Outra data", selected: false) { pickingDate = true }
+                    dateChip("Outra data", selected: false) { showingCalendar.toggle() }
                 }
+            }
+            if showingCalendar {
+                DatePicker("Data do registro", selection: calendarSelection, in: ...Date(), displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+                    .tint(CapiaTheme.action)
+                    .environment(\.locale, Locale(identifier: "pt_BR"))
+                    .padding(.horizontal, 8)
+                    .background(CapiaTheme.paper, in: RoundedRectangle(cornerRadius: 18))
+                    .id("calendar")
+                    .transition(reduceMotion ? .identity : .opacity.combined(with: .offset(y: -8)))
             }
         }
         .accessibilityElement(children: .contain)
@@ -314,46 +342,6 @@ private struct SaveButtonStyle: ButtonStyle {
             .background(isEnabled ? CapiaTheme.action : CapiaTheme.inactive, in: RoundedRectangle(cornerRadius: 18))
             .scaleEffect(configuration.isPressed && !reduceMotion ? 0.96 : 1)
             .animation(.easeOut(duration: 0.2), value: isEnabled)
-    }
-}
-
-/// "Outra data": calendário do iOS até hoje (adaptação do quadro, que usa uma data fixa).
-private struct OtherDateSheet: View {
-    let choose: (CalendarDay) -> Void
-    let cancel: () -> Void
-    @State private var selection: Date
-
-    init(initial: CalendarDay, choose: @escaping (CalendarDay) -> Void, cancel: @escaping () -> Void) {
-        self.choose = choose
-        self.cancel = cancel
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = .current
-        let date = calendar.date(from: DateComponents(year: initial.year, month: initial.month,
-                                                      day: initial.day, hour: 12)) ?? Date()
-        _selection = State(initialValue: date)
-    }
-
-    var body: some View {
-        NavigationStack {
-            DatePicker("Data do registro", selection: $selection, in: ...Date(), displayedComponents: .date)
-                .datePickerStyle(.graphical)
-                .tint(CapiaTheme.action)
-                .environment(\.locale, Locale(identifier: "pt_BR"))
-                .padding(.horizontal, 18)
-                .frame(maxHeight: .infinity, alignment: .top)
-                .background(CapiaTheme.cream.ignoresSafeArea())
-                .navigationTitle("Outra data")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) { Button("Cancelar", action: cancel) }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Escolher") { choose(CalendarDay(date: selection, timeZone: .current)) }
-                            .bold()
-                    }
-                }
-        }
-        .presentationDetents([.large])
-        .preferredColorScheme(.light)
     }
 }
 
