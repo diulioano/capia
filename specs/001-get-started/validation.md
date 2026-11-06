@@ -113,3 +113,16 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   A conexão `USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015` não listava aparelhos ao final dessas
   verificações; solicitado manter iPhone desbloqueado e visível em Dispositivos Apple.
   Não há host UIKit neste ambiente Linux para substituir essa verificação por um teste nativo.
+
+## Reinstalação da build 2 — 2026-11-06
+
+- Revisão instalada: `9a1a2a4`, branch `feat/001-get-started-us1-welcome`.
+- Conexão Apple do Windows voltou a listar o mesmo iPhone pelo socket local 27015.
+- Executado em `ios/Capia`: `USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb`.
+- **Passou**: compilação, instalação e verificação (`[Installing] 100%`, `[Verifying] 100%`, código zero).
+- **Passou**: consulta do app no aparelho por `ideviceinstaller list`, restrita ao identificador
+  instalado do Capia e aos campos CFBundleIdentifier, CFBundleVersion e CFBundleDisplayName,
+  retornou versão de build `2` e nome `Capia`.
+- **Pendente**: abertura manual da build 2 e confirmação visual do fundo e da capivara.
+  Solicitada ao usuário. T012, T014 e T016 continuam abertas; compilação e instalação
+  não confirmam que o problema visual foi resolvido.
