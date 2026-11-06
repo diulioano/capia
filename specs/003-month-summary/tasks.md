@@ -75,7 +75,7 @@ force-push. Sem aparelho, salvar como `wip(usN): ...` e manter a validação abe
 **Branch**: `feat/003-month-summary-us3-hide-values`.
 
 - [X] T014 [US3] Ligar o olho a `toggleValuesHidden` e aplicar `BRL.hidden` a todos os valores do Início, ao selo e às leituras acessíveis ("valor oculto"), com estado do botão anunciado.
-- [ ] T015 [US3] Validar no iPhone a linha Ocultar de `quickstart.md`, com VoiceOver; registrar e commitar só a US3.
+- [X] T015 [US3] Validar no iPhone a linha Ocultar de `quickstart.md`, com VoiceOver; registrar e commitar só a US3.
 
 ## Phase 6: User Story 4 - Navegar a partir do Início (P2)
 

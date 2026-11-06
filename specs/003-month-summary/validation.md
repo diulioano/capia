@@ -57,7 +57,7 @@ Branch `feat/003-month-summary-us3-hide-values`. T014 implementada em 2026-11-06
 |-------------|-----------|
 | `HomeFlowTests` e `AppFlowTests` (alternância, preservação ao trocar de aba e de tela) | Passou na base |
 | `xtool dev build` | Passou |
-| T015: percurso Ocultar no iPhone, com VoiceOver | Pendente: depende do aparelho e da conferência do usuário |
+| T015: percurso Ocultar no iPhone, com VoiceOver | Passou: aceite do usuário em 2026-11-06 após uso no iPhone. VoiceOver, texto ampliado e redução de movimento não foram registrados separadamente |
 
 Adaptação: o olho usa os símbolos `eye` e `eye.slash` do sistema, no lugar dos traços do
 quadro, com o mesmo botão de 44 pt, raio 14 e fundo areia.
