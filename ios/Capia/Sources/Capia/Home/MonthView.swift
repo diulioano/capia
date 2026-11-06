@@ -31,7 +31,7 @@ struct MonthView: View {
                     .padding(.bottom, -6)
                     .modifier(HomeEnter(appeared: appeared, delay: 0.15))
                 MonthSectionsView(categoryTab: home.categoryTab, salary: summary.salary,
-                                  expenses: summary.expenseBreakdown, recentItems: summary.recent, hidden: hidden,
+                                  expenses: summary.expenseBreakdown, incomes: summary.incomeBreakdown, recentItems: summary.recent, hidden: hidden,
                                   appeared: appeared, send: send, confirmSalary: receiveSalary)
             }
             .padding(.horizontal, 18)

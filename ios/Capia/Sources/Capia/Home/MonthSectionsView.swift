@@ -24,6 +24,7 @@ struct MonthSectionsView: View {
     let categoryTab: CategoryTab
     let salary: SalaryStatus?
     let expenses: [CategoryShare]
+    let incomes: [IncomeShare]
     let recentItems: [RecentItem]
     let hidden: Bool
     let appeared: Bool
@@ -157,13 +158,15 @@ struct MonthSectionsView: View {
                 Spacer(minLength: 8)
                 tabs
             }
-            let showsSalary = categoryTab == .income && receipt != nil
+            let showsIncomes = categoryTab == .income && !incomes.isEmpty
             let showsExpenses = categoryTab == .expenses && !expenses.isEmpty
             if showsExpenses {
                 distribution(expenses.map { (CapiaTheme.category($0.category), $0.amount) })
+            } else if showsIncomes {
+                distribution(incomes.indices.map { (CapiaTheme.income(at: $0), incomes[$0].amount) })
             } else {
                 RoundedRectangle(cornerRadius: 6)
-                    .fill(showsSalary ? CapiaTheme.action : CapiaTheme.divider)
+                    .fill(CapiaTheme.divider)
                     .frame(height: 12)
                     .accessibilityHidden(true)
             }
@@ -172,8 +175,10 @@ struct MonthSectionsView: View {
                     VStack(spacing: 12) {
                         ForEach(expenses, id: \.category) { expenseCategory($0) }
                     }
-                } else if showsSalary, let receipt {
-                    incomeCategory(receipt)
+                } else if showsIncomes {
+                    VStack(spacing: 12) {
+                        ForEach(incomes.indices, id: \.self) { incomeCategory(incomes[$0], color: CapiaTheme.income(at: $0)) }
+                    }
                 } else {
                     Text(categoryTab == .expenses ? "Nenhum gasto registrado neste mês."
                                                   : "Nenhuma receita registrada neste mês.")
@@ -238,25 +243,32 @@ struct MonthSectionsView: View {
                             + "\(share.percent)% dos gastos")
     }
 
-    /// Linha de receita do quadro: nome, valor e barra da parte do total (aqui, 100%).
-    private func incomeCategory(_ receipt: SalaryReceipt) -> some View {
+    /// Linha de receita do quadro: nome, valor e barra da parte do total.
+    private func incomeCategory(_ share: IncomeShare, color: Color) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("Salário")
+                Text(share.name)
                     .font(CapiaFonts.body(15))
+                    .lineLimit(2)
                 Spacer(minLength: 8)
-                Text(HomeCopy.money(receipt.amount, hidden: hidden))
+                Text(HomeCopy.money(share.amount, hidden: hidden))
                     .font(CapiaFonts.body(15, weight: .semibold))
                     .monospacedDigit()
             }
-            RoundedRectangle(cornerRadius: 3)
-                .fill(CapiaTheme.action)
-                .frame(height: 6)
-                .accessibilityHidden(true)
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 3).fill(CapiaTheme.divider)
+                    RoundedRectangle(cornerRadius: 3).fill(color)
+                        .frame(width: geometry.size.width * CGFloat(min(share.percent, 100)) / 100)
+                }
+            }
+            .frame(height: 6)
+            .accessibilityHidden(true)
         }
         .foregroundStyle(CapiaTheme.ink)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Salário, \(HomeCopy.spoken(BRL.format(receipt.amount), hidden: hidden)), 100% das receitas")
+        .accessibilityLabel("\(share.name), \(HomeCopy.spoken(BRL.format(share.amount), hidden: hidden)), "
+                            + "\(share.percent)% das receitas")
     }
 
     private var tabs: some View {

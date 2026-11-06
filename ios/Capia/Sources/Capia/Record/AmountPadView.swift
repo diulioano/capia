@@ -42,9 +42,6 @@ struct AmountPadView: View {
         HStack(spacing: 8) {
             kindChip(.expense, selectedFill: CapiaTheme.expenseChip, selectedBorder: CapiaTheme.terracotta)
             kindChip(.income, selectedFill: CapiaTheme.selection, selectedBorder: CapiaTheme.action)
-                // A receita chega na US2.
-                .disabled(true)
-                .opacity(0.45)
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Tipo de registro")

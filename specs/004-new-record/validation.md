@@ -57,7 +57,17 @@ Adaptações e decisões da US1:
 
 ## US2 — Registrar uma receita digitada
 
-Pendente.
+Branch `feat/004-new-record-us2-income`. T017–T018 implementadas em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou, sem avisos |
+| `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
+| T019: linhas Receita e Receita sem descrição de `quickstart.md`, com VoiceOver | Pendente: aceite do usuário |
+
+"Para onde foi" › Receitas passou a listar todas as receitas do mês pelo nome, com o salário
+recebido como "Salário", nas cores do quadro em sequência. A receita no formulário já seguia a
+base: "Entrou em" só com contas, sem categorias, e o aviso com "+ R$".
 
 ## US3 — Gastar no cartão, à vista ou parcelado
 

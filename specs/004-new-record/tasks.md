@@ -86,8 +86,8 @@ arquivos de tela (`RecordFormView.swift`, `NewRecordView.swift`).
 
 **Branch**: `feat/004-new-record-us2-income`.
 
-- [ ] T017 [US2] Ativar Receita em `AmountPadView.swift` (cores do contrato, "Quanto você recebeu?", valor preservado ao trocar) e adaptar `RecordFormView.swift` (subtítulo de receita, "Entrou em" só com contas, sem categorias) e o subtítulo "+ R$" do aviso.
-- [ ] T018 [US2] Mostrar receitas em `MonthSectionsView.swift` ("Para onde foi" › Receitas pelo nome, salário como "Salário"; recentes "+ R$" em verde) e conferir o selo do saldo com receitas avulsas.
+- [X] T017 [US2] Ativar Receita em `AmountPadView.swift` (cores do contrato, "Quanto você recebeu?", valor preservado ao trocar) e adaptar `RecordFormView.swift` (subtítulo de receita, "Entrou em" só com contas, sem categorias) e o subtítulo "+ R$" do aviso.
+- [X] T018 [US2] Mostrar receitas em `MonthSectionsView.swift` ("Para onde foi" › Receitas pelo nome, salário como "Salário"; recentes "+ R$" em verde) e conferir o selo do saldo com receitas avulsas.
 - [ ] T019 [US2] Validar no iPhone as linhas da US2 de `quickstart.md`, com VoiceOver; registrar e commitar só a US2.
 
 ## Phase 5: User Story 3 - Gastar no cartão, à vista ou parcelado (P2)
