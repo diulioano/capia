@@ -160,3 +160,12 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   respeitada, com as interações disponíveis.
 - Próximo cenário: uso sem rede. Maior tamanho de texto acessível, VoiceOver,
   comparação visual completa e SC-001 continuam pendentes; T016 permanece aberta.
+
+## Uso sem rede confirmado — 2026-11-06
+
+- O usuário respondeu "funcionou" ao teste de ativar modo avião, desligar o Wi-Fi,
+  fechar e reabrir o Capia e conferir fundo, capivara, carinho, Começar e Voltar.
+- **Passou por relato do usuário no aparelho**: imagens e interações disponíveis sem rede,
+  incluindo reabertura. A nova execução apresentou as boas-vindas.
+- Maior tamanho de texto acessível, VoiceOver, comparação visual completa e SC-001
+  continuam pendentes; T016 permanece aberta.
