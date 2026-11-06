@@ -55,12 +55,11 @@ e no iPhone. Controles com alvo mínimo de 44 × 44 pontos. Nenhuma credencial v
 | I. Nativo e compilação comprovada | Conforme: cadeia xtool já validada no Get Started | Conforme: nenhuma dependência nova; ausência do plugin SwiftData verificada no SDK |
 | II. Design e acessibilidade | Conforme: quadro "Configuração inicial" identificado | Conforme: contrato mapeia cada etapa; complementos registrados no contrato e na spec |
 | III. Domínio financeiro | Conforme: conta e cartão distintos; saldo inicial | Conforme: entidades separadas, centavos exatos, sem cálculo de fatura nem pagamento |
-| IV. Protótipo antes de integrações | Exceção parcial: persistência local pedida pelo usuário | Justificada: arquivo local mínimo, sem servidor nem iCloud; ver Complexity Tracking |
+| IV. Protótipo antes de integrações | Conforme (emenda 1.1.0): dados informados pela pessoa podem ficar no aparelho | Conforme: arquivo local, sem servidor nem iCloud |
 | V. Estrutura e entregas verificáveis | Conforme: estado puro antes da interface | Conforme: unidades abaixo separam comportamento, persistência e interface |
 
-A persistência local é uma decisão do usuário de 2026-11-06, registrada em `docs/` e na
-spec. A constituição prevê "estado da sessão" para o protótipo; o plano limita a exceção
-ao espaço concluído desta funcionalidade, sem estender a outros dados de exemplo.
+Sem violações. A gravação local deixou de ser exceção: o usuário observou que a pessoa
+precisa manter seus dados, e a constituição 1.1.0 passou a permiti-la no aparelho.
 
 ## Project Structure
 
@@ -141,6 +140,5 @@ um `SpaceStore` concreto apontando para Application Support.
 
 ## Complexity Tracking
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| Persistência local no protótipo (Princípio IV prevê estado da sessão) | Decisão do usuário em 2026-11-06: reabrir o app com o espaço configurado | Somente sessão foi oferecido e recusado; SwiftData não compila no SDK cruzado; `UserDefaults` não é adequado a um documento que crescerá e será sincronizado depois |
+Sem violações constitucionais. SwiftData foi descartado por indisponibilidade da macro no
+SDK cruzado, e `UserDefaults` por não ser adequado a entidades do domínio (research §1).

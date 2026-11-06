@@ -59,7 +59,10 @@ Uma simulação no protótipo não pode ser apresentada como regra definitiva do
 
 A primeira entrega DEVE ser um protótipo nativo navegável, com dados de exemplo e
 sem backend. As ações DEVEM atualizar o estado da sessão para permitir avaliar os
-fluxos documentados em `docs/prototipo.md`.
+fluxos documentados em `docs/prototipo.md`. Os dados que a pessoa informa e confirma,
+como perfil, contas e cartões, PODEM ser guardados somente no aparelho, para que o app
+os preserve ao ser reaberto. Isso não é integração: sincronização e recuperação pelo
+iCloud continuam fora da entrega até decisão própria.
 
 Reconhecimento por voz e imagem e sugestões de planejamento DEVEM ser identificados
 como simulações. Integração bancária, reconhecimento real por IA e recuperação real
@@ -133,4 +136,9 @@ A emenda 1.0.1 registra a escolha do nome Capia pelo usuário e atualiza a ident
 do produto. A mudança substitui a identificação provisória sem alterar os princípios
 técnicos ou o escopo da entrega.
 
-**Version**: 1.0.1 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06
+A emenda 1.1.0 permite guardar no aparelho os dados informados pela pessoa. Motivação:
+o usuário apontou em 2026-11-06 que, sem isso, a pessoa não teria como manter seus dados,
+e decidiu deixar a sincronização pelo iCloud para depois. Impacto: a configuração inicial
+(funcionalidade 002) grava o espaço concluído; o Get Started validado não muda.
+
+**Version**: 1.1.0 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06
