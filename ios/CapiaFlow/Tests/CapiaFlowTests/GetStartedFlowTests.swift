@@ -24,8 +24,8 @@ final class GetStartedFlowTests: XCTestCase {
         flow.send(.init(.continueIntroduction, from: flow.screen))
         XCTAssertEqual(flow.screen, .introduction(.goals))
         flow.send(.init(.configure, from: flow.screen))
-        XCTAssertEqual(flow.screen, .configurationEntry(origin: .goals))
-        flow.send(.init(.returnToIntroduction, from: flow.screen))
+        XCTAssertEqual(flow.screen, .setup(origin: .goals))
+        flow.send(.init(.returnFromSetup, from: flow.screen))
         XCTAssertEqual(flow.screen, .introduction(.goals))
     }
 
@@ -46,8 +46,8 @@ final class GetStartedFlowTests: XCTestCase {
         for step in IntroStep.allCases {
             var flow = flow(at: step)
             flow.send(.init(.skip, from: flow.screen))
-            XCTAssertEqual(flow.screen, .configurationEntry(origin: step))
-            flow.send(.init(.returnToIntroduction, from: flow.screen))
+            XCTAssertEqual(flow.screen, .setup(origin: step))
+            flow.send(.init(.returnFromSetup, from: flow.screen))
             XCTAssertEqual(flow.screen, .introduction(step))
         }
     }
@@ -84,7 +84,7 @@ final class GetStartedFlowTests: XCTestCase {
         }
         for step in IntroStep.allCases {
             var flow = flow(at: step)
-            for intent in [GetStartedAction.Intent.start, .returnToIntroduction] {
+            for intent in [GetStartedAction.Intent.start, .returnFromSetup] {
                 flow.send(.init(intent, from: flow.screen))
                 XCTAssertEqual(flow.screen, .introduction(step))
             }
@@ -100,9 +100,9 @@ final class GetStartedFlowTests: XCTestCase {
                 XCTAssertEqual(flow.screen, .introduction(step))
             }
             flow.send(.init(.skip, from: flow.screen))
-            for intent in GetStartedAction.Intent.allCases where intent != .returnToIntroduction {
+            for intent in GetStartedAction.Intent.allCases where intent != .returnFromSetup {
                 flow.send(.init(intent, from: flow.screen))
-                XCTAssertEqual(flow.screen, .configurationEntry(origin: step))
+                XCTAssertEqual(flow.screen, .setup(origin: step))
             }
         }
     }

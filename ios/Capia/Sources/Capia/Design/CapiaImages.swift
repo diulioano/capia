@@ -5,6 +5,7 @@ import UIKit
 enum CapiaImages {
     static let onsenWallpaper = loadPNG("OnsenWallpaper")
     static let welcomeCapybara = loadPNG("WelcomeCapybara")
+    static let calmCapybara = loadPNG("CalmCapybara")
     static let thinkingCapybara = loadPNG("ThinkingCapybara")
     static let happyCapybara = loadPNG("HappyCapybara")
     static let celebratingCapybara = loadPNG("CelebratingCapybara")

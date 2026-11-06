@@ -1,4 +1,4 @@
-"""Prepare Get Started resources without changing the original design.
+"""Prepare Capia resources without changing the original design.
 
 Run from any directory. --check reads only and requires no network.
 """
@@ -31,7 +31,8 @@ FONTS = {
 }
 MASCOT = 'c98bf460-1310-48cf-b12a-570d347b97de'
 STATIC_FONTS = {'Regular': 400, 'SemiBold': 600, 'Bold': 700}
-POSES = {'ThinkingCapybara': (2, 0, 'pensando'),
+POSES = {'CalmCapybara': (0, 0, 'calma'),
+         'ThinkingCapybara': (2, 0, 'pensando'),
          'HappyCapybara': (1, 0, 'feliz'),
          'CelebratingCapybara': (1, 1, 'comemora')}
 ICON_SOURCE = ROOT / 'assets/capia-app-icon-generated.png'
@@ -122,7 +123,7 @@ def prepare():
                         'prompt_sha256': digest(ICON_PROMPT.read_bytes()),
                         'original_sha256': digest((ROOT / 'assets/capybara-onsen.png').read_bytes())}
     (RESOURCES / 'sources.json').write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    lines = ['# Recursos do Get Started (US1, US2 e US3)', '',
+    lines = ['# Recursos do Capia (Get Started e configuração inicial)', '',
              'HTML original e licenças incorporadas preservados. Fontes completas, distribuídas sob OFL 1.1.',
              f'Revisão Google Fonts: `{REVISION}`.', '',
              f'HTML SHA-256: `{metadata["design_sha256"]}`.', '']
@@ -181,7 +182,7 @@ def check():
     assert (RESOURCES / 'Images/OnsenWallpaper.png').read_bytes() == (ROOT / 'assets/onsen-wallpaper-1170x2532.png').read_bytes(), 'Fundo divergente'
     with Image.open(RESOURCES / 'Images/OnsenWallpaper.png') as image:
         assert image.size == (1170, 2532), 'Dimensão incorreta do fundo'
-    print('Get Started: imagens, poses, fontes, licenças, ícone opaco 1024 e hashes conferidos.')
+    print('Capia: imagens, poses (calma, pensando, feliz, comemora), fontes, licenças, ícone opaco 1024 e hashes conferidos.')
 
 
 if __name__ == '__main__':

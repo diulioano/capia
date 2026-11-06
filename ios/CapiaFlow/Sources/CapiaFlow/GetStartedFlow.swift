@@ -13,12 +13,13 @@ public enum IntroStep: CaseIterable, Sendable {
 public enum GetStartedScreen: Equatable, Sendable {
     case welcome
     case introduction(IntroStep)
-    case configurationEntry(origin: IntroStep)
+    /// Configuração inicial aberta a partir de uma etapa da apresentação.
+    case setup(origin: IntroStep)
 }
 
 public struct GetStartedAction: Sendable {
     public enum Intent: CaseIterable, Sendable {
-        case start, continueIntroduction, back, skip, configure, returnToIntroduction
+        case start, continueIntroduction, back, skip, configure, returnFromSetup
     }
 
     public let intent: Intent
@@ -51,10 +52,10 @@ public struct GetStartedFlow: Sendable {
         case (.introduction(.goals), .back):
             screen = .introduction(.monthlyOverview)
         case (.introduction(let step), .skip):
-            screen = .configurationEntry(origin: step)
+            screen = .setup(origin: step)
         case (.introduction(.goals), .configure):
-            screen = .configurationEntry(origin: .goals)
-        case (.configurationEntry(let origin), .returnToIntroduction):
+            screen = .setup(origin: .goals)
+        case (.setup(let origin), .returnFromSetup):
             screen = .introduction(origin)
         default:
             break

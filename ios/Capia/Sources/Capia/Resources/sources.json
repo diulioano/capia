@@ -10,6 +10,10 @@
       "sha256": "a9f5f7d2cde8b9a8d92355d7cd7c84454a71eeba7bee62d96aa1ae0db5c65980",
       "origin": "assets/onsen-wallpaper-1170x2532.png; cópia sem alteração"
     },
+    "Images/CalmCapybara.png": {
+      "sha256": "6ce375e075bc0bc44013c361799987c640b7ea72ca92bb63f563b7053dea5e19",
+      "origin": "assets/capybara-expressions-sheet-3x2.png; célula (0, 0), pose calma; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML"
+    },
     "Images/ThinkingCapybara.png": {
       "sha256": "5ccbbe2889dfd0131e86e3dbcefcefcba4bc7bb2d29c58ab8198f9df1be769b8",
       "origin": "assets/capybara-expressions-sheet-3x2.png; célula (2, 0), pose pensando; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML"

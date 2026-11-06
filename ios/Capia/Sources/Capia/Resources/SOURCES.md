@@ -1,4 +1,4 @@
-# Recursos do Get Started (US1, US2 e US3)
+# Recursos do Capia (Get Started e configuração inicial)
 
 HTML original e licenças incorporadas preservados. Fontes completas, distribuídas sob OFL 1.1.
 Revisão Google Fonts: `38411257417e616c5d4daa1b9e91a3dbcebe1c2e`.
@@ -18,6 +18,12 @@ SHA-256: `424f68f69305e005f226610306efc249273ea38394a8e202cd3fbf8c9af98b9f`.
 assets/onsen-wallpaper-1170x2532.png; cópia sem alteração
 
 SHA-256: `a9f5f7d2cde8b9a8d92355d7cd7c84454a71eeba7bee62d96aa1ae0db5c65980`.
+
+## Images/CalmCapybara.png
+
+assets/capybara-expressions-sheet-3x2.png; célula (0, 0), pose calma; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML
+
+SHA-256: `6ce375e075bc0bc44013c361799987c640b7ea72ca92bb63f563b7053dea5e19`.
 
 ## Images/ThinkingCapybara.png
 

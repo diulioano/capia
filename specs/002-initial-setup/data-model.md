@@ -67,7 +67,7 @@ incompatível ou Continuar com etapa inválida: nenhuma mudança.
 | `account` em `addingAccount` | Voltar | `done`, sem alterar listas |
 | `done`, não restaurado, `hasCard = true` | Voltar | Remove o último par anexado; `cardDates` |
 | `done`, não restaurado, `hasCard = false` | Voltar | Remove a última conta anexada; `cardQuestion` |
-| `done` restaurado da gravação | Voltar | Indisponível (não há rascunho) |
+| `done` restaurado ou após cancelar outra conta | Voltar | Indisponível (não há rascunho) |
 | `done` | Adicionar outra conta | Modo `addingAccount`; limpa conta e cartão do rascunho; `account` |
 | `done` | Ver meu mês | Sai do fluxo para o destino provisório do mês |
 
@@ -87,9 +87,10 @@ não dupliquem contas nem cartões. Nome e objetivos não são revisitados em `a
 
 ## Telas do app (raiz)
 
-`AppRootView` mantém um único destino: `getStarted(GetStartedFlow)`, `setup(SetupFlow)` ou
+`AppFlow` (pacote puro, testado) mantém um único destino: `getStarted(GetStartedFlow)`, `setup(SetupFlow)` ou
 `month`. Abertura: espaço gravado → `month`; caso contrário → `getStarted` em `welcome`.
-`month` → "Voltar ao resumo" → `setup` em `done` com o espaço atual.
+`month` → "Voltar ao resumo" → `setup` em `done` com o espaço atual. Ao entrar em `done`,
+`AppFlow` devolve o espaço a gravar; `AppRootView` só chama o `SpaceStore`.
 
 ## Testes planejados
 
