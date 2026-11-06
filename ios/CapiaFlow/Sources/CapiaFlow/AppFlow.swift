@@ -75,6 +75,19 @@ public struct AppFlow: Sendable {
         home.send(action)
     }
 
+    /// "Recebi" no salário previsto do mês. Devolve o espaço a guardar; sem salário, fora
+    /// do Início ou com o mês já confirmado, não muda nada e devolve `nil`.
+    @discardableResult
+    public mutating func confirmSalary(in calendar: MonthCalendar, now: Date = Date()) -> ConfiguredSpace? {
+        guard showingHome, var current = space, let amount = current.monthlySalary,
+              current.salaryReceipt(year: calendar.year, month: calendar.month) == nil else { return nil }
+        let receipt = SalaryReceipt(year: calendar.year, month: calendar.month, amount: amount, confirmedAt: now)
+        current.salaryReceipts.append(receipt)
+        setup?.recordSalaryReceipt(receipt)
+        space = current
+        return current
+    }
+
     /// "Adicionar outra conta" na aba Contas: abre o cadastro de conta da configuração.
     /// Ao concluir, a conclusão grava o espaço e "Ver meu mês" volta ao Início.
     public mutating func addAnotherAccountFromHome() {

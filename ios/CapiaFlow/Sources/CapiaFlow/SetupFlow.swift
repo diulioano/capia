@@ -1,12 +1,13 @@
 import Foundation
 
-/// Etapas da configuração inicial, na ordem do quadro "Configuração inicial".
+/// Etapas da configuração inicial, na ordem do quadro "Configuração inicial". O salário
+/// mensal é um complemento ao design (funcionalidade 003, US5), depois do saldo.
 public enum SetupStep: Int, CaseIterable, Sendable {
-    case name, goals, account, balance, cardQuestion, cardDates, done
+    case name, goals, account, balance, salary, cardQuestion, cardDates, done
 
-    public static let count = 6
+    public static let count = 7
 
-    /// Posição de 1 a 6 na barra de progresso. A conclusão não tem posição.
+    /// Posição de 1 a 7 na barra de progresso. A conclusão não tem posição.
     public var position: Int? { self == .done ? nil : rawValue + 1 }
 }
 
@@ -39,6 +40,8 @@ public struct SetupDraft: Equatable, Sendable {
     public var accountKind = AccountKind.checking
     public var accountName = ""
     public var balance = Cents.zero
+    /// Salário mensal; zero significa que a pessoa não informou.
+    public var salary = Cents.zero
     public var hasCard: Bool?
     public var closingDay = SetupDraft.defaultClosingDay
     public var dueDay = SetupDraft.defaultDueDay
@@ -128,6 +131,8 @@ public struct SetupFlow: Sendable {
     public private(set) var mode: SetupMode
     public private(set) var accounts: [Account]
     public private(set) var cards: [CreditCard]
+    /// Recebimentos já confirmados no espaço restaurado, preservados ao gravar de novo.
+    public private(set) var salaryReceipts: [SalaryReceipt] = []
     /// Itens anexados ao chegar à conclusão a partir do rascunho atual. Voltar os remove.
     private var lastAppended: (account: UUID, card: UUID?)?
 
@@ -145,6 +150,8 @@ public struct SetupFlow: Sendable {
         draft = SetupDraft()
         draft.name = space.profile.name
         draft.goals = space.profile.goals
+        draft.salary = space.monthlySalary ?? .zero
+        salaryReceipts = space.salaryReceipts
         mode = .addingAccount
         accounts = space.accounts
         cards = space.cards
@@ -156,6 +163,7 @@ public struct SetupFlow: Sendable {
         case .goals: !draft.goals.isEmpty
         case .account: draft.isAccountValid
         case .balance: true
+        case .salary: true
         case .cardQuestion: draft.hasCard != nil
         case .cardDates: draft.areCardDaysValid
         case .done: false
@@ -177,7 +185,8 @@ public struct SetupFlow: Sendable {
     /// Espaço a guardar. Existe somente na conclusão e com pelo menos uma conta.
     public func space(completedAt date: Date) -> ConfiguredSpace? {
         guard step == .done, !accounts.isEmpty else { return nil }
-        return ConfiguredSpace(profile: profile, accounts: accounts, cards: cards, completedAt: date)
+        return ConfiguredSpace(profile: profile, accounts: accounts, cards: cards, completedAt: date,
+                               monthlySalary: draft.salary, salaryReceipts: salaryReceipts)
     }
 
     /// Aplica uma ação de navegação. Ações de origem antiga, incompatíveis ou com etapa
@@ -200,7 +209,9 @@ public struct SetupFlow: Sendable {
         case .name: step = .goals
         case .goals: step = .account
         case .account: step = .balance
-        case .balance: step = .cardQuestion
+        // O salário pertence ao perfil: "Adicionar outra conta" não o pergunta de novo.
+        case .balance: step = mode == .addingAccount ? .cardQuestion : .salary
+        case .salary: step = .cardQuestion
         case .cardQuestion:
             if draft.hasCard == true { step = .cardDates } else { complete() }
         case .cardDates: complete()
@@ -230,7 +241,8 @@ public struct SetupFlow: Sendable {
         case .account:
             if mode == .addingAccount { step = .done } else { step = .goals }
         case .balance: step = .account
-        case .cardQuestion: step = .balance
+        case .salary: step = .balance
+        case .cardQuestion: step = mode == .addingAccount ? .balance : .salary
         case .cardDates: step = .cardQuestion
         case .done:
             guard let appended = lastAppended else { return nil }
@@ -248,5 +260,11 @@ public struct SetupFlow: Sendable {
         draft.resetAccountAndCard()
         mode = .addingAccount
         step = .account
+    }
+
+    /// Registra o recebimento do salário de um mês, uma única vez.
+    mutating func recordSalaryReceipt(_ receipt: SalaryReceipt) {
+        guard !salaryReceipts.contains(where: { $0.year == receipt.year && $0.month == receipt.month }) else { return }
+        salaryReceipts.append(receipt)
     }
 }

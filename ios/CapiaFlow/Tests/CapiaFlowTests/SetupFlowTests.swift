@@ -1,4 +1,5 @@
 import CapiaFlow
+import Foundation
 import XCTest
 
 final class SetupFlowTests: XCTestCase {
@@ -22,6 +23,8 @@ final class SetupFlowTests: XCTestCase {
         flow.draft.accountName = bank
         next(&flow)
         flow.draft.balance = Cents(typed: balance)
+        next(&flow)
+        XCTAssertEqual(flow.step, .salary)
         next(&flow)
         XCTAssertEqual(flow.step, .cardQuestion)
         return flow
@@ -62,7 +65,7 @@ final class SetupFlowTests: XCTestCase {
     }
 
     func testProgressPositions() {
-        XCTAssertEqual(SetupStep.allCases.map(\.position), [1, 2, 3, 4, 5, 6, nil])
+        XCTAssertEqual(SetupStep.allCases.map(\.position), [1, 2, 3, 4, 5, 6, 7, nil])
     }
 
     func testContinueRules() {
@@ -100,6 +103,9 @@ final class SetupFlowTests: XCTestCase {
         next(&flow)
 
         XCTAssertTrue(flow.canContinue, "Saldo zero é aceito")
+        next(&flow)
+
+        XCTAssertTrue(flow.canContinue, "Salário zero é aceito")
         next(&flow)
 
         XCTAssertFalse(flow.canContinue)
@@ -142,7 +148,7 @@ final class SetupFlowTests: XCTestCase {
         next(&flow)
         flow.draft.setClosingDay(7)
         let draft = flow.draft
-        let expected: [SetupStep] = [.cardQuestion, .balance, .account, .goals, .name]
+        let expected: [SetupStep] = [.cardQuestion, .salary, .balance, .account, .goals, .name]
         for step in expected {
             XCTAssertNil(back(&flow))
             XCTAssertEqual(flow.step, step)
@@ -343,6 +349,7 @@ final class CardDatesTests: XCTestCase {
         flow.draft.accountName = "Banco Aurora"
         flow.send(.init(.continueStep, from: .account))
         flow.send(.init(.continueStep, from: .balance))
+        flow.send(.init(.continueStep, from: .salary))
         flow.draft.hasCard = true
         flow.send(.init(.continueStep, from: .cardQuestion))
         flow.draft.setDueDay(4)
@@ -367,6 +374,7 @@ final class CardDatesTests: XCTestCase {
         flow.draft.accountName = "Banco Aurora"
         flow.send(.init(.continueStep, from: .account))
         flow.send(.init(.continueStep, from: .balance))
+        flow.send(.init(.continueStep, from: .salary))
         flow.draft.hasCard = true
         flow.send(.init(.continueStep, from: .cardQuestion))
         flow.draft.setDueDay(20)
@@ -375,5 +383,61 @@ final class CardDatesTests: XCTestCase {
         XCTAssertFalse(flow.draft.dueDayChosen)
         flow.draft.setClosingDay(25)
         XCTAssertEqual(flow.draft.dueDay, 2)
+    }
+}
+
+/// Etapa do salário (funcionalidade 003, US5).
+extension SetupFlowTests {
+    func testSalaryStepComesAfterBalanceAndAcceptsZero() {
+        var flow = flowAtCardQuestion()
+        XCTAssertNil(back(&flow))
+        XCTAssertEqual(flow.step, .salary)
+        XCTAssertTrue(flow.canContinue, "Zero é aceito")
+        XCTAssertEqual(flow.mood, .happy)
+        flow.draft.salary = Cents(typed: "620000")
+        next(&flow)
+        flow.draft.hasCard = false
+        next(&flow)
+        XCTAssertEqual(flow.space(completedAt: Date(timeIntervalSince1970: 0))?.monthlySalary, Cents(620_000))
+    }
+
+    func testZeroSalaryIsNotSaved() {
+        var flow = flowAtCardQuestion()
+        flow.draft.hasCard = false
+        next(&flow)
+        XCTAssertNil(flow.space(completedAt: Date(timeIntervalSince1970: 0))?.monthlySalary)
+    }
+
+    func testAnotherAccountSkipsSalaryAndKeepsIt() {
+        var flow = flowAtCardQuestion()
+        XCTAssertNil(back(&flow))
+        flow.draft.salary = Cents(500_000)
+        next(&flow)
+        flow.draft.hasCard = false
+        next(&flow)
+        flow.send(.init(.addAnotherAccount, from: .done))
+        flow.draft.accountName = "Banco Seiva"
+        next(&flow)
+        next(&flow)
+        XCTAssertEqual(flow.step, .cardQuestion, "Outra conta não pergunta o salário de novo")
+        XCTAssertNil(back(&flow))
+        XCTAssertEqual(flow.step, .balance)
+        next(&flow)
+        flow.draft.hasCard = false
+        next(&flow)
+        XCTAssertEqual(flow.space(completedAt: Date(timeIntervalSince1970: 0))?.monthlySalary, Cents(500_000))
+    }
+
+    func testRestoringKeepsSalaryAndReceipts() {
+        let receipt = SalaryReceipt(year: 2026, month: 11, amount: Cents(500_000),
+                                    confirmedAt: Date(timeIntervalSince1970: 10))
+        let saved = ConfiguredSpace(
+            profile: Profile(name: "Diuli", goals: [.saveForGoal]),
+            accounts: [Account(kind: .checking, name: "Banco Aurora", initialBalance: Cents(99))],
+            cards: [], completedAt: Date(timeIntervalSince1970: 0),
+            monthlySalary: Cents(500_000), salaryReceipts: [receipt])
+        let flow = SetupFlow(restoring: saved)
+        XCTAssertEqual(flow.draft.salary, Cents(500_000))
+        XCTAssertEqual(flow.space(completedAt: saved.completedAt), saved)
     }
 }

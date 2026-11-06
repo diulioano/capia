@@ -6,6 +6,8 @@ import SwiftUI
 @MainActor
 struct BalanceCardView: View {
     let totals: MonthTotals
+    /// Saldos iniciais mais salários recebidos: dinheiro nas contas, não sobra do mês.
+    let accountsTotal: Cents
     let hidden: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -42,6 +44,11 @@ struct BalanceCardView: View {
             .lineLimit(1)
             .minimumScaleFactor(0.6)
             Text("\(HomeCopy.forecastTitle) \(Text(HomeCopy.money(signed: totals.forecastBalance, hidden: hidden)).bold())")
+                .font(CapiaFonts.body(14, relativeTo: .subheadline))
+                .monospacedDigit()
+                .foregroundStyle(CapiaTheme.balanceText)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("\(HomeCopy.accountsTitle) \(Text(HomeCopy.money(accountsTotal, hidden: hidden)).bold())")
                 .font(CapiaFonts.body(14, relativeTo: .subheadline))
                 .monospacedDigit()
                 .foregroundStyle(CapiaTheme.balanceText)
@@ -119,8 +126,9 @@ struct BalanceCardView: View {
     private var spokenSummary: String {
         let balance = HomeCopy.spoken(BRL.format(signed: totals.balance), hidden: hidden)
         let forecast = HomeCopy.spoken(BRL.format(signed: totals.forecastBalance), hidden: hidden)
+        let accounts = HomeCopy.spoken(BRL.format(accountsTotal), hidden: hidden)
         return "\(HomeCopy.balanceTitle), \(balance). Sobra prevista no fim do mês, \(forecast). "
-            + HomeCopy.availableBadge(totals, hidden: hidden)
+            + "Em contas hoje, \(accounts). " + HomeCopy.availableBadge(totals, hidden: hidden)
     }
 }
 

@@ -7,10 +7,15 @@ struct MonthView: View {
     let summary: MonthSummary
     let home: HomeFlow
     let send: (HomeAction) -> Void
+    let confirmSalary: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AccessibilityFocusState private var titleFocused: Bool
     @State private var appeared = false
+    /// Depois do "Recebi", a capivara responde e fica feliz por 2,2 s, como no quadro.
+    @State private var justReceived = false
+    @State private var happy = false
 
     private var hidden: Bool { home.valuesHidden }
 
@@ -18,14 +23,15 @@ struct MonthView: View {
         ScrollView {
             VStack(spacing: 16) {
                 header.modifier(HomeEnter(appeared: appeared, delay: 0))
-                BalanceCardView(totals: summary.totals, hidden: hidden)
+                BalanceCardView(totals: summary.totals, accountsTotal: summary.accountsTotal, hidden: hidden)
                     .modifier(HomeEnter(appeared: appeared, delay: 0.05))
                 indicators.modifier(HomeEnter(appeared: appeared, delay: 0.1))
                 capybara
                     .padding(.top, -4)
                     .padding(.bottom, -6)
                     .modifier(HomeEnter(appeared: appeared, delay: 0.15))
-                MonthSectionsView(categoryTab: home.categoryTab, appeared: appeared, send: send)
+                MonthSectionsView(categoryTab: home.categoryTab, salary: summary.salary, hidden: hidden,
+                                  appeared: appeared, send: send, confirmSalary: receiveSalary)
             }
             .padding(.horizontal, 18)
             .padding(.top, 12)
@@ -38,6 +44,19 @@ struct MonthView: View {
             await Task.yield()
             guard !Task.isCancelled else { return }
             titleFocused = true
+        }
+    }
+
+    private func receiveSalary() {
+        confirmSalary()
+        withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) {
+            justReceived = true
+            happy = true
+        }
+        AccessibilityNotification.Announcement(HomeCopy.salaryReceivedMessage).post()
+        Task {
+            try? await Task.sleep(for: .seconds(2.2))
+            happy = false
         }
     }
 
@@ -125,12 +144,15 @@ struct MonthView: View {
 
     private var capybara: some View {
         HStack(alignment: .bottom, spacing: 4) {
-            Image(uiImage: CapiaImages.calmCapybara)
+            Image(uiImage: happy ? CapiaImages.happyCapybara : CapiaImages.calmCapybara)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 76, height: 76)
                 .accessibilityHidden(true)
-            Text(HomeCopy.capybaraMessage(firstName: summary.firstName))
+            Text(justReceived ? HomeCopy.salaryReceivedMessage
+                              : HomeCopy.capybaraMessage(firstName: summary.firstName, salary: summary.salary))
+                .id(justReceived)
+                .transition(.opacity)
                 .font(CapiaFonts.body(14, relativeTo: .subheadline))
                 .lineSpacing(3)
                 .foregroundStyle(CapiaTheme.tipText)

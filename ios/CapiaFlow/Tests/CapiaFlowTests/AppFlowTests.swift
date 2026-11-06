@@ -29,6 +29,8 @@ final class AppFlowTests: XCTestCase {
         XCTAssertNil(next(&app))
         app.editDraft { $0.balance = Cents(10_000) }
         XCTAssertNil(next(&app))
+        XCTAssertEqual(app.screen, .setup(.salary))
+        XCTAssertNil(next(&app))
         XCTAssertEqual(app.screen, .setup(.cardQuestion))
         return app
     }
@@ -165,5 +167,45 @@ final class AppFlowTests: XCTestCase {
             accounts: [Account(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
                                kind: .checking, name: "Banco Aurora", initialBalance: Cents(99))],
             cards: [], completedAt: now)
+    }
+
+    func testConfirmSalaryRecordsTheMonthOnceAndSaves() {
+        var saved = savedSpace
+        saved.monthlySalary = Cents(620_000)
+        var app = AppFlow(saved: saved)
+        let november = MonthCalendar(date: now, timeZone: TimeZone(identifier: "America/Sao_Paulo")!)
+        let space = app.confirmSalary(in: november, now: now)
+        XCTAssertEqual(space?.salaryReceipts,
+                       [SalaryReceipt(year: november.year, month: november.month, amount: Cents(620_000), confirmedAt: now)])
+        XCTAssertEqual(app.space, space)
+        XCTAssertNil(app.confirmSalary(in: november, now: now), "Um recebimento por mês")
+        XCTAssertEqual(space?.accountsTotal, Cents(620_099))
+
+        let summary = MonthSummary(space: app.space!, calendar: november)
+        XCTAssertEqual(summary.totals.income, Cents(620_000))
+        XCTAssertEqual(summary.totals.forecastIncome, .zero)
+
+        // A conta adicionada depois preserva o recebimento ao gravar de novo.
+        app.send(.select(.accounts))
+        app.addAnotherAccountFromHome()
+        app.editDraft { $0.accountKind = .wallet }
+        _ = next(&app)
+        _ = next(&app)
+        app.editDraft { $0.hasCard = false }
+        let resaved = next(&app)
+        XCTAssertEqual(resaved?.salaryReceipts, space?.salaryReceipts)
+        XCTAssertEqual(resaved?.monthlySalary, Cents(620_000))
+    }
+
+    func testConfirmSalaryNeedsSalaryAndHome() {
+        var app = AppFlow(saved: savedSpace)
+        let calendar = MonthCalendar(date: now, timeZone: .gmt)
+        XCTAssertNil(app.confirmSalary(in: calendar, now: now), "Sem salário informado")
+        var withSalary = savedSpace
+        withSalary.monthlySalary = Cents(100)
+        app = AppFlow(saved: withSalary)
+        app.send(.select(.accounts))
+        app.addAnotherAccountFromHome()
+        XCTAssertNil(app.confirmSalary(in: calendar, now: now), "Fora do Início")
     }
 }

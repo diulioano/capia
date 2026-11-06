@@ -10,6 +10,7 @@ struct HomeView: View {
     let space: ConfiguredSpace
     let send: (HomeAction) -> Void
     let addAnotherAccount: () -> Void
+    let confirmSalary: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -17,7 +18,7 @@ struct HomeView: View {
         Group {
             switch home.tab {
             case .month:
-                MonthView(summary: summary, home: home, send: send)
+                MonthView(summary: summary, home: home, send: send, confirmSalary: confirmSalary)
                     .overlay(alignment: .bottomTrailing) {
                         NewRecordButton { send(.openNewRecord) }
                             .padding(.trailing, 22)

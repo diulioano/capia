@@ -108,4 +108,48 @@ final class MonthSummaryTests: XCTestCase {
         withCard.cards = [CreditCard(name: "Banco Aurora", closingDay: 3, dueDay: 10)]
         XCTAssertTrue(MonthSummary(space: withCard, calendar: calendar).hasCard)
     }
+
+    private func space(salary: Cents?, receipts: [SalaryReceipt] = []) -> ConfiguredSpace {
+        ConfiguredSpace(
+            profile: Profile(name: "Diuli", goals: [.understandSpending]),
+            accounts: [Account(kind: .checking, name: "Banco Aurora", initialBalance: Cents(100_000)),
+                       Account(kind: .wallet, name: "Carteira", initialBalance: Cents(5_050))],
+            cards: [], completedAt: Date(timeIntervalSince1970: 0),
+            monthlySalary: salary, salaryReceipts: receipts)
+    }
+
+    func testPendingSalaryOnlyEntersTheForecast() {
+        let november = MonthCalendar(date: date(hour: 9), timeZone: saoPaulo)
+        let summary = MonthSummary(space: space(salary: Cents(620_000)), calendar: november)
+        XCTAssertEqual(summary.salary, .pending(Cents(620_000)))
+        XCTAssertEqual(summary.totals.income, .zero)
+        XCTAssertEqual(summary.totals.balance, 0)
+        XCTAssertEqual(summary.totals.forecastBalance, 620_000)
+        XCTAssertNil(summary.totals.availablePercent, "Previsto não é receita")
+        XCTAssertEqual(summary.accountsTotal, Cents(105_050), "Previsto não está nas contas")
+    }
+
+    func testReceivedSalaryCountsInItsMonthOnly() {
+        let receipt = SalaryReceipt(year: 2026, month: 11, amount: Cents(600_000),
+                                    confirmedAt: date(hour: 10))
+        let paid = space(salary: Cents(620_000), receipts: [receipt])
+        let november = MonthSummary(space: paid, calendar: MonthCalendar(date: date(hour: 9), timeZone: saoPaulo))
+        XCTAssertEqual(november.salary, .received(receipt))
+        XCTAssertEqual(november.totals.income, Cents(600_000), "Vale o valor confirmado")
+        XCTAssertEqual(november.totals.forecastIncome, .zero)
+        XCTAssertEqual(november.totals.availablePercent, 100)
+        XCTAssertEqual(november.accountsTotal, Cents(705_050))
+
+        let december = MonthSummary(space: paid, calendar: MonthCalendar(date: date(month: 12, hour: 9), timeZone: saoPaulo))
+        XCTAssertEqual(december.salary, .pending(Cents(620_000)), "Novo mês, novo previsto")
+        XCTAssertEqual(december.totals.income, .zero)
+        XCTAssertEqual(december.accountsTotal, Cents(705_050), "O que entrou continua nas contas")
+    }
+
+    func testNoSalaryAndZeroSalaryAreTheSame() {
+        let calendar = MonthCalendar(date: date(hour: 9), timeZone: saoPaulo)
+        XCTAssertNil(MonthSummary(space: space(salary: nil), calendar: calendar).salary)
+        XCTAssertNil(MonthSummary(space: space(salary: .zero), calendar: calendar).salary)
+        XCTAssertEqual(MonthSummary(space: space(salary: nil), calendar: calendar).totals, .zero)
+    }
 }

@@ -77,6 +77,20 @@ Adaptações: a barra inferior fica na área segura (itens de 52 pt, recuo de 10
 o botão + fica 20 pt acima da barra, como no quadro (112 − 92), e só aparece no Início;
 o destino de novo registro abre como folha sobre o Início.
 
+## US5 — Informar o salário e ver quanto tem
+
+Branch `feat/003-month-summary-us5-salary`. T021–T025 implementadas em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `swift test --package-path ios/CapiaFlow` | Passou: 76 testes, 0 falhas (salário na configuração, previsto e recebido, um por mês, mês seguinte, outra conta, espaço antigo sem as chaves novas) |
+| `xtool dev build` | Passou |
+| T026: cenários da US5 no iPhone | Pendente: depende do aparelho e da conferência do usuário |
+
+Complementos ao design: etapa 5 de 7 da configuração; "Em contas hoje" no cartão do saldo;
+a resposta ao "Recebi" não cita metas, que ainda não existem. Pendências registradas:
+"Recebi" não pode ser desfeito e uma falha ao gravar o recebimento não é avisada.
+
 ## Validação integrada
 
 Pendente.

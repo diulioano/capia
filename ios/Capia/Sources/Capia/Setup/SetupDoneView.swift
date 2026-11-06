@@ -100,7 +100,8 @@ struct SetupDoneView: View {
     // MARK: Resumo
 
     private var summary: some View {
-        SpaceSummaryList(accounts: flow.accounts, cards: flow.cards)
+        SpaceSummaryList(accounts: flow.accounts, cards: flow.cards,
+                         salary: flow.draft.salary == .zero ? nil : flow.draft.salary)
     }
 
     private var saveWarning: some View {

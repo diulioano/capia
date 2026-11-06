@@ -30,12 +30,13 @@ struct AppRootView: View {
                 }
             case .home:
                 if let space = app.space {
+                    let calendar = MonthCalendar(date: now, timeZone: .current)
                     HomeView(home: app.home,
-                             summary: MonthSummary(space: space,
-                                                   calendar: MonthCalendar(date: now, timeZone: .current)),
+                             summary: MonthSummary(space: space, calendar: calendar),
                              space: space,
                              send: { app.send($0) },
-                             addAnotherAccount: { app.addAnotherAccountFromHome() })
+                             addAnotherAccount: { app.addAnotherAccountFromHome() },
+                             confirmSalary: { save(app.confirmSalary(in: calendar)) })
                     .transition(.opacity)
                 }
             }

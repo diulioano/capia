@@ -81,12 +81,65 @@ public struct ConfiguredSpace: Codable, Equatable, Sendable {
     public var accounts: [Account]
     public var cards: [CreditCard]
     public var completedAt: Date
+    /// Salário mensal informado na configuração: uma receita recorrente prevista.
+    /// Ausente quando a pessoa deixa zero. Só altera valores depois de "Recebi".
+    public var monthlySalary: Cents?
+    /// Recebimentos do salário confirmados pela pessoa, um por mês no máximo.
+    public var salaryReceipts: [SalaryReceipt]
 
-    public init(profile: Profile, accounts: [Account], cards: [CreditCard], completedAt: Date) {
+    public init(profile: Profile, accounts: [Account], cards: [CreditCard], completedAt: Date,
+                monthlySalary: Cents? = nil, salaryReceipts: [SalaryReceipt] = []) {
         self.schemaVersion = Self.currentSchemaVersion
         self.profile = profile
         self.accounts = accounts
         self.cards = cards
         self.completedAt = completedAt
+        self.monthlySalary = monthlySalary.flatMap { $0 == .zero ? nil : $0 }
+        self.salaryReceipts = salaryReceipts
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case schemaVersion, profile, accounts, cards, completedAt, monthlySalary, salaryReceipts
+    }
+
+    /// Espaços gravados antes do salário não têm as duas chaves novas; continuam válidos
+    /// na mesma versão do esquema, sem salário e sem recebimentos.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        schemaVersion = try container.decode(Int.self, forKey: .schemaVersion)
+        profile = try container.decode(Profile.self, forKey: .profile)
+        accounts = try container.decode([Account].self, forKey: .accounts)
+        cards = try container.decode([CreditCard].self, forKey: .cards)
+        completedAt = try container.decode(Date.self, forKey: .completedAt)
+        monthlySalary = try container.decodeIfPresent(Cents.self, forKey: .monthlySalary)
+        salaryReceipts = try container.decodeIfPresent([SalaryReceipt].self, forKey: .salaryReceipts) ?? []
+    }
+
+    /// Recebimento confirmado no mês, se houver.
+    public func salaryReceipt(year: Int, month: Int) -> SalaryReceipt? {
+        salaryReceipts.first { $0.year == year && $0.month == month }
+    }
+
+    /// Dinheiro nas contas hoje: saldos iniciais somados aos salários já recebidos.
+    /// Não inclui previstos nem cartões, que não têm saldo.
+    public var accountsTotal: Cents {
+        let initial = accounts.reduce(Cents.zero) { $0.adding($1.initialBalance) }
+        return salaryReceipts.reduce(initial) { $0.adding($1.amount) }
+    }
+}
+
+/// Confirmação de que o salário de um mês entrou. Guarda o valor da época, para que
+/// mudar o salário depois não reescreva meses passados.
+public struct SalaryReceipt: Codable, Equatable, Sendable {
+    public let year: Int
+    public let month: Int
+    public let amount: Cents
+    public let confirmedAt: Date
+
+    public init(year: Int, month: Int, amount: Cents, confirmedAt: Date) {
+        self.year = year
+        self.month = month
+        self.amount = amount
+        self.confirmedAt = confirmedAt
     }
 }

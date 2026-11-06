@@ -150,6 +150,8 @@ struct SetupView: View {
                                 submit: { send(.init(.continueStep, from: source)) })
             case .balance:
                 BalanceStepView(draft: flow.draft, edit: edit)
+            case .salary:
+                SalaryStepView(draft: flow.draft, edit: edit)
             case .cardQuestion:
                 CardQuestionStepView(draft: flow.draft, edit: edit)
             case .cardDates:

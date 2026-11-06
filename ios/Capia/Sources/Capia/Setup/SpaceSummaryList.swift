@@ -9,6 +9,8 @@ struct SpaceSummaryList: View {
     let cards: [CreditCard]
     /// Substitui os saldos iniciais por `BRL.hidden` quando a pessoa oculta os valores.
     var valuesHidden = false
+    /// Salário mensal previsto, mostrado na conclusão. Não é conta nem saldo.
+    var salary: Cents?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -45,6 +47,17 @@ struct SpaceSummaryList: View {
                     .accessibilityLabel("Cartão de crédito \(card.name), fecha dia \(card.closingDay), vence dia \(card.dueDay), separado da conta")
                     divider(after: accounts.count + index, total: accounts.count + cards.count)
                 }
+            }
+            if let salary {
+                Rectangle().fill(Color(hex: 0xF4EBDC)).frame(height: 1)
+                row(title: "Salário", detail: "Receita prevista todo mês") {
+                    Text("+ " + BRL.format(salary))
+                        .font(CapiaFonts.body(16, weight: .bold))
+                        .monospacedDigit()
+                        .foregroundStyle(CapiaTheme.notice)
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Salário, receita prevista todo mês, \(BRL.format(salary))")
             }
         }
         .padding(.vertical, 6)

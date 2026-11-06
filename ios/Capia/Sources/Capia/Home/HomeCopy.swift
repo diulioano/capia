@@ -11,9 +11,17 @@ enum HomeCopy {
         }
     }
 
-    static func capybaraMessage(firstName: String) -> String {
-        "Oi, \(firstName)! Seu mês começa aqui. Conforme você registra, eu mostro para onde o dinheiro vai."
+    static func capybaraMessage(firstName: String, salary: SalaryStatus?) -> String {
+        if case .pending = salary {
+            return "Oi, \(firstName)! Seu salário já está previsto. Quando ele cair, é só tocar em Recebi."
+        }
+        return "Oi, \(firstName)! Seu mês começa aqui. Conforme você registra, eu mostro para onde o dinheiro vai."
     }
+
+    /// Resposta ao "Recebi", como no quadro, sem citar metas, que ainda não existem.
+    static let salaryReceivedMessage = "Entrou! Seu mês já conta com isso."
+
+    static let accountsTitle = "Em contas hoje:"
 
     static let balanceTitle = "Saldo do mês até agora"
     static let forecastTitle = "Sobra prevista no fim do mês:"

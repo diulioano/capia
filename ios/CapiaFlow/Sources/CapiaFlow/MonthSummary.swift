@@ -79,19 +79,48 @@ public struct MonthCalendar: Equatable, Sendable {
     }
 }
 
+/// Situação do salário no mês exibido.
+public enum SalaryStatus: Equatable, Sendable {
+    /// Previsto e ainda não confirmado: entra só na sobra prevista.
+    case pending(Cents)
+    /// Confirmado com "Recebi": conta como receita do mês e soma ao dinheiro em contas.
+    case received(SalaryReceipt)
+
+    public var amount: Cents {
+        switch self {
+        case .pending(let amount): amount
+        case .received(let receipt): receipt.amount
+        }
+    }
+}
+
 /// O que o Início mostra a partir do espaço configurado.
 public struct MonthSummary: Equatable, Sendable {
     public let firstName: String
     public let hasCard: Bool
     public let totals: MonthTotals
     public let calendar: MonthCalendar
+    /// Ausente quando a pessoa não informou salário.
+    public let salary: SalaryStatus?
+    /// Saldos iniciais mais salários recebidos. Distinto do saldo do mês e da sobra.
+    public let accountsTotal: Cents
 
-    /// Sem registros nesta entrega, os totais são zero; o saldo inicial não é receita.
-    public init(space: ConfiguredSpace, calendar: MonthCalendar, totals: MonthTotals = .zero) {
+    /// O saldo inicial não é receita do mês; o salário só é receita depois de confirmado.
+    public init(space: ConfiguredSpace, calendar: MonthCalendar) {
         let name = space.profile.name.trimmingCharacters(in: .whitespacesAndNewlines)
         firstName = name.split(whereSeparator: \.isWhitespace).first.map(String.init) ?? name
         hasCard = !space.cards.isEmpty
-        self.totals = totals
         self.calendar = calendar
+        accountsTotal = space.accountsTotal
+        if let receipt = space.salaryReceipt(year: calendar.year, month: calendar.month) {
+            salary = .received(receipt)
+            totals = MonthTotals(income: receipt.amount)
+        } else if let amount = space.monthlySalary {
+            salary = .pending(amount)
+            totals = MonthTotals(forecastIncome: amount)
+        } else {
+            salary = nil
+            totals = .zero
+        }
     }
 }

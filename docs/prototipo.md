@@ -50,3 +50,7 @@ A especificação está em `../specs/001-get-started/spec.md`. O cadastro de nom
 Implementada e aprovada pelo usuário no iPhone em 2026-11-06, por US (nome e objetivos, conta e saldo, cartão e datas, conclusão e reabertura). Durante a US3 o usuário decidiu sugerir o vencimento 7 dias após o fechamento e avisar, sem bloquear, fora de 5 a 15 dias. Evidências em `../specs/002-initial-setup/validation.md`.
 
 Configuração inicial do espaço: nome, objetivos, primeira conta com saldo inicial, cartão de crédito separado com fechamento e vencimento e conclusão com resumo, conforme o quadro "Configuração inicial" do HTML. Substitui a entrada provisória do Get Started. A especificação está em `../specs/002-initial-setup/spec.md`.
+
+## Terceira funcionalidade: resumo do mês
+
+Em andamento em 2026-11-06, especificada em `../specs/003-month-summary/spec.md`. Por decisão do usuário, o Início mostra só os dados reais do espaço, sem registros de exemplo; isso substitui, para esta tela, a proposta de dados de exemplo acima. US1–US4 (visão do mês, seções vazias, ocultar valores, navegação) foram aprovadas pelo usuário no iPhone. A US5 acrescenta o salário mensal como sétima etapa da configuração (complementa as seis etapas de `../specs/002-initial-setup/spec.md`), confirmado com "Recebi" no Início, e mostra o dinheiro em contas hoje.

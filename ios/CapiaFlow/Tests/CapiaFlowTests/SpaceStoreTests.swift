@@ -71,4 +71,29 @@ final class SpaceStoreTests: XCTestCase {
         XCTAssertEqual((json?["cards"] as? [Any])?.count, 1)
         XCTAssertEqual(((json?["accounts"] as? [[String: Any]])?.first?["initialBalance"] as? Int), 123_456)
     }
+
+    func testSalaryAndReceiptsRoundTrip() throws {
+        let store = SpaceStore(directory: directory)
+        var space = sample
+        space.monthlySalary = Cents(620_000)
+        space.salaryReceipts = [SalaryReceipt(year: 2026, month: 11, amount: Cents(620_000),
+                                              confirmedAt: Date(timeIntervalSince1970: 1_793_000_100))]
+        try store.save(space)
+        XCTAssertEqual(store.load(), space)
+    }
+
+    func testSpaceSavedBeforeSalaryStillLoads() throws {
+        // Documento gravado pela funcionalidade 002, sem as chaves do salário.
+        let json = """
+        {"accounts":[{"id":"00000000-0000-0000-0000-000000000001","initialBalance":99,"kind":"checking","name":"Banco Aurora"}],
+         "cards":[],"completedAt":"2026-11-06T12:00:00Z",
+         "profile":{"goals":["saveForGoal"],"name":"Diuli"},"schemaVersion":1}
+        """
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try Data(json.utf8).write(to: SpaceStore(directory: directory).fileURL)
+        let loaded = try XCTUnwrap(SpaceStore(directory: directory).load())
+        XCTAssertNil(loaded.monthlySalary)
+        XCTAssertEqual(loaded.salaryReceipts, [])
+        XCTAssertEqual(loaded.accounts.first?.initialBalance, Cents(99))
+    }
 }

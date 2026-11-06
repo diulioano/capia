@@ -34,7 +34,8 @@ Mesma regra das funcionalidades anteriores (AGENTS.md). Commits com o e-mail
 | US2: seções | `feat/003-month-summary-us2-sections` | US1 | `feat(us2): adiciona seções do mês com estados vazios` |
 | US3: ocultar | `feat/003-month-summary-us3-hide-values` | US2 | `feat(us3): adiciona ocultar valores` |
 | US4: navegação | `feat/003-month-summary-us4-navigation` | US3 | `feat(us4): adiciona barra, botão +, contas e metas` |
-| Validação integrada | `feat/003-month-summary` | US4 | `chore(validation): valida resumo do mês no iPhone` |
+| US5: salário | `feat/003-month-summary-us5-salary` | US4 validada | `feat(us5): adiciona salário previsto e dinheiro em contas` |
+| Validação integrada | `feat/003-month-summary` | US5 | `chore(validation): valida resumo do mês no iPhone` |
 
 Cada US atualiza sua branch com `git merge --ff-only` da predecessora. Sem reset nem
 force-push. Sem aparelho, salvar como `wip(usN): ...` e manter a validação aberta.
@@ -86,6 +87,18 @@ force-push. Sem aparelho, salvar como `wip(usN): ...` e manter a validação abe
 - [X] T018 [P] [US4] Criar `ios/Capia/Sources/Capia/Home/PlaceholderTabView.swift` para Metas e novo registro, com "Voltar ao início" no novo registro.
 - [X] T019 [US4] Validar no iPhone as linhas Novo registro, Contas, Outra conta, Metas e Toques rápidos de `quickstart.md`; registrar e commitar só a US4.
 
-## Phase 7: Validação integrada
+## Phase 7: User Story 5 - Informar o salário e ver quanto tem (P1)
 
-- [ ] T020 Integrar as US na base, executar `quickstart.md` completo no iPhone, comparar com o quadro, atualizar `docs/prototipo.md` e o status da spec; commitar.
+**Branch**: `feat/003-month-summary-us5-salary`, a partir da US4 validada. Pedido do usuário
+em 2026-11-06, depois de aprovar US1–US4.
+
+- [X] T021 [US5] Acrescentar `monthlySalary`, `salaryReceipts`, `SalaryReceipt` e `accountsTotal` em `ios/CapiaFlow/Sources/CapiaFlow/Space.swift`, aceitando espaços gravados sem as chaves novas; testar em `SpaceStoreTests.swift`.
+- [X] T022 [US5] Inserir a etapa `salary` depois de `balance` em `SetupFlow.swift` (7 etapas, zero aceito, omitida em `addingAccount`, recebimentos preservados ao restaurar); atualizar `SetupFlowTests.swift`.
+- [X] T023 [US5] Derivar `SalaryStatus` e os totais do salário em `MonthSummary.swift` e criar `AppFlow.confirmSalary(in:now:)`, um por mês, gravado pela raiz; testar em `MonthSummaryTests.swift` e `AppFlowTests.swift`.
+- [X] T024 [US5] Criar `ios/Capia/Sources/Capia/Setup/SalaryStepView.swift`, textos em `SetupCopy.swift` e a linha do salário na conclusão (`SpaceSummaryList.swift`).
+- [X] T025 [US5] No Início: "Em contas hoje" em `BalanceCardView.swift`; linha do salário com "Recebi"/"Recebido", receita em "Para onde foi" e registro recente em `MonthSectionsView.swift`; resposta da capivara em `MonthView.swift`.
+- [ ] T026 [US5] Validar no iPhone os cenários da US5 da spec, inclusive reabertura e outra conta; registrar e commitar só a US5.
+
+## Phase 8: Validação integrada
+
+- [ ] T020 Integrar as US1–US5 na base, executar `quickstart.md` completo no iPhone, comparar com o quadro, atualizar `docs/prototipo.md` e o status da spec; commitar.
