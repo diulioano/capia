@@ -118,9 +118,9 @@ public struct AppFlow: Sendable {
     }
 
     /// A gravação do registro ou do desfazer falhou; a sessão não muda.
-    public mutating func recordSaveFailed() {
+    public mutating func recordSaveFailed(_ failure: RecordFailure = .save) {
         guard var flow = record else { return }
-        flow.saveDidFail()
+        flow.saveDidFail(failure)
         record = flow
     }
 

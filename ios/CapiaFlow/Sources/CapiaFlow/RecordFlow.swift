@@ -63,13 +63,20 @@ public enum RecordAction: Equatable, Sendable {
     case dismissToast
 }
 
+/// Gravação que falhou, para "Tentar de novo" repetir a mesma.
+public enum RecordFailure: Equatable, Sendable {
+    case save, undo
+}
+
 /// Estado do novo registro durante a sessão (data-model.md).
 public struct RecordFlow: Equatable, Sendable {
     public private(set) var mode: RecordMode = .type
     public private(set) var phase: RecordPhase = .amount
     public private(set) var draft: RecordDraft
     public private(set) var toast: SavedToast?
-    public private(set) var saveFailed = false
+    /// Falha da última gravação; o aviso de falha fica até a próxima ação.
+    public private(set) var failure: RecordFailure?
+    public var saveFailed: Bool { failure != nil }
     public let accounts: [Account]
     public let cards: [CreditCard]
 
@@ -112,6 +119,8 @@ public struct RecordFlow: Equatable, Sendable {
     // MARK: Ações
 
     public mutating func send(_ action: RecordAction) {
+        // Qualquer ação da pessoa fecha o aviso de falha; o formulário segue como estava.
+        failure = nil
         switch action {
         case .selectMode(let mode):
             self.mode = mode
@@ -195,12 +204,15 @@ public struct RecordFlow: Equatable, Sendable {
         toast = SavedToast(record: record, previous: draft)
         draft = RecordDraft(kind: draft.kind, source: accounts.first.map { .account(id: $0.id) })
         phase = .amount
-        saveFailed = false
+        failure = nil
     }
 
-    /// A gravação falhou: nada muda além do aviso de falha.
-    mutating func saveDidFail() {
-        saveFailed = true
+    /// A gravação falhou: o formulário fica como estava e aparece o aviso de falha. Se foi
+    /// o registro, o aviso anterior sai para não oferecer "Desfazer" de outro registro; se foi
+    /// o desfazer, o registro segue salvo e o aviso fica guardado para tentar de novo.
+    mutating func saveDidFail(_ failure: RecordFailure = .save) {
+        self.failure = failure
+        if failure == .save { toast = nil }
     }
 
     /// "Desfazer": restaura o formulário de antes de salvar.
@@ -210,6 +222,6 @@ public struct RecordFlow: Equatable, Sendable {
         mode = .type
         phase = .details
         self.toast = nil
-        saveFailed = false
+        failure = nil
     }
 }

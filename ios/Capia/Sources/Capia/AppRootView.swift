@@ -79,7 +79,7 @@ struct AppRootView: View {
             try Self.store.save(space)
             app.undoLastRecord()
         } catch {
-            app.recordSaveFailed()
+            app.recordSaveFailed(.undo)
         }
     }
 

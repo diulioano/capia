@@ -55,8 +55,9 @@ raio 22, recuo 8/10/8/6, sombra `0 14 30 rgba(40,30,20,.3)`. Capivara comemorand
 `rgba(255,255,255,.12)`, 14 bold `#F2C9A7`. Entra subindo 120% em 0,4 s; some após 4,2 s.
 
 Subtítulo: `{+ }R$ valor · {nome exibido} · {conta ou Cartão nome}`; "+ " só na receita.
-Complemento: falha de gravação usa o mesmo lugar e estilo, sem capivara comemorando, com
-"Não deu para salvar agora. Tente de novo." e "Tentar de novo".
+Complemento: falha de gravação usa o mesmo lugar e estilo, com a capivara pensativa no lugar da
+comemorando, "Não deu para salvar agora. Tente de novo." e "Tentar de novo", que repete a
+gravação que falhou (registro ou desfazer). Não expira; some na próxima ação.
 
 Acessibilidade: o aviso é anunciado ao aparecer; com VoiceOver, permanece até a próxima ação.
 

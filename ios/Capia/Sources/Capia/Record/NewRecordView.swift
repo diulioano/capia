@@ -2,7 +2,7 @@ import CapiaFlow
 import SwiftUI
 
 /// Novo registro do quadro "Novo registro", aberto sobre o Início: fechar, título, abas
-/// Digitar, Falar e Foto, a fase atual e o aviso de registro salvo.
+/// Digitar, Falar e Foto, a fase atual e o aviso de registro salvo ou de falha.
 @MainActor
 struct NewRecordView: View {
     let flow: RecordFlow
@@ -12,6 +12,7 @@ struct NewRecordView: View {
     let close: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
     @AccessibilityFocusState private var titleFocused: Bool
 
     /// Duração do aviso no quadro.
@@ -28,8 +29,10 @@ struct NewRecordView: View {
         .overlay(alignment: .bottom) { toast }
         .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: flow.phase)
         .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: flow.mode)
-        .task(id: flow.toast?.record.id) {
-            guard flow.toast != nil else { return }
+        .task(id: toastTimer) {
+            // O aviso some em 4,2 s. Com VoiceOver, fica até a próxima ação, para dar tempo de
+            // alcançar "Desfazer"; com falha, o registro guardado espera "Tentar de novo".
+            guard flow.toast != nil, flow.failure == nil, !voiceOver else { return }
             try? await Task.sleep(for: Self.toastDuration)
             guard !Task.isCancelled else { return }
             send(.dismissToast)
@@ -39,6 +42,16 @@ struct NewRecordView: View {
             guard !Task.isCancelled else { return }
             titleFocused = true
         }
+    }
+
+    private var toastTimer: String {
+        "\(flow.toast?.record.id.uuidString ?? "-")|\(String(describing: flow.failure))|\(voiceOver)"
+    }
+
+    /// Ações das fases. Com VoiceOver, a próxima ação fecha o aviso de registro salvo.
+    private func forward(_ action: RecordAction) {
+        if voiceOver, flow.toast != nil, action != .dismissToast { send(.dismissToast) }
+        send(action)
     }
 
     // MARK: Cabeçalho
@@ -77,7 +90,7 @@ struct NewRecordView: View {
         HStack(spacing: 4) {
             ForEach(RecordMode.allCases, id: \.self) { mode in
                 let selected = flow.mode == mode
-                Button { send(.selectMode(mode)) } label: {
+                Button { forward(.selectMode(mode)) } label: {
                     HStack(spacing: 6) {
                         RecordModeIcon(mode: mode)
                             .stroke(CapiaTheme.ink, style: StrokeStyle(lineWidth: 1.8 * 18 / 24, lineCap: .round,
@@ -111,10 +124,10 @@ struct NewRecordView: View {
     private var content: some View {
         switch (flow.mode, flow.phase) {
         case (.type, .amount):
-            AmountPadView(flow: flow, send: send)
+            AmountPadView(flow: flow, send: forward)
                 .transition(enter)
         case (.type, .details):
-            RecordFormView(flow: flow, send: send, save: save)
+            RecordFormView(flow: flow, send: forward, save: save)
                 .transition(enter)
         default:
             Text(RecordCopy.modePlaceholder(flow.mode))
@@ -133,14 +146,28 @@ struct NewRecordView: View {
 
     @ViewBuilder
     private var toast: some View {
-        if let saved = flow.toast {
-            RecordToastView(title: RecordCopy.saved,
-                            subtitle: RecordCopy.toastSubtitle(saved.record, accounts: flow.accounts, cards: flow.cards))
-                .padding(.horizontal, 14)
-                .padding(.bottom, flow.phase == .details ? 104 : 24)
-                .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+        Group {
+            if let failure = flow.failure {
+                // Mesmo lugar e estilo, com a capivara pensativa no lugar da comemorando.
+                RecordToastView(image: CapiaImages.thinkingCapybara, title: RecordCopy.saveFailed, subtitle: nil,
+                                actionTitle: RecordCopy.retry) {
+                    switch failure {
+                    case .save: save()
+                    case .undo: undo()
+                    }
+                }
+                .id("failure-\(String(describing: failure))")
+            } else if let saved = flow.toast {
+                RecordToastView(image: CapiaImages.celebratingCapybara, title: RecordCopy.saved,
+                                subtitle: RecordCopy.toastSubtitle(saved.record, accounts: flow.accounts,
+                                                                   cards: flow.cards),
+                                actionTitle: RecordCopy.undo, action: undo)
                 .id(saved.record.id)
+            }
         }
+        .padding(.horizontal, 14)
+        .padding(.bottom, flow.phase == .details ? 104 : 24)
+        .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
     }
 }
 

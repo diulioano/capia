@@ -295,6 +295,49 @@ final class AppFlowTests: XCTestCase {
         XCTAssertNil(app.spaceUndoingLastRecord, "Sem aviso, nada a desfazer")
     }
 
+    func testSaveFailureRemembersWhatToRetry() throws {
+        var app = appWithFilledExpense()
+        app.recordSaveFailed()
+        XCTAssertEqual(app.record?.failure, .save)
+        let pending = try XCTUnwrap(app.pendingRecord(now: now, timeZone: utc), "Tentar de novo grava o mesmo formulário")
+        app.commitRecord(pending.record)
+        XCTAssertNil(app.record?.failure, "Gravar com sucesso fecha o aviso de falha")
+        XCTAssertEqual(app.space?.records.count, 1)
+    }
+
+    func testUndoFailureKeepsTheRecordAndAllowsRetry() throws {
+        var app = appWithFilledExpense()
+        let before = app.record?.draft
+        let pending = try XCTUnwrap(app.pendingRecord(now: now, timeZone: utc))
+        app.commitRecord(pending.record)
+        app.recordSaveFailed(.undo)
+        XCTAssertEqual(app.record?.failure, .undo)
+        XCTAssertEqual(app.space?.records, [pending.record], "O registro segue salvo")
+        XCTAssertNotNil(app.spaceUndoingLastRecord, "Tentar de novo ainda desfaz")
+        app.undoLastRecord()
+        XCTAssertNil(app.record?.failure)
+        XCTAssertEqual(app.space?.records, [])
+        XCTAssertEqual(app.record?.draft, before)
+    }
+
+    func testSaveFailureAfterASavedRecordDropsItsUndo() throws {
+        var app = appWithFilledExpense()
+        app.commitRecord(try XCTUnwrap(app.pendingRecord(now: now, timeZone: utc)).record)
+        app.send(.press(.digit(5)))
+        app.recordSaveFailed()
+        XCTAssertNil(app.record?.toast, "Sem Desfazer de um registro que não é o da falha")
+        XCTAssertNil(app.spaceUndoingLastRecord)
+        XCTAssertEqual(app.space?.records.count, 1)
+    }
+
+    func testNextActionClosesTheFailureNotice() {
+        var app = appWithFilledExpense()
+        app.recordSaveFailed()
+        app.send(.setDescription("Feira"))
+        XCTAssertNil(app.record?.failure)
+        XCTAssertEqual(app.record?.draft.description, "Feira", "O formulário segue como estava")
+    }
+
     func testRecordsSurviveAddingAnotherAccount() throws {
         var app = appWithFilledExpense()
         let pending = try XCTUnwrap(app.pendingRecord(now: now, timeZone: utc))

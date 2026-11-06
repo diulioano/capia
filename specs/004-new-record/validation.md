@@ -94,7 +94,26 @@ esmaecidos e desabilitados nos limites (1× e 12×), e o número de parcelas é 
 
 ## US4 — Desfazer ou desistir de um registro
 
-Pendente.
+Branch `feat/004-new-record-us4-undo`. T023–T024 implementadas em 2026-11-06.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `swift test` em `ios/CapiaFlow` | Passou: 137 testes, incluindo falha ao salvar, falha ao desfazer, falha depois de outro registro salvo e fechamento do aviso pela próxima ação |
+| `xtool dev build` | Passou, sem avisos |
+| `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas. Telas ainda não conferidas |
+| T025: linhas Desfazer, Aviso expira e Voltar e fechar de `quickstart.md`, com reabertura após desfazer | Pendente: aceite do usuário |
+| Falha de gravação | Coberta só por testes em `AppFlowTests`; não reproduzível no aparelho sem ferramentas |
+
+Decisões que complementam o quadro:
+
+- "Tentar de novo" repete a gravação que falhou: o registro, com o formulário preservado, ou
+  o desfazer, com o registro ainda salvo e o aviso guardado.
+- Se o registro falha enquanto o aviso de um registro anterior ainda está aberto, esse aviso
+  sai, para não oferecer "Desfazer" de outro registro; o anterior segue salvo.
+- O aviso de falha não expira: some na próxima ação da pessoa ou ao gravar com sucesso. Usa
+  a capivara pensativa, já que o quadro só define a comemorando para o sucesso.
+- Com VoiceOver, o aviso "Registro salvo" não expira e some na próxima ação nas fases do
+  registro; fechar o novo registro descarta aviso e rascunho.
 
 ## US5 — Saber que Falar e Foto ainda vêm
 
