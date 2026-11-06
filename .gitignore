@@ -9,6 +9,9 @@ Desktop.ini
 # Swift e Xcode
 .build/
 DerivedData/
+*.swiftpm/
+Packages/
+.bsp/
 xcuserdata/
 *.xcuserstate
 
