@@ -1,4 +1,4 @@
-# Recursos do Get Started (US1 e US2)
+# Recursos do Get Started (US1, US2 e US3)
 
 HTML original e licenças incorporadas preservados. Fontes completas, distribuídas sob OFL 1.1.
 Revisão Google Fonts: `38411257417e616c5d4daa1b9e91a3dbcebe1c2e`.
@@ -78,3 +78,15 @@ SHA-256: `0583b7bc283958849d367b182262d5365390e03dd33568f77f6fedca64f80964`.
 https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf; instância estática wght=700, sem subset
 
 SHA-256: `9167c86dde180f0aa8b4c18b1af5bef08f26fc8336a74e1d819c0f0b2ca8b75a`.
+
+## Ícone instalado
+
+Edição por image_gen a partir de assets/capybara-onsen.png. Original gerado em assets/capia-app-icon-generated.png; prompt integral em assets/capia-app-icon-prompt.txt.
+Normalização técnica: 1254 × 1254 RGB → 1024 × 1024 RGB, sem máscara de cantos.
+
+path: `ios/Capia/Resources/AppIcon.png`
+sha256: `5b13cf920e74975d740cc4c2f13465f059516be067c611650d8b22cecf6448dc`
+source: `assets/capia-app-icon-generated.png`
+source_sha256: `7d127fd32598c89da865e7380f63950fd0567740d6c0f5ae11165c8be16adc13`
+prompt_sha256: `ea06372eefd0936ce29a1da50b575f68dca8d001ff2f96a111427ed3e8fed1df`
+original_sha256: `7435495652d2d02583c02d6508d7d89f7483e3bd65d30d8d00a74d0608bcd3a7`

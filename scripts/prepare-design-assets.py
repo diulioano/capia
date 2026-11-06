@@ -34,6 +34,9 @@ STATIC_FONTS = {'Regular': 400, 'SemiBold': 600, 'Bold': 700}
 POSES = {'ThinkingCapybara': (2, 0, 'pensando'),
          'HappyCapybara': (1, 0, 'feliz'),
          'CelebratingCapybara': (1, 1, 'comemora')}
+ICON_SOURCE = ROOT / 'assets/capia-app-icon-generated.png'
+ICON_PROMPT = ROOT / 'assets/capia-app-icon-prompt.txt'
+ICON = ROOT / 'ios/Capia/Resources/AppIcon.png'
 
 
 def pose_image(column, row):
@@ -110,20 +113,45 @@ def prepare():
     metadata = {'design_sha256': digest(DESIGN.read_bytes()),
                 'google_fonts_revision': REVISION, 'files': records}
     metadata['expressions_sheet_sha256'] = digest((ROOT / 'assets/capybara-expressions-sheet-3x2.png').read_bytes())
+    with Image.open(ICON_SOURCE) as original:
+        original.convert('RGB').resize((1024, 1024), Image.Resampling.LANCZOS).save(ICON)
+    metadata['icon'] = {'path': ICON.relative_to(ROOT).as_posix(),
+                        'sha256': digest(ICON.read_bytes()),
+                        'source': ICON_SOURCE.relative_to(ROOT).as_posix(),
+                        'source_sha256': digest(ICON_SOURCE.read_bytes()),
+                        'prompt_sha256': digest(ICON_PROMPT.read_bytes()),
+                        'original_sha256': digest((ROOT / 'assets/capybara-onsen.png').read_bytes())}
     (RESOURCES / 'sources.json').write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    lines = ['# Recursos do Get Started (US1 e US2)', '',
+    lines = ['# Recursos do Get Started (US1, US2 e US3)', '',
              'HTML original e licenças incorporadas preservados. Fontes completas, distribuídas sob OFL 1.1.',
              f'Revisão Google Fonts: `{REVISION}`.', '',
              f'HTML SHA-256: `{metadata["design_sha256"]}`.', '']
     lines += [f'Folha de expressões SHA-256: `{metadata["expressions_sheet_sha256"]}`.', '']
     for path, record in records.items():
         lines += [f'## {path}', '', record['origin'], '', f'SHA-256: `{record["sha256"]}`.', '']
+    lines += ['## Ícone instalado', '',
+              'Edição por image_gen a partir de assets/capybara-onsen.png. Original gerado em assets/capia-app-icon-generated.png; prompt integral em assets/capia-app-icon-prompt.txt.',
+              'Normalização técnica: 1254 × 1254 RGB → 1024 × 1024 RGB, sem máscara de cantos.', '']
+    lines += [f'{key}: `{value}`' for key, value in metadata['icon'].items()]
+    lines += ['']
     (RESOURCES / 'SOURCES.md').write_text('\n'.join(lines), encoding='utf-8')
 
 
 def check():
     metadata = json.loads((RESOURCES / 'sources.json').read_text(encoding='utf-8'))
     assert digest(DESIGN.read_bytes()) == metadata['design_sha256'], 'HTML alterado'
+    icon = metadata['icon']
+    assert icon['path'] == ICON.relative_to(ROOT).as_posix(), 'Caminho do ícone divergente'
+    assert icon['sha256'] == digest(ICON.read_bytes()), 'Ícone alterado'
+    assert icon['source_sha256'] == digest(ICON_SOURCE.read_bytes()), 'Fonte do ícone alterada'
+    assert icon['prompt_sha256'] == digest(ICON_PROMPT.read_bytes()), 'Prompt do ícone alterado'
+    assert icon['original_sha256'] == digest((ROOT / 'assets/capybara-onsen.png').read_bytes()), 'Imagem original do ícone alterada'
+    with Image.open(ICON) as image:
+        assert image.format == 'PNG' and image.size == (1024, 1024), 'Formato/dimensão do ícone incorretos'
+        assert image.mode == 'RGB' or (image.mode == 'RGBA' and image.getchannel('A').getextrema() == (255, 255)), 'Ícone não é opaco'
+        with Image.open(ICON_SOURCE) as source:
+            expected = source.convert('RGB').resize((1024, 1024), Image.Resampling.LANCZOS)
+            assert image.convert('RGB').tobytes() == expected.tobytes(), 'Ícone divergente da origem'
     required = {'Images/WelcomeCapybara.png', 'Images/OnsenWallpaper.png'} | {
         f'Fonts/{name}' for name in FONTS} | {f'Fonts/Figtree-{style}.ttf' for style in STATIC_FONTS} | {f'Images/{name}.png' for name in POSES}
     assert set(metadata['files']) == required, 'Manifesto de recursos incompleto'
@@ -134,6 +162,7 @@ def check():
             assert image.mode == 'RGBA' and image.size == expected.size and image.tobytes() == expected.tobytes(), f'Pose divergente: {name}'
             assert image.getchannel('A').getextrema() == (0, 255), f'Recorte opaco: {name}'
     sources = (RESOURCES / 'SOURCES.md').read_text(encoding='utf-8')
+    assert all(str(value) in sources for value in icon.values()), 'Origem do ícone não documentada'
     for path, record in metadata['files'].items():
         data = (RESOURCES / path).read_bytes()
         assert digest(data) == record['sha256'], f'Hash divergente: {path}'
@@ -152,7 +181,7 @@ def check():
     assert (RESOURCES / 'Images/OnsenWallpaper.png').read_bytes() == (ROOT / 'assets/onsen-wallpaper-1170x2532.png').read_bytes(), 'Fundo divergente'
     with Image.open(RESOURCES / 'Images/OnsenWallpaper.png') as image:
         assert image.size == (1170, 2532), 'Dimensão incorreta do fundo'
-    print('US1 e US2: imagens, poses, fontes, licenças e hashes conferidos. Ícone ainda fora deste estágio.')
+    print('Get Started: imagens, poses, fontes, licenças, ícone opaco 1024 e hashes conferidos.')
 
 
 if __name__ == '__main__':

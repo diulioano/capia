@@ -1,9 +1,8 @@
 # Validar o Get Started do Capia
 
-US1 aceita no iPhone na build 3, com os relatos de validação registrados. A build 4
-implementa as três introduções e a entrada provisória da configuração; os testes de
-navegação passaram, a instalação no iPhone foi confirmada e seu aceite no aparelho está
-pendente. O ícone final ainda não existe.
+US1 e US2 aceitas no iPhone, com os relatos registrados. A build 5 acrescenta o ícone
+do Capia; compilação, recursos e testes passaram. Instalação dessa build, identificação
+do ícone e validação integrada ainda pendentes.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente
@@ -45,7 +44,7 @@ Referência: [issue do xtool sobre a etapa Connecting](https://github.com/xtool-
 
 ## Preparar e conferir os recursos
 
-O script `scripts/prepare-design-assets.py` prepara os recursos US1 e US2 e oferece `--check`
+O script `scripts/prepare-design-assets.py` prepara os recursos das três histórias e oferece `--check`
 para verificar presença, dimensões, licenças e correspondência dos recursos sem escrita
 nem rede. Instale as dependências Python no Windows. Para regenerar recursos, o modo
 sem argumentos baixa fontes da revisão oficial fixada e preserva `design/`.
@@ -62,8 +61,9 @@ O resultado esperado é código de saída zero e nenhum recurso obrigatório aus
 Neste estágio, confira o mascote extraído do HTML, as três poses preparadas da folha
 de expressões (os blobs dessas poses não estão embutidos no HTML), o fundo existente, as fontes TTF
 completas e seus avisos OFL. A ferramenta registra caminhos, hashes e origem em
-`ios/Capia/Sources/Capia/Resources/SOURCES.md`. O ícone opaco 1024 × 1024 e os recursos
-finais serão exigidos pelo modo de conferência quando a US3 for implementada.
+`ios/Capia/Sources/Capia/Resources/SOURCES.md`. O ícone opaco 1024 × 1024 também é
+exigido pela conferência, incluindo sua origem e o prompt da edição. A preparação
+normaliza o PNG gerado já versionado em `assets/`; não chama geração de imagem nem IA.
 
 ## Testar as transições e compilar
 
@@ -102,7 +102,7 @@ real produzido com `xtool install` apenas quando optar pela instalação separad
 Nunca registre conta Apple, senha, token, certificado ou perfil de assinatura no Git.
 
 Resultado final esperado após US3: Capia aparece na tela inicial, com o ícone da capivara.
-Na US1 atual, o ícone final ainda não existe. Abra o app
+Na build 5, o ícone está empacotado e aguarda essa conferência no aparelho. Abra o app
 pelo ícone e confirme as boas-vindas. Registre modelo do aparelho, versão do iOS,
 identificador do bundle e versão do build. O alvo mínimo planejado é iOS 17.
 

@@ -51,5 +51,13 @@
       "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf; instância estática wght=700, sem subset"
     }
   },
-  "expressions_sheet_sha256": "e226434117aad84d4486c34c970a483ca9cbf781d89d121531fea8002e095800"
+  "expressions_sheet_sha256": "e226434117aad84d4486c34c970a483ca9cbf781d89d121531fea8002e095800",
+  "icon": {
+    "path": "ios/Capia/Resources/AppIcon.png",
+    "sha256": "5b13cf920e74975d740cc4c2f13465f059516be067c611650d8b22cecf6448dc",
+    "source": "assets/capia-app-icon-generated.png",
+    "source_sha256": "7d127fd32598c89da865e7380f63950fd0567740d6c0f5ae11165c8be16adc13",
+    "prompt_sha256": "ea06372eefd0936ce29a1da50b575f68dca8d001ff2f96a111427ed3e8fed1df",
+    "original_sha256": "7435495652d2d02583c02d6508d7d89f7483e3bd65d30d8d00a74d0608bcd3a7"
+  }
 }

@@ -349,3 +349,32 @@ Verificações:
 - Com SC-002 e SC-003 já registrados, T025 concluída. US2 aceita no iPhone15,2 / iOS 26.7.2.
   Não há medição instrumental dos tempos nem novas capturas da build 4.
 - US3 e validação integrada ainda pendentes.
+
+## US3 — ícone e identidade, build 5 — 2026-11-06
+
+- Branch `feat/001-get-started-us3-app-identity`, avançada por fast-forward até o aceite
+  da US2 em `27dcacb` antes de iniciar a história.
+- T026: usada a skill imagegen com a ferramenta incorporada, em modo de edição de
+  `assets/capybara-onsen.png`. Resultado preservado em `assets/capia-app-icon-generated.png`
+  (1254 × 1254 RGB); prompt integral em `assets/capia-app-icon-prompt.txt`.
+  Mantidos capivara tranquila, toalha, rosto e textura; enquadramento fechado com fundo creme,
+  sem texto nem máscara arredondada desenhada. Inspeção visual do resultado realizada.
+- Normalização técnica reproduzível para `ios/Capia/Resources/AppIcon.png`: redução a
+  1024 × 1024 RGB, opaco. A imagem original escolhida e o arquivo gerado são preservados.
+- T027: script agora prepara e confere todos os recursos finais, inclusive ícone, origem,
+  prompt, opacidade, dimensões e igualdade com a normalização esperada. Hashes e origem
+  registrados em `Resources/SOURCES.md` e `sources.json`; prompt protegido de conversão
+  de fim de linha pelo Git no Windows.
+- T028: `iconPath: Resources/AppIcon.png` em xtool.yml, nome Capia e CFBundleVersion 5.
+  `xtool dev build` passou. O `.app` contém AppIcon.png no bundle principal, igual byte a
+  byte ao master; Info.plist contém CFBundleIconFile `AppIcon`, nome Capia e bundle
+  `com.diuli.capia`. Não foi usado asset catalog.
+- T029: raiz continua com uma nova instância de GetStartedFlow em `@State`, sem
+  persistência. `swift test --package-path ios/CapiaFlow`: seis testes passaram,
+  incluindo nova instância em welcome, zero falhas.
+- Preparação repetida gerou os mesmos hashes e `--check` passou sem escrita, incluindo
+  o ícone. Imagens, fontes e licenças encontradas uma única vez no `.app` e iguais às origens.
+- **T030 pendente**: instalar a build 5, identificar nome/rosto/toalha na tela inicial,
+  abrir pelo ícone, encerrar o processo e confirmar reabertura nas boas-vindas. SC-006
+  ainda não aprovado. O socket Apple não listava aparelho; reconexão solicitada ao usuário.
+- Validação integrada T031–T033 aguarda o aceite da US3.

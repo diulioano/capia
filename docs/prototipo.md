@@ -39,7 +39,7 @@ O nome escolhido pelo usuário em 2026-11-06 é Capia. O HTML original permanece
 
 ## Primeira funcionalidade especificada
 
-Implementação iniciada em 2026-11-06: projeto criado por `xtool new Capia --skip-setup`, esqueleto compilado e seis testes de navegação aprovados. As boas-vindas foram aceitas no iPhone na US1. A US2 implementa as três introduções e a entrada provisória da configuração; seu aceite no aparelho está pendente. O ícone aguarda esse checkpoint. Comandos e evidências estão em `../specs/001-get-started/quickstart.md` e `../specs/001-get-started/validation.md`.
+Implementação iniciada em 2026-11-06: projeto criado por `xtool new Capia --skip-setup`, esqueleto compilado e seis testes de navegação aprovados. US1 e US2 foram aceitas no iPhone. A build 5 acrescenta o ícone preparado a partir da capivara escolhida; sua identificação instalada e a integração final aguardam validação. Comandos e evidências estão em `../specs/001-get-started/quickstart.md` e `../specs/001-get-started/validation.md`.
 
 A implementação começa pelo fluxo Get Started: boas-vindas e três etapas de apresentação, conforme o primeiro quadro do HTML. O ícone do Capia usará `../assets/capybara-onsen.png` como base, com adaptação de enquadramento para identificação na tela inicial do iPhone.
 
