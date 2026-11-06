@@ -220,3 +220,14 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
 - **Pendente**: conferência da build 3 com texto máximo (rolagem, cena, botão fixo e carinho),
   regressão visual em tamanho padrão e demais verificações ainda abertas da US1.
   O resultado foi solicitado ao usuário; T012/T014/T016 continuam abertas.
+
+## Texto ampliado aprovado na build 3 — 2026-11-06
+
+- O usuário respondeu "Layout e carinho funcionaram bem" à conferência da build 3
+  com o texto no máximo, incluindo rolagem, recorte da cena, Começar fixo no rodapé
+  e toque na capivara.
+- **Passou por relato do usuário no aparelho**: reorganização para o maior texto
+  acessível e interação de carinho após a mudança. O defeito visual relatado na build 2
+  não foi observado pelo usuário nesse percurso da build 3.
+- Permanecem pendentes a conferência da composição em tamanho padrão após o ajuste,
+  VoiceOver e SC-001. T016 continua aberta; US2 ainda não iniciada.

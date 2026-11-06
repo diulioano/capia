@@ -6,7 +6,8 @@ compilaram; seis testes de navegação passaram. O Capia foi instalado no iPhone
 falhou: fundo e capivara ausentes. A build 2 carrega essas imagens diretamente por URL;
 foi instalada, e o usuário confirmou que ambas aparecem. Interações, comparação visual
 completa e acessibilidade seguem pendentes. O teste com maior texto mostrou falha visual;
-a build 3 reorganiza esse modo, foi instalada e aguarda conferência. As introduções finais
+a build 3 reorganiza esse modo, foi instalada e o usuário aprovou layout e carinho com
+o texto no máximo. Conferência em tamanho padrão e VoiceOver ainda pendentes. As introduções finais
 e o ícone ainda não foram implementados.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
