@@ -10,6 +10,11 @@ import UIKit
 struct CentsField: UIViewRepresentable {
     let value: Cents
     let accessibilityLabel: String
+    /// Maior valor aceito; algarismos que passariam dele são ignorados.
+    var maxValue: Cents = .max
+    var fontSize: CGFloat = 48
+    /// Abre o teclado ao aparecer, como nas etapas da configuração.
+    var focusOnAppear = true
     let onChange: (Cents) -> Void
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -28,16 +33,16 @@ struct CentsField: UIViewRepresentable {
         field.tintColor = UIColor(CapiaTheme.caret)
         field.setContentHuggingPriority(.defaultLow, for: .horizontal)
         field.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        let base = UIFont(name: "ZenMaruGothic-Bold", size: 48) ?? .systemFont(ofSize: 48, weight: .bold)
+        let base = UIFont(name: "ZenMaruGothic-Bold", size: fontSize) ?? .systemFont(ofSize: fontSize, weight: .bold)
         let monospaced = base.fontDescriptor.addingAttributes([
             .featureSettings: [[UIFontDescriptor.FeatureKey.type: kNumberSpacingType,
                                 UIFontDescriptor.FeatureKey.selector: kMonospacedNumbersSelector]]
         ])
         field.font = UIFontMetrics(forTextStyle: .largeTitle)
-            .scaledFont(for: UIFont(descriptor: monospaced, size: 48))
+            .scaledFont(for: UIFont(descriptor: monospaced, size: fontSize))
         apply(to: field)
         // Abre o teclado ao entrar na etapa, como antes.
-        DispatchQueue.main.async { field.becomeFirstResponder() }
+        if focusOnAppear { DispatchQueue.main.async { field.becomeFirstResponder() } }
         return field
     }
 
@@ -62,7 +67,8 @@ struct CentsField: UIViewRepresentable {
                        replacementString string: String) -> Bool {
             let length = (field.text ?? "").utf16.count
             let replacingAll = length > 0 && range.location == 0 && range.length == length
-            let updated = parent.value.editing(insert: string, replacingAll: replacingAll)
+            let edited = parent.value.editing(insert: string, replacingAll: replacingAll)
+            let updated = edited > parent.maxValue ? parent.value : edited
             field.text = BRL.format(updated)
             field.textColor = UIColor(updated == .zero ? CapiaTheme.placeholder : CapiaTheme.ink)
             moveCaretToEnd(field)

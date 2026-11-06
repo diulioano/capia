@@ -6,11 +6,16 @@ import SwiftUI
 @MainActor
 struct HomeView: View {
     let home: HomeFlow
+    /// Novo registro aberto sobre o Início.
+    let record: RecordFlow?
     let summary: MonthSummary
     let space: ConfiguredSpace
     let send: (HomeAction) -> Void
     let addAnotherAccount: () -> Void
     let confirmSalary: () -> Void
+    let sendRecord: (RecordAction) -> Void
+    let saveRecord: () -> Void
+    let undoRecord: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -36,10 +41,16 @@ struct HomeView: View {
         .background(CapiaTheme.cream.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { TabBar(current: home.tab, send: send) }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: home.tab)
-        .sheet(isPresented: .init(get: { home.showingNewRecord },
-                                  set: { if !$0 { send(.closeNewRecord) } })) {
-            NewRecordPlaceholderView { send(.closeNewRecord) }
+        // O Início fica por baixo, oculto para o VoiceOver enquanto o registro está aberto.
+        .accessibilityHidden(record != nil)
+        .overlay {
+            if let record {
+                NewRecordView(flow: record, send: sendRecord, save: saveRecord, undo: undoRecord,
+                              close: { send(.closeNewRecord) })
+                    .transition(reduceMotion ? .identity : .opacity.combined(with: .offset(y: 14)))
+            }
         }
+        .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.34), value: record != nil)
     }
 }
 

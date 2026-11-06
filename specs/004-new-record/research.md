@@ -79,7 +79,9 @@ Somas de `Int64` não estouram no protótipo: o limite por registro é R$ 999.99
 
 **Decisão**: `RecordCategory.suggestion(for:)` dobra caixa e acentos
 (`folding(options: [.caseInsensitive, .diacriticInsensitive])`), separa a descrição em
-palavras e procura, na ordem do quadro, palavras que comecem por um dos prefixos: Mercado
+palavras e procura, na ordem do quadro, palavras que comecem por um dos prefixos. Os termos
+curtos `bar`, `99` e `luz` só valem como palavra inteira, para "barato" ou "1999" não
+casarem. Prefixos: Mercado
 (`mercad`, `feira`, `hortifruti`, `sacol`), Restaurantes (`caf`, `restaur`, `padaria`,
 `lanche`, `almo`, `jantar`, `pizza`, `ifood`), Transporte (`uber`, `99`, `onibus`, `metr`,
 `posto`, `gasolina`, `combust`), Saúde (`farm`, `medic`, `consulta`, `dentista`), Casa

@@ -1,3 +1,4 @@
+import CapiaFlow
 import SwiftUI
 
 enum CapiaTheme {
@@ -35,6 +36,33 @@ enum CapiaTheme {
     static let badge = Color(hex: 0xFFFDF8)
     static let balanceText = Color(hex: 0x3E3A34)
     static let shadow = Color(red: 80/255, green: 60/255, blue: 40/255)
+
+    // Quadro "Novo registro".
+    static let keyPressed = Color(hex: 0xE5D6BE)
+    static let toastBackground = ink
+    static let toastText = Color(hex: 0xFBF7F0)
+    static let toastSecondary = Color(hex: 0xD8CFC2)
+    static let toastAction = Color(hex: 0xF2C9A7)
+
+    /// Cor de cada categoria (ponto da ficha, inicial dos recentes, barra de "Para onde foi").
+    static func category(_ category: RecordCategory) -> Color {
+        switch category {
+        case .market: Color(hex: 0x5C6B34)
+        case .restaurants: Color(hex: 0xC4622E)
+        case .transport: Color(hex: 0xC9A472)
+        case .home: Color(hex: 0x6FA798)
+        case .leisure: Color(hex: 0xD99A3C)
+        case .health: Color(hex: 0xA8957A)
+        case .shopping: Color(hex: 0xB07A93)
+        case .other: Color(hex: 0x9A8F82)
+        }
+    }
+
+    /// Cores das receitas em "Para onde foi", na ordem do quadro "Resumo do mês".
+    static func income(at index: Int) -> Color {
+        let colors = [Color(hex: 0x5C6B34), Color(hex: 0x6FA798), Color(hex: 0xC9A472)]
+        return colors.indices.contains(index) ? colors[index] : Color(hex: 0x9A8F82)
+    }
 }
 
 extension Color {

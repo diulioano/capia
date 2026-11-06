@@ -23,7 +23,7 @@ struct MonthView: View {
         ScrollView {
             VStack(spacing: 16) {
                 header.modifier(HomeEnter(appeared: appeared, delay: 0))
-                BalanceCardView(totals: summary.totals, accountsTotal: summary.accountsTotal, hidden: hidden)
+                BalanceCardView(totals: summary.totals, accountsBalance: summary.accountsBalance, hidden: hidden)
                     .modifier(HomeEnter(appeared: appeared, delay: 0.05))
                 indicators.modifier(HomeEnter(appeared: appeared, delay: 0.1))
                 capybara

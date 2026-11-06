@@ -32,11 +32,15 @@ struct AppRootView: View {
                 if let space = app.space {
                     let calendar = MonthCalendar(date: now, timeZone: .current)
                     HomeView(home: app.home,
+                             record: app.record,
                              summary: MonthSummary(space: space, calendar: calendar),
                              space: space,
                              send: { app.send($0) },
                              addAnotherAccount: { app.addAnotherAccountFromHome() },
-                             confirmSalary: { save(app.confirmSalary(in: calendar)) })
+                             confirmSalary: { save(app.confirmSalary(in: calendar)) },
+                             sendRecord: { app.send($0) },
+                             saveRecord: saveRecord,
+                             undoRecord: undoRecord)
                     .transition(.opacity)
                 }
             }
@@ -54,6 +58,29 @@ struct AppRootView: View {
 
     private func send(_ action: SetupAction) {
         if let space = app.send(action) { save(space) }
+    }
+
+    /// Grava o registro antes de confirmá-lo na sessão; se falhar, nada muda além do aviso.
+    private func saveRecord() {
+        guard let pending = app.pendingRecord(now: Date(), timeZone: .current) else { return }
+        do {
+            try Self.store.save(pending.space)
+            app.commitRecord(pending.record)
+            now = Date()
+        } catch {
+            app.recordSaveFailed()
+        }
+    }
+
+    /// Grava o espaço sem o último registro e só então o remove da sessão.
+    private func undoRecord() {
+        guard let space = app.spaceUndoingLastRecord else { return }
+        do {
+            try Self.store.save(space)
+            app.undoLastRecord()
+        } catch {
+            app.recordSaveFailed()
+        }
     }
 
     private func save(_ space: ConfiguredSpace?) {

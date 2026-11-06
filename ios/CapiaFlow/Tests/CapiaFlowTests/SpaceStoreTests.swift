@@ -94,6 +94,44 @@ final class SpaceStoreTests: XCTestCase {
         let loaded = try XCTUnwrap(SpaceStore(directory: directory).load())
         XCTAssertNil(loaded.monthlySalary)
         XCTAssertEqual(loaded.salaryReceipts, [])
+        XCTAssertEqual(loaded.records, [], "Espaços anteriores ao registro abrem sem registros")
         XCTAssertEqual(loaded.accounts.first?.initialBalance, Cents(99))
+    }
+
+    func testRecordsRoundTripInTheSameSchemaVersion() throws {
+        let store = SpaceStore(directory: directory)
+        let account = try XCTUnwrap(sample.accounts.first)
+        let card = try XCTUnwrap(sample.cards.first)
+        let day = CalendarDay(year: 2026, month: 11, day: 5)
+        let saved = Date(timeIntervalSince1970: 1_793_000_200)
+        let space = sample
+            .adding(Record(kind: .expense, amount: Cents(4_290), description: "Mercado", category: .market,
+                           source: .account(id: account.id), day: day, savedAt: saved))
+            .adding(Record(kind: .expense, amount: Cents(60_000), description: "Fone", category: .shopping,
+                           source: .card(id: card.id), day: day, installments: 3, savedAt: saved))
+            .adding(Record(kind: .income, amount: Cents(115_000), description: "Freela", category: nil,
+                           source: .account(id: account.id), day: day, savedAt: saved))
+        XCTAssertEqual(space.records.count, 3)
+        try store.save(space)
+        let loaded = try XCTUnwrap(store.load())
+        XCTAssertEqual(loaded, space)
+        XCTAssertEqual(loaded.schemaVersion, 1)
+    }
+
+    func testInvalidRecordsAreIgnoredWhenLoading() throws {
+        let store = SpaceStore(directory: directory)
+        try store.save(sample)
+        // Gasto sem categoria, gravado à mão: some na leitura sem perder o espaço.
+        var json = try String(contentsOf: store.fileURL, encoding: .utf8)
+        let record = """
+        "records":[{"amount":100,"description":"","id":"00000000-0000-0000-0000-0000000000AA","installments":1,
+        "kind":"expense","savedAt":"2026-11-06T12:00:00Z","source":{"account":{"id":"\(sample.accounts[0].id.uuidString)"}},
+        "day":{"day":5,"month":11,"year":2026}}],
+        """
+        json = json.replacingOccurrences(of: "\"schemaVersion\"", with: record + "\"schemaVersion\"")
+        try Data(json.utf8).write(to: store.fileURL)
+        let loaded = try XCTUnwrap(store.load())
+        XCTAssertEqual(loaded.records, [])
+        XCTAssertEqual(loaded.accounts, sample.accounts)
     }
 }

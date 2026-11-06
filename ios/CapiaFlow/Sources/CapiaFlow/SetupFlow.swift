@@ -133,6 +133,8 @@ public struct SetupFlow: Sendable {
     public private(set) var cards: [CreditCard]
     /// Recebimentos já confirmados no espaço restaurado, preservados ao gravar de novo.
     public private(set) var salaryReceipts: [SalaryReceipt] = []
+    /// Registros do espaço, preservados ao adicionar outra conta.
+    public private(set) var records: [Record] = []
     /// Itens anexados ao chegar à conclusão a partir do rascunho atual. Voltar os remove.
     private var lastAppended: (account: UUID, card: UUID?)?
 
@@ -152,6 +154,7 @@ public struct SetupFlow: Sendable {
         draft.goals = space.profile.goals
         draft.salary = space.monthlySalary ?? .zero
         salaryReceipts = space.salaryReceipts
+        records = space.records
         mode = .addingAccount
         accounts = space.accounts
         cards = space.cards
@@ -186,7 +189,7 @@ public struct SetupFlow: Sendable {
     public func space(completedAt date: Date) -> ConfiguredSpace? {
         guard step == .done, !accounts.isEmpty else { return nil }
         return ConfiguredSpace(profile: profile, accounts: accounts, cards: cards, completedAt: date,
-                               monthlySalary: draft.salary, salaryReceipts: salaryReceipts)
+                               monthlySalary: draft.salary, salaryReceipts: salaryReceipts, records: records)
     }
 
     /// Aplica uma ação de navegação. Ações de origem antiga, incompatíveis ou com etapa
@@ -266,5 +269,10 @@ public struct SetupFlow: Sendable {
     mutating func recordSalaryReceipt(_ receipt: SalaryReceipt) {
         guard !salaryReceipts.contains(where: { $0.year == receipt.year && $0.month == receipt.month }) else { return }
         salaryReceipts.append(receipt)
+    }
+
+    /// Acompanha os registros do espaço da sessão.
+    mutating func replaceRecords(_ records: [Record]) {
+        self.records = records
     }
 }

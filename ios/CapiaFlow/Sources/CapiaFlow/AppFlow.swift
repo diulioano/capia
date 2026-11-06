@@ -15,6 +15,8 @@ public struct AppFlow: Sendable {
     public private(set) var home = HomeFlow()
     /// Espaço exibido no Início: o guardado ou o da última conclusão da sessão.
     public private(set) var space: ConfiguredSpace?
+    /// Novo registro aberto sobre o Início. Ausente quando fechado.
+    public private(set) var record: RecordFlow?
     private var showingHome: Bool
 
     /// Com espaço guardado, abre no Início; caso contrário, nas boas-vindas.
@@ -62,6 +64,7 @@ public struct AppFlow: Sendable {
         case .month?:
             if let current = flow.space(completedAt: space?.completedAt ?? now) { space = current }
             home.showMonth()
+            record = nil
             showingHome = true
         case nil:
             if before != .done, flow.step == .done { return flow.space(completedAt: now) }
@@ -72,7 +75,69 @@ public struct AppFlow: Sendable {
     /// Aplica uma ação do Início. Fora do Início, não faz nada.
     public mutating func send(_ action: HomeAction) {
         guard showingHome else { return }
+        switch action {
+        case .openNewRecord:
+            // Repetir não recria o registro em andamento.
+            guard record == nil, let space else { return }
+            record = RecordFlow(accounts: space.accounts, cards: space.cards)
+        case .closeNewRecord, .select, .openBill:
+            record = nil
+        case .selectCategory, .toggleValuesHidden:
+            break
+        }
         home.send(action)
+    }
+
+    /// Aplica uma ação ao novo registro aberto.
+    public mutating func send(_ action: RecordAction) {
+        guard showingHome, var flow = record else { return }
+        flow.send(action)
+        record = flow
+    }
+
+    /// Registro e espaço a gravar, sem mudar a sessão. A raiz grava e só então confirma com
+    /// `commitRecord(_:)`, para que um registro nunca apareça como salvo sem estar guardado.
+    public func pendingRecord(now: Date, timeZone: TimeZone, id: UUID = UUID()) -> (record: Record, space: ConfiguredSpace)? {
+        guard showingHome, let space, let made = record?.makeRecord(now: now, timeZone: timeZone, id: id) else {
+            return nil
+        }
+        let updated = space.adding(made)
+        guard updated.records.count == space.records.count + 1 else { return nil }
+        return (made, updated)
+    }
+
+    /// Confirma na sessão um registro já gravado.
+    public mutating func commitRecord(_ saved: Record) {
+        guard showingHome, var flow = record, let current = space else { return }
+        let updated = current.adding(saved)
+        guard updated.records.count == current.records.count + 1 else { return }
+        space = updated
+        setup?.replaceRecords(updated.records)
+        flow.didSave(saved)
+        record = flow
+    }
+
+    /// A gravação do registro ou do desfazer falhou; a sessão não muda.
+    public mutating func recordSaveFailed() {
+        guard var flow = record else { return }
+        flow.saveDidFail()
+        record = flow
+    }
+
+    /// Espaço a gravar para desfazer o último registro salvo, se o aviso ainda está aberto.
+    public var spaceUndoingLastRecord: ConfiguredSpace? {
+        guard showingHome, let saved = record?.toast?.record, let space else { return nil }
+        return space.removing(recordID: saved.id)
+    }
+
+    /// Confirma na sessão o desfazer já gravado: remove o registro e restaura o formulário.
+    public mutating func undoLastRecord() {
+        guard showingHome, var flow = record, let saved = flow.toast?.record, let current = space else { return }
+        let updated = current.removing(recordID: saved.id)
+        space = updated
+        setup?.replaceRecords(updated.records)
+        flow.undo()
+        record = flow
     }
 
     /// "Recebi" no salário previsto do mês. Devolve o espaço a guardar; sem salário, fora
@@ -94,6 +159,7 @@ public struct AppFlow: Sendable {
         guard showingHome, home.tab == .accounts, var flow = setup, flow.step == .done else { return }
         flow.send(.init(.addAnotherAccount, from: .done))
         setup = flow
+        record = nil
         showingHome = false
     }
 

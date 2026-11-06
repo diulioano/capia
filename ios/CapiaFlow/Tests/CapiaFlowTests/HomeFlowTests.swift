@@ -7,7 +7,6 @@ final class HomeFlowTests: XCTestCase {
         XCTAssertEqual(home.tab, .month)
         XCTAssertEqual(home.categoryTab, .expenses)
         XCTAssertFalse(home.valuesHidden)
-        XCTAssertFalse(home.showingNewRecord)
     }
 
     func testTabsAndBillLeadToAccounts() {
@@ -42,18 +41,12 @@ final class HomeFlowTests: XCTestCase {
         XCTAssertFalse(home.valuesHidden)
     }
 
-    func testNewRecordDoesNotStackAndClosesOnTabChange() {
+    func testNewRecordActionsDoNotChangeTheHome() {
         var home = HomeFlow()
+        home.send(.toggleValuesHidden)
         home.send(.openNewRecord)
-        home.send(.openNewRecord)
-        XCTAssertTrue(home.showingNewRecord)
         home.send(.closeNewRecord)
-        XCTAssertFalse(home.showingNewRecord)
-        home.send(.closeNewRecord)
-        XCTAssertFalse(home.showingNewRecord)
-        home.send(.openNewRecord)
-        home.send(.select(.goals))
-        XCTAssertFalse(home.showingNewRecord)
-        XCTAssertEqual(home.tab, .goals)
+        XCTAssertEqual(home.tab, .month)
+        XCTAssertTrue(home.valuesHidden)
     }
 }

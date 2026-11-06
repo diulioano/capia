@@ -126,7 +126,7 @@ final class MonthSummaryTests: XCTestCase {
         XCTAssertEqual(summary.totals.balance, 0)
         XCTAssertEqual(summary.totals.forecastBalance, 620_000)
         XCTAssertNil(summary.totals.availablePercent, "Previsto não é receita")
-        XCTAssertEqual(summary.accountsTotal, Cents(105_050), "Previsto não está nas contas")
+        XCTAssertEqual(summary.accountsBalance, 105_050, "Previsto não está nas contas")
     }
 
     func testReceivedSalaryCountsInItsMonthOnly() {
@@ -138,12 +138,12 @@ final class MonthSummaryTests: XCTestCase {
         XCTAssertEqual(november.totals.income, Cents(600_000), "Vale o valor confirmado")
         XCTAssertEqual(november.totals.forecastIncome, .zero)
         XCTAssertEqual(november.totals.availablePercent, 100)
-        XCTAssertEqual(november.accountsTotal, Cents(705_050))
+        XCTAssertEqual(november.accountsBalance, 705_050)
 
         let december = MonthSummary(space: paid, calendar: MonthCalendar(date: date(month: 12, hour: 9), timeZone: saoPaulo))
         XCTAssertEqual(december.salary, .pending(Cents(620_000)), "Novo mês, novo previsto")
         XCTAssertEqual(december.totals.income, .zero)
-        XCTAssertEqual(december.accountsTotal, Cents(705_050), "O que entrou continua nas contas")
+        XCTAssertEqual(december.accountsBalance, 705_050, "O que entrou continua nas contas")
     }
 
     func testNoSalaryAndZeroSalaryAreTheSame() {
@@ -151,5 +151,122 @@ final class MonthSummaryTests: XCTestCase {
         XCTAssertNil(MonthSummary(space: space(salary: nil), calendar: calendar).salary)
         XCTAssertNil(MonthSummary(space: space(salary: .zero), calendar: calendar).salary)
         XCTAssertEqual(MonthSummary(space: space(salary: nil), calendar: calendar).totals, .zero)
+    }
+
+    // MARK: Registros
+
+    private let checking = Account(kind: .checking, name: "Conta Aurora", initialBalance: Cents(100_000))
+    private let aurora = CreditCard(name: "Aurora", closingDay: 3, dueDay: 10)
+
+    private func recordsSpace(_ records: [Record], salary: Cents? = nil,
+                              receipts: [SalaryReceipt] = []) -> ConfiguredSpace {
+        ConfiguredSpace(profile: Profile(name: "Diuli Vargas", goals: []), accounts: [checking], cards: [aurora],
+                        completedAt: Date(timeIntervalSince1970: 0), monthlySalary: salary,
+                        salaryReceipts: receipts, records: records)
+    }
+
+    private func record(_ kind: RecordKind = .expense, _ cents: Int64, _ description: String = "",
+                        category: RecordCategory? = .market, card: Bool = false, installments: Int = 1,
+                        month: Int = 11, day: Int = 5, savedHour: Int = 9) -> Record {
+        Record(kind: kind, amount: Cents(cents), description: description,
+               category: kind == .income ? nil : category,
+               source: card ? .card(id: aurora.id) : .account(id: checking.id),
+               day: CalendarDay(year: 2026, month: month, day: day), installments: installments,
+               savedAt: date(month: month, day: day, hour: savedHour))
+    }
+
+    private func summary(_ space: ConfiguredSpace, month: Int = 11, day: Int = 6) -> MonthSummary {
+        MonthSummary(space: space, calendar: MonthCalendar(date: date(month: month, day: day, hour: 12), timeZone: saoPaulo))
+    }
+
+    func testAccountExpenseAndIncomeEnterTheMonthAndAccounts() {
+        let result = summary(recordsSpace([record(.expense, 4_290, "Mercado"), record(.income, 115_000, "Freela · site")]))
+        XCTAssertEqual(result.totals.expenses, Cents(4_290))
+        XCTAssertEqual(result.totals.income, Cents(115_000))
+        XCTAssertEqual(result.totals.balance, 110_710)
+        XCTAssertEqual(result.accountsBalance, 100_000 - 4_290 + 115_000)
+        XCTAssertTrue(result.hasRecords)
+    }
+
+    func testInitialBalanceIsNeverIncome() {
+        let result = summary(recordsSpace([record(.expense, 1_000)]))
+        XCTAssertEqual(result.totals.income, .zero)
+        XCTAssertEqual(result.totals.balance, -1_000)
+    }
+
+    func testAccountsCanGoNegative() {
+        let result = summary(recordsSpace([record(.expense, 150_000)]))
+        XCTAssertEqual(result.accountsBalance, -50_000)
+        XCTAssertEqual(BRL.format(signed: result.accountsBalance), "\u{2212} R$ 500,00")
+    }
+
+    func testPreviousMonthRecordOnlyChangesAccounts() {
+        let result = summary(recordsSpace([record(.expense, 2_000, month: 10, day: 20)]))
+        XCTAssertEqual(result.totals.expenses, .zero)
+        XCTAssertEqual(result.accountsBalance, 98_000)
+    }
+
+    func testCardPurchaseCountsInstallmentsByMonthAndNotInAccounts() {
+        let purchase = record(.expense, 60_000, "Fone", category: .shopping, card: true, installments: 3)
+        let space = recordsSpace([purchase])
+        let november = summary(space)
+        XCTAssertEqual(november.totals.expenses, Cents(20_000))
+        XCTAssertEqual(november.accountsBalance, 100_000, "Cartão não mexe nas contas")
+        XCTAssertEqual(november.totals.bill, Cents(20_000), "1ª parcela na fatura aberta (fecha 3/12)")
+        XCTAssertEqual(november.recent.first?.amount, Cents(60_000), "Recente mostra o total")
+        XCTAssertEqual(november.recent.first?.installments, 3)
+        XCTAssertEqual(november.recent.first?.sourceName, "Cartão Aurora")
+
+        let december = summary(space, month: 12, day: 10)
+        XCTAssertEqual(december.totals.expenses, Cents(20_000), "2ª parcela no mês seguinte")
+        XCTAssertEqual(december.totals.bill, Cents(20_000), "2ª parcela na fatura que fecha em janeiro")
+        XCTAssertEqual(summary(space, month: 12, day: 2).totals.bill, Cents(20_000))
+    }
+
+    func testCardRestGoesToTheFirstInstallment() {
+        let result = summary(recordsSpace([record(.expense, 10_000, card: true, installments: 3)]))
+        XCTAssertEqual(result.totals.expenses, Cents(3_334))
+    }
+
+    func testExpenseBreakdownSortedWithTiesInDesignOrder() {
+        let result = summary(recordsSpace([
+            record(.expense, 1_000, category: .leisure), record(.expense, 3_000, category: .health),
+            record(.expense, 1_000, category: .market), record(.expense, 1_000, category: .transport),
+        ]))
+        XCTAssertEqual(result.expenseBreakdown.map(\.category), [.health, .market, .transport, .leisure])
+        XCTAssertEqual(result.expenseBreakdown.map(\.percent), [50, 17, 17, 17])
+    }
+
+    func testIncomeBreakdownGroupsByNameWithSalary() {
+        let receipt = SalaryReceipt(year: 2026, month: 11, amount: Cents(620_000), confirmedAt: date(day: 5, hour: 10))
+        let result = summary(recordsSpace([record(.income, 50_000, "Freela"), record(.income, 65_000, "Freela"),
+                                           record(.income, 1_000)],
+                                          salary: Cents(620_000), receipts: [receipt]))
+        XCTAssertEqual(result.incomeBreakdown.map(\.name), ["Salário", "Freela", "Receita"])
+        XCTAssertEqual(result.incomeBreakdown.map(\.amount), [Cents(620_000), Cents(115_000), Cents(1_000)])
+        XCTAssertEqual(result.totals.income, Cents(736_000))
+    }
+
+    func testRecentOrderLimitAndSalary() {
+        let receipt = SalaryReceipt(year: 2026, month: 11, amount: Cents(620_000), confirmedAt: date(day: 4, hour: 10))
+        let records = [
+            record(.expense, 100, "a", day: 1), record(.expense, 200, "b", day: 2),
+            record(.expense, 300, "c", day: 3, savedHour: 8), record(.expense, 400, "d", day: 3, savedHour: 11),
+            record(.expense, 500, "e", day: 5), record(.expense, 600, "f", month: 10, day: 30),
+        ]
+        let result = summary(recordsSpace(records, salary: Cents(620_000), receipts: [receipt]))
+        XCTAssertEqual(result.recent.map(\.name), ["e", "Salário", "d", "c", "b"])
+        XCTAssertTrue(result.recent[1].isSalary)
+        XCTAssertNil(result.recent[1].sourceName)
+    }
+
+    func testRecordsOfMissingSourcesAreIgnored() {
+        let orphan = Record(kind: .expense, amount: Cents(9_999), description: "", category: .other,
+                            source: .account(id: UUID()), day: CalendarDay(year: 2026, month: 11, day: 5),
+                            savedAt: date(day: 5, hour: 9))
+        let result = summary(recordsSpace([orphan]))
+        XCTAssertEqual(result.totals.expenses, .zero)
+        XCTAssertEqual(result.accountsBalance, 100_000)
+        XCTAssertNil(result.recent.first?.sourceName)
     }
 }

@@ -86,9 +86,12 @@ public struct ConfiguredSpace: Codable, Equatable, Sendable {
     public var monthlySalary: Cents?
     /// Recebimentos do salário confirmados pela pessoa, um por mês no máximo.
     public var salaryReceipts: [SalaryReceipt]
+    /// Gastos e receitas confirmados pela pessoa, na ordem em que foram salvos.
+    public var records: [Record]
 
     public init(profile: Profile, accounts: [Account], cards: [CreditCard], completedAt: Date,
-                monthlySalary: Cents? = nil, salaryReceipts: [SalaryReceipt] = []) {
+                monthlySalary: Cents? = nil, salaryReceipts: [SalaryReceipt] = [],
+                records: [Record] = []) {
         self.schemaVersion = Self.currentSchemaVersion
         self.profile = profile
         self.accounts = accounts
@@ -96,14 +99,16 @@ public struct ConfiguredSpace: Codable, Equatable, Sendable {
         self.completedAt = completedAt
         self.monthlySalary = monthlySalary.flatMap { $0 == .zero ? nil : $0 }
         self.salaryReceipts = salaryReceipts
+        self.records = records
     }
 
     private enum CodingKeys: String, CodingKey {
-        case schemaVersion, profile, accounts, cards, completedAt, monthlySalary, salaryReceipts
+        case schemaVersion, profile, accounts, cards, completedAt, monthlySalary, salaryReceipts, records
     }
 
-    /// Espaços gravados antes do salário não têm as duas chaves novas; continuam válidos
-    /// na mesma versão do esquema, sem salário e sem recebimentos.
+    /// Espaços gravados antes do salário ou dos registros não têm as chaves novas; continuam
+    /// válidos na mesma versão do esquema, sem salário, recebimentos nem registros.
+    /// Registros inválidos são ignorados em vez de invalidar o espaço inteiro.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         schemaVersion = try container.decode(Int.self, forKey: .schemaVersion)
@@ -113,6 +118,22 @@ public struct ConfiguredSpace: Codable, Equatable, Sendable {
         completedAt = try container.decode(Date.self, forKey: .completedAt)
         monthlySalary = try container.decodeIfPresent(Cents.self, forKey: .monthlySalary)
         salaryReceipts = try container.decodeIfPresent([SalaryReceipt].self, forKey: .salaryReceipts) ?? []
+        records = (try container.decodeIfPresent([Record].self, forKey: .records) ?? []).filter(\.isValid)
+    }
+
+    /// Espaço com o registro acrescentado; registros inválidos ou repetidos não entram.
+    public func adding(_ record: Record) -> ConfiguredSpace {
+        guard record.isValid, !records.contains(where: { $0.id == record.id }) else { return self }
+        var copy = self
+        copy.records.append(record)
+        return copy
+    }
+
+    /// Espaço sem o registro indicado.
+    public func removing(recordID: UUID) -> ConfiguredSpace {
+        var copy = self
+        copy.records.removeAll { $0.id == recordID }
+        return copy
     }
 
     /// Recebimento confirmado no mês, se houver.
@@ -120,11 +141,18 @@ public struct ConfiguredSpace: Codable, Equatable, Sendable {
         salaryReceipts.first { $0.year == year && $0.month == month }
     }
 
-    /// Dinheiro nas contas hoje: saldos iniciais somados aos salários já recebidos.
-    /// Não inclui previstos nem cartões, que não têm saldo.
-    public var accountsTotal: Cents {
-        let initial = accounts.reduce(Cents.zero) { $0.adding($1.initialBalance) }
-        return salaryReceipts.reduce(initial) { $0.adding($1.amount) }
+    /// Dinheiro nas contas hoje: saldos iniciais, salários recebidos e receitas, menos os
+    /// gastos pagos com conta, de qualquer data. Gastos no cartão não saem das contas até o
+    /// pagamento da fatura. Não inclui previstos. Pode ser negativo.
+    public var accountsBalance: Int64 {
+        let accountIDs = Set(accounts.map(\.id))
+        var total = accounts.reduce(Int64(0)) { $0 + $1.initialBalance.value }
+        total += salaryReceipts.reduce(Int64(0)) { $0 + $1.amount.value }
+        for record in records {
+            guard case .account(let id) = record.source, accountIDs.contains(id) else { continue }
+            total += record.kind == .income ? record.amount.value : -record.amount.value
+        }
+        return total
     }
 }
 

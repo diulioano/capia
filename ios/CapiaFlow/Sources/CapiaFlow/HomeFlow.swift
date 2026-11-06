@@ -14,6 +14,7 @@ public enum HomeAction: Equatable, Sendable {
     case openBill
     case selectCategory(CategoryTab)
     case toggleValuesHidden
+    /// Abre e fecha o novo registro, cujo estado fica em `AppFlow.record`.
     case openNewRecord
     case closeNewRecord
 }
@@ -23,8 +24,6 @@ public struct HomeFlow: Equatable, Sendable {
     public private(set) var tab: HomeTab = .month
     public private(set) var categoryTab: CategoryTab = .expenses
     public private(set) var valuesHidden = false
-    /// Destino provisório de novo registro, aberto sobre o Início.
-    public private(set) var showingNewRecord = false
 
     public init() {}
 
@@ -32,18 +31,14 @@ public struct HomeFlow: Equatable, Sendable {
         switch action {
         case .select(let tab):
             self.tab = tab
-            showingNewRecord = false
         case .openBill:
             tab = .accounts
-            showingNewRecord = false
         case .selectCategory(let category):
             categoryTab = category
         case .toggleValuesHidden:
             valuesHidden.toggle()
-        case .openNewRecord:
-            showingNewRecord = true
-        case .closeNewRecord:
-            showingNewRecord = false
+        case .openNewRecord, .closeNewRecord:
+            break
         }
     }
 
@@ -51,6 +46,5 @@ public struct HomeFlow: Equatable, Sendable {
     mutating func showMonth() {
         tab = .month
         categoryTab = .expenses
-        showingNewRecord = false
     }
 }
