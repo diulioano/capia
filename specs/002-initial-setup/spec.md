@@ -6,7 +6,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Tasks generated
+**Status**: Implemented; integrated validation partially pending (see validation.md)
 
 **Input**: User description: "Vamos começar agora com a segunda US já que finalizamos a primeira." Confirmado pelo usuário: o próximo fluxo é a configuração inicial do espaço, com nome, preferências, primeira conta e cartão. "Continue na próxima fase."
 

@@ -105,4 +105,17 @@ Movimento.
 
 ## Validação integrada
 
-Pendente.
+Branch `feat/002-initial-setup`, avançada por fast-forward até `a0b49e6` (ponta da US4).
+O código integrado é o mesmo aprovado pelo usuário na US4.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `python scripts/prepare-design-assets.py --check` | Passou |
+| `swift test --package-path ios/CapiaFlow` | Passou: 46 testes, 0 falhas |
+| `xtool dev build` | Passou; bundle com `CFBundleDisplayName` Capia, `com.diuli.capia`, `AppIcon.png`, quatro poses, fundo, mascote e fontes |
+| SC-002 a SC-008 | Aprovados nos aceites das US1–US4, na mesma sequência de builds |
+| SC-001: concluir com conta e cartão em até 2 minutos | Pendente: tempo não medido |
+| Percurso completo sem rede, numa única sessão | Pendente: não confirmado explicitamente |
+| VoiceOver, maior texto e Reduzir Movimento item a item | Aprovados de forma geral pelo usuário, sem registro individual |
+
+T027 permanece aberta até a medição de SC-001 e a confirmação sem rede.

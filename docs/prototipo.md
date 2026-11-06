@@ -45,6 +45,8 @@ A implementação começa pelo fluxo Get Started: boas-vindas e três etapas de 
 
 A especificação está em `../specs/001-get-started/spec.md`. O cadastro de nome da pessoa, preferências, primeira conta e cartão pertence ao próximo fluxo. As tarefas de estrutura e comportamento serão separadas das tarefas de interface e fidelidade visual no planejamento.
 
-## Segunda funcionalidade especificada
+## Segunda funcionalidade: configuração inicial
+
+Implementada e aprovada pelo usuário no iPhone em 2026-11-06, por US (nome e objetivos, conta e saldo, cartão e datas, conclusão e reabertura). Durante a US3 o usuário decidiu sugerir o vencimento 7 dias após o fechamento e avisar, sem bloquear, fora de 5 a 15 dias. Evidências em `../specs/002-initial-setup/validation.md`.
 
 Configuração inicial do espaço: nome, objetivos, primeira conta com saldo inicial, cartão de crédito separado com fechamento e vencimento e conclusão com resumo, conforme o quadro "Configuração inicial" do HTML. Substitui a entrada provisória do Get Started. A especificação está em `../specs/002-initial-setup/spec.md`.
