@@ -10,6 +10,18 @@
       "sha256": "a9f5f7d2cde8b9a8d92355d7cd7c84454a71eeba7bee62d96aa1ae0db5c65980",
       "origin": "assets/onsen-wallpaper-1170x2532.png; cópia sem alteração"
     },
+    "Images/ThinkingCapybara.png": {
+      "sha256": "5ccbbe2889dfd0131e86e3dbcefcefcba4bc7bb2d29c58ab8198f9df1be769b8",
+      "origin": "assets/capybara-expressions-sheet-3x2.png; célula (2, 0), pose pensando; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML"
+    },
+    "Images/HappyCapybara.png": {
+      "sha256": "6f7a07b85f20339fd9b00bdcf632e70467ff869b2e824bbeca9a274fc2fd3b23",
+      "origin": "assets/capybara-expressions-sheet-3x2.png; célula (1, 0), pose feliz; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML"
+    },
+    "Images/CelebratingCapybara.png": {
+      "sha256": "956324aabc340dd06a5fdca50c0d96ca3c0b0a5c0eb7fa607f16117a8d2fb6cd",
+      "origin": "assets/capybara-expressions-sheet-3x2.png; célula (1, 1), pose comemora; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML"
+    },
     "Fonts/Figtree.ttf": {
       "sha256": "26ad3db9b31ff7dde67a91ff515d022d2f495cd506590699cf264f0bfe6fb714",
       "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf"
@@ -38,5 +50,6 @@
       "sha256": "9167c86dde180f0aa8b4c18b1af5bef08f26fc8336a74e1d819c0f0b2ca8b75a",
       "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf; instância estática wght=700, sem subset"
     }
-  }
+  },
+  "expressions_sheet_sha256": "e226434117aad84d4486c34c970a483ca9cbf781d89d121531fea8002e095800"
 }

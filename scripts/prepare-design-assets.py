@@ -1,4 +1,4 @@
-"""Prepare US1 resources without changing the original design. Requires Pillow.
+"""Prepare Get Started resources without changing the original design.
 
 Run from any directory. --check reads only and requires no network.
 """
@@ -14,6 +14,7 @@ import shutil
 import urllib.request
 
 from PIL import Image
+from collections import deque
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 
@@ -30,6 +31,29 @@ FONTS = {
 }
 MASCOT = 'c98bf460-1310-48cf-b12a-570d347b97de'
 STATIC_FONTS = {'Regular': 400, 'SemiBold': 600, 'Bold': 700}
+POSES = {'ThinkingCapybara': (2, 0, 'pensando'),
+         'HappyCapybara': (1, 0, 'feliz'),
+         'CelebratingCapybara': (1, 1, 'comemora')}
+
+
+def pose_image(column, row):
+    with Image.open(ROOT / 'assets/capybara-expressions-sheet-3x2.png') as sheet:
+        image = sheet.crop((column * 512, row * 512, (column + 1) * 512, (row + 1) * 512)).convert('RGBA')
+    pixels = image.load()
+    pending = deque([(x, y) for x in range(512) for y in (0, 511)] +
+                    [(x, y) for y in range(512) for x in (0, 511)])
+    seen = set()
+    while pending:
+        x, y = pending.popleft()
+        if not (0 <= x < 512 and 0 <= y < 512) or (x, y) in seen:
+            continue
+        seen.add((x, y))
+        r, g, b, _ = pixels[x, y]
+        if min(r, g, b) < 235 or max(r, g, b) - min(r, g, b) > 20:
+            continue
+        pixels[x, y] = (r, g, b, 0)
+        pending.extend(((x-1,y), (x+1,y), (x,y-1), (x,y+1)))
+    return image.crop(image.getbbox())
 
 
 def digest(data):
@@ -62,6 +86,12 @@ def prepare():
     image = RESOURCES / 'Images/OnsenWallpaper.png'
     shutil.copyfile(ROOT / 'assets/onsen-wallpaper-1170x2532.png', image)
     origins[image] = 'assets/onsen-wallpaper-1170x2532.png; cópia sem alteração'
+    for name, (column, row, mood) in POSES.items():
+        image = RESOURCES / f'Images/{name}.png'
+        pose_image(column, row).save(image)
+        origins[image] = (f'assets/capybara-expressions-sheet-3x2.png; célula ({column}, {row}), '
+                         f'pose {mood}; recorte e remoção do fundo branco conectado à borda; '
+                         'alternativa aos /_blob ausentes no componente Capivara do HTML')
     for name, remote in FONTS.items():
         url = f'{FONT_ROOT}/{remote}'
         target = RESOURCES / 'Fonts' / name
@@ -79,11 +109,13 @@ def prepare():
     } for p, origin in origins.items()}
     metadata = {'design_sha256': digest(DESIGN.read_bytes()),
                 'google_fonts_revision': REVISION, 'files': records}
+    metadata['expressions_sheet_sha256'] = digest((ROOT / 'assets/capybara-expressions-sheet-3x2.png').read_bytes())
     (RESOURCES / 'sources.json').write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    lines = ['# Recursos das boas-vindas (US1)', '',
+    lines = ['# Recursos do Get Started (US1 e US2)', '',
              'HTML original e licenças incorporadas preservados. Fontes completas, distribuídas sob OFL 1.1.',
              f'Revisão Google Fonts: `{REVISION}`.', '',
              f'HTML SHA-256: `{metadata["design_sha256"]}`.', '']
+    lines += [f'Folha de expressões SHA-256: `{metadata["expressions_sheet_sha256"]}`.', '']
     for path, record in records.items():
         lines += [f'## {path}', '', record['origin'], '', f'SHA-256: `{record["sha256"]}`.', '']
     (RESOURCES / 'SOURCES.md').write_text('\n'.join(lines), encoding='utf-8')
@@ -93,8 +125,14 @@ def check():
     metadata = json.loads((RESOURCES / 'sources.json').read_text(encoding='utf-8'))
     assert digest(DESIGN.read_bytes()) == metadata['design_sha256'], 'HTML alterado'
     required = {'Images/WelcomeCapybara.png', 'Images/OnsenWallpaper.png'} | {
-        f'Fonts/{name}' for name in FONTS} | {f'Fonts/Figtree-{style}.ttf' for style in STATIC_FONTS}
-    assert set(metadata['files']) == required, 'Manifesto de recursos US1 incompleto'
+        f'Fonts/{name}' for name in FONTS} | {f'Fonts/Figtree-{style}.ttf' for style in STATIC_FONTS} | {f'Images/{name}.png' for name in POSES}
+    assert set(metadata['files']) == required, 'Manifesto de recursos incompleto'
+    assert metadata['expressions_sheet_sha256'] == digest((ROOT / 'assets/capybara-expressions-sheet-3x2.png').read_bytes()), 'Folha de expressões alterada'
+    for name, (column, row, _) in POSES.items():
+        with Image.open(RESOURCES / f'Images/{name}.png') as image:
+            expected = pose_image(column, row)
+            assert image.mode == 'RGBA' and image.size == expected.size and image.tobytes() == expected.tobytes(), f'Pose divergente: {name}'
+            assert image.getchannel('A').getextrema() == (0, 255), f'Recorte opaco: {name}'
     sources = (RESOURCES / 'SOURCES.md').read_text(encoding='utf-8')
     for path, record in metadata['files'].items():
         data = (RESOURCES / path).read_bytes()
@@ -114,7 +152,7 @@ def check():
     assert (RESOURCES / 'Images/OnsenWallpaper.png').read_bytes() == (ROOT / 'assets/onsen-wallpaper-1170x2532.png').read_bytes(), 'Fundo divergente'
     with Image.open(RESOURCES / 'Images/OnsenWallpaper.png') as image:
         assert image.size == (1170, 2532), 'Dimensão incorreta do fundo'
-    print('US1: imagens, fontes, licenças e hashes conferidos. US2 e ícone ainda fora deste estágio.')
+    print('US1 e US2: imagens, poses, fontes, licenças e hashes conferidos. Ícone ainda fora deste estágio.')
 
 
 if __name__ == '__main__':

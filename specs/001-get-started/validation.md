@@ -255,3 +255,46 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   do usuário para aparência padrão, maior texto, VoiceOver, movimento reduzido,
   uso sem rede e carinho. O tempo de SC-001 foi informado pelo usuário, sem medição instrumental.
 - US1 aceita; as introduções ainda são provisórias. US2 e US3 não estão concluídas.
+
+## US2 — apresentação implementada, build 4 — 2026-11-06
+
+- Branch `feat/001-get-started-us2-introduction`, avançada por fast-forward até o aceite
+  da US1 em `0158a87` antes da implementação da US2. Código verificado no commit parcial
+  que inclui este registro.
+- Consultados template do quadro Get Started e componente Capivara do HTML original,
+  preservado sem edição. Os textos e posições foram lidos diretamente do quadro.
+- T017: o componente Capivara aponta para blobs externos das seis expressões, ausentes
+  dos sete quadros exportados. Aplicada a alternativa das tarefas: folha existente
+  `assets/capybara-expressions-sheet-3x2.png`, cujo prompt documenta as mesmas expressões.
+  Células: pensando (2,0), feliz (1,0), comemora (1,1). Recorte e remoção do branco conectado
+  às bordas, sem redesenho. A correspondência é semântica e visual com a folha existente;
+  não há comparação pixel a pixel com os blobs ausentes. Origens e hashes registrados
+  em `Resources/SOURCES.md` e `sources.json`.
+- T018–T020: painéis no espaço 350 × 400 da referência, opções ilustrativas, resumo
+  Novembro com 35/20/13/11% sem normalização e meta Viagem ao Japão com 68% e
+  R$ 12.240 de R$ 18.000. Nenhuma captura, permissão ou cálculo financeiro implementado.
+- T021–T023: três títulos e descrições exatos, Voltar, Pular, progresso derivado e ação
+  final correta; configuração com tema, mensagem e retorno previstos. Removidos os textos
+  do esqueleto. Estado e transições continuam em CapiaFlow com origem capturada na renderização.
+  Cada etapa recria sua view para reiniciar rolagem, animação e foco, sem recriar o fluxo.
+- T024: controles com alvo mínimo 44, cabeçalho com foco assistivo após montagem,
+  progresso como um elemento "Etapa N de 3" e exemplos identificados. Conteúdo rolável
+  recortado à área útil; navegação e rodapé acessíveis. No maior texto, o rodapé empilha
+  progresso/botão e os painéis ganham uma descrição textual ampliada com todos os valores.
+  A arte mantém proporção e tipografia interna; a descrição substitui sua leitura assistiva
+  nesse modo para evitar duplicação. Decisão documentada no contrato.
+- Barras, nível da meta e entradas têm animações discretas; etiquetas/mascotes flutuam
+  levemente. Reduzir Movimento mostra valores finais sem movimentos contínuos, e as
+  timelines pausam fora da tela. Nenhuma ação aguarda animações.
+
+Verificações:
+
+- `swift test --package-path ios/CapiaFlow`: seis testes passaram, zero falhas, cobrindo
+  percurso, retornos, Pular de cada origem, ações incompatíveis e eventos antigos repetidos.
+- `python scripts/prepare-design-assets.py --check`: passou. Preparação repetida preservou
+  hashes; conferência sem escrita. Poses comparadas à extração reproduzível com transparência,
+  fontes/licenças e recursos US1 intactos.
+- `xtool dev build`: passou; artefato `ios/Capia/xtool/Capia.app`, CFBundleVersion 4.
+- **T025 pendente**: instalação e percurso da US2 no iPhone, comparação dos painéis,
+  retornos, toques rápidos, acessibilidade e SC-002 a SC-005. Conexão Apple não listava
+  aparelho; reconexão solicitada ao usuário. US3 não iniciada.

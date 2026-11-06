@@ -20,7 +20,7 @@ As instruções para os agentes estão em [AGENTS.md](AGENTS.md). A implementaç
 
 ## Estado do projeto
 
-O projeto xtool está em `ios/Capia`, com navegação pura e testes em `ios/CapiaFlow`. O esqueleto e a primeira implementação das boas-vindas compilam no Ubuntu do WSL. A US1 é parcial: falta validar o Capia instalado no iPhone. As introduções ainda são provisórias e o ícone final não foi preparado.
+O projeto xtool está em `ios/Capia`, com navegação pura e testes em `ios/CapiaFlow`. As boas-vindas (US1) foram aceitas no iPhone. As três introduções e a entrada provisória da configuração (US2) estão implementadas, com validação no aparelho pendente. O ícone final ainda não foi preparado.
 
 Consulte os [comandos de preparação, teste e instalação](specs/001-get-started/quickstart.md) e os [resultados e pendências](specs/001-get-started/validation.md). O relato anterior de execução do app padrão permanece válido; o Capia ainda precisa da própria validação no aparelho.
 

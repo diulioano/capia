@@ -1,14 +1,8 @@
 # Validar o Get Started do Capia
 
-Os pacotes, o script de recursos US1 e os testes já existem. O esqueleto e as boas-vindas
-compilaram; seis testes de navegação passaram. O Capia foi instalado no iPhone em
-2026-11-06, e as capturas do usuário confirmam sua abertura. A primeira inspeção visual
-falhou: fundo e capivara ausentes. A build 2 carrega essas imagens diretamente por URL;
-foi instalada, e o usuário confirmou que ambas aparecem. Interações, comparação visual
-completa e acessibilidade seguem pendentes. O teste com maior texto mostrou falha visual;
-a build 3 reorganiza esse modo, foi instalada e o usuário aprovou layout e carinho com
-o texto no máximo. Conferência em tamanho padrão e VoiceOver ainda pendentes. As introduções finais
-e o ícone ainda não foram implementados.
+US1 aceita no iPhone na build 3, com os relatos de validação registrados. A build 4
+implementa as três introduções e a entrada provisória da configuração; os testes de
+navegação passaram e seu aceite no aparelho está pendente. O ícone final ainda não existe.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente
@@ -50,7 +44,7 @@ Referência: [issue do xtool sobre a etapa Connecting](https://github.com/xtool-
 
 ## Preparar e conferir os recursos
 
-O script `scripts/prepare-design-assets.py` prepara os recursos US1 e oferece `--check`
+O script `scripts/prepare-design-assets.py` prepara os recursos US1 e US2 e oferece `--check`
 para verificar presença, dimensões, licenças e correspondência dos recursos sem escrita
 nem rede. Instale as dependências Python no Windows. Para regenerar recursos, o modo
 sem argumentos baixa fontes da revisão oficial fixada e preserva `design/`.
@@ -64,10 +58,11 @@ python scripts/prepare-design-assets.py --check
 ```
 
 O resultado esperado é código de saída zero e nenhum recurso obrigatório ausente.
-Neste estágio, confira o mascote extraído do HTML, o fundo existente, as fontes TTF
+Neste estágio, confira o mascote extraído do HTML, as três poses preparadas da folha
+de expressões (os blobs dessas poses não estão embutidos no HTML), o fundo existente, as fontes TTF
 completas e seus avisos OFL. A ferramenta registra caminhos, hashes e origem em
 `ios/Capia/Sources/Capia/Resources/SOURCES.md`. O ícone opaco 1024 × 1024 e os recursos
-da US2 serão exigidos pelo modo de conferência quando essas histórias forem implementadas.
+finais serão exigidos pelo modo de conferência quando a US3 for implementada.
 
 ## Testar as transições e compilar
 

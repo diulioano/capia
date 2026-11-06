@@ -51,6 +51,15 @@ Digitar, Falar, Foto do recibo, barras e meta são ilustrações, não controles
 edição ou transação. Uma indicação discreta "Exemplo" e uma descrição acessível informam
 essa condição sem criar dados financeiros da pessoa.
 
+Os blobs das poses do componente Capivara não estão incluídos no HTML exportado.
+As poses pensando, feliz e comemorando são preparadas das células correspondentes
+da folha de expressões existente em `assets/`, conforme permitido nas tarefas.
+O script registra origem e transformação; a alternativa precisa da conferência visual no aparelho.
+
+Em tamanhos de texto de acessibilidade, o painel mantém sua composição e ganha abaixo
+uma descrição ampliada com todos os valores do exemplo. Essa descrição é a leitura
+assistiva do exemplo nesse modo, evitando repetição dos rótulos internos.
+
 ## Entrada provisória da configuração
 
 Pular de qualquer introdução e Configurar meu espaço da terceira chegam a uma tela

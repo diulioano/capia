@@ -1,9 +1,11 @@
-# Recursos das boas-vindas (US1)
+# Recursos do Get Started (US1 e US2)
 
 HTML original e licenças incorporadas preservados. Fontes completas, distribuídas sob OFL 1.1.
 Revisão Google Fonts: `38411257417e616c5d4daa1b9e91a3dbcebe1c2e`.
 
 HTML SHA-256: `ccf7cb799ad297d0a7765b5c943f9fc1d125f9c4dbdf65bcc0596321133bbdee`.
+
+Folha de expressões SHA-256: `e226434117aad84d4486c34c970a483ca9cbf781d89d121531fea8002e095800`.
 
 ## Images/WelcomeCapybara.png
 
@@ -16,6 +18,24 @@ SHA-256: `424f68f69305e005f226610306efc249273ea38394a8e202cd3fbf8c9af98b9f`.
 assets/onsen-wallpaper-1170x2532.png; cópia sem alteração
 
 SHA-256: `a9f5f7d2cde8b9a8d92355d7cd7c84454a71eeba7bee62d96aa1ae0db5c65980`.
+
+## Images/ThinkingCapybara.png
+
+assets/capybara-expressions-sheet-3x2.png; célula (2, 0), pose pensando; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML
+
+SHA-256: `5ccbbe2889dfd0131e86e3dbcefcefcba4bc7bb2d29c58ab8198f9df1be769b8`.
+
+## Images/HappyCapybara.png
+
+assets/capybara-expressions-sheet-3x2.png; célula (1, 0), pose feliz; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML
+
+SHA-256: `6f7a07b85f20339fd9b00bdcf632e70467ff869b2e824bbeca9a274fc2fd3b23`.
+
+## Images/CelebratingCapybara.png
+
+assets/capybara-expressions-sheet-3x2.png; célula (1, 1), pose comemora; recorte e remoção do fundo branco conectado à borda; alternativa aos /_blob ausentes no componente Capivara do HTML
+
+SHA-256: `956324aabc340dd06a5fdca50c0d96ca3c0b0a5c0eb7fa607f16117a8d2fb6cd`.
 
 ## Fonts/Figtree.ttf
 
