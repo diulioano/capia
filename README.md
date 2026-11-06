@@ -20,7 +20,9 @@ As instruções para os agentes estão em [AGENTS.md](AGENTS.md). A implementaç
 
 ## Estado do projeto
 
-O repositório contém o design, os recursos visuais e a documentação. A implementação do app ainda não começou. O usuário confirmou a execução de um app padrão no iPhone em 2026-11-06, validando o caminho inicial com xtool. A primeira funcionalidade especificada é o [Get Started com ícone do app](specs/001-get-started/spec.md).
+O projeto xtool está em `ios/Capia`, com navegação pura e testes em `ios/CapiaFlow`. O esqueleto e a primeira implementação das boas-vindas compilam no Ubuntu do WSL. A US1 é parcial: falta validar o Capia instalado no iPhone. As introduções ainda são provisórias e o ícone final não foi preparado.
+
+Consulte os [comandos de preparação, teste e instalação](specs/001-get-started/quickstart.md) e os [resultados e pendências](specs/001-get-started/validation.md). O relato anterior de execução do app padrão permanece válido; o Capia ainda precisa da própria validação no aparelho.
 
 ## Spec Kit
 

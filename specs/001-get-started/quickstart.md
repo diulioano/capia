@@ -1,8 +1,9 @@
 # Validar o Get Started do Capia
 
-Este guia será executável após implementar as tarefas derivadas de [plan.md](plan.md).
-Nesta fase, os pacotes, o script de recursos e os testes ainda não existem. Os comandos
-de ambiente foram verificados; os comandos de build e teste abaixo são passos futuros.
+Os pacotes, o script de recursos US1 e os testes já existem. O esqueleto e as boas-vindas
+compilaram; seis testes de navegação passaram. A instalação do Capia e a validação visual
+continuam pendentes. As introduções finais e o ícone ainda não foram implementados.
+Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente
 
@@ -33,20 +34,24 @@ sucesso de instalação a partir da geração de um pacote.
 
 ## Preparar e conferir os recursos
 
-Na implementação, o script `scripts/prepare-design-assets.py` terá o modo `--check`
-para verificar presença, dimensões, licenças e correspondência dos recursos. A geração
-ocorrerá antes, sem modificar `design/`. O modo de conferência não altera arquivos.
+O script `scripts/prepare-design-assets.py` prepara os recursos US1 e oferece `--check`
+para verificar presença, dimensões, licenças e correspondência dos recursos sem escrita
+nem rede. Instale as dependências Python no Windows. Para regenerar recursos, o modo
+sem argumentos baixa fontes da revisão oficial fixada e preserva `design/`.
 
 No PowerShell, a partir da raiz do repositório:
 
 ```powershell
+python -m pip install -r scripts/requirements-design-assets.txt
+python scripts/prepare-design-assets.py
 python scripts/prepare-design-assets.py --check
 ```
 
 O resultado esperado é código de saída zero e nenhum recurso obrigatório ausente.
-Confira o PNG do ícone opaco em 1024 × 1024, o mascote extraído do HTML, o fundo existente,
-as fontes TTF completas e seus avisos OFL. A ferramenta registra caminhos e origem,
-sem incluir payloads base64 ou credenciais na saída.
+Neste estágio, confira o mascote extraído do HTML, o fundo existente, as fontes TTF
+completas e seus avisos OFL. A ferramenta registra caminhos, hashes e origem em
+`ios/Capia/Sources/Capia/Resources/SOURCES.md`. O ícone opaco 1024 × 1024 e os recursos
+da US2 serão exigidos pelo modo de conferência quando essas histórias forem implementadas.
 
 ## Testar as transições e compilar
 

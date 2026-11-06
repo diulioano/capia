@@ -1,0 +1,42 @@
+{
+  "design_sha256": "ccf7cb799ad297d0a7765b5c943f9fc1d125f9c4dbdf65bcc0596321133bbdee",
+  "google_fonts_revision": "38411257417e616c5d4daa1b9e91a3dbcebe1c2e",
+  "files": {
+    "Images/WelcomeCapybara.png": {
+      "sha256": "424f68f69305e005f226610306efc249273ea38394a8e202cd3fbf8c9af98b9f",
+      "origin": "design/App de finanças onsen — protótipo iPhone.html / c98bf460-1310-48cf-b12a-570d347b97de; WEBP → PNG, sem edição visual"
+    },
+    "Images/OnsenWallpaper.png": {
+      "sha256": "a9f5f7d2cde8b9a8d92355d7cd7c84454a71eeba7bee62d96aa1ae0db5c65980",
+      "origin": "assets/onsen-wallpaper-1170x2532.png; cópia sem alteração"
+    },
+    "Fonts/Figtree.ttf": {
+      "sha256": "26ad3db9b31ff7dde67a91ff515d022d2f495cd506590699cf264f0bfe6fb714",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf"
+    },
+    "Fonts/Figtree-OFL.txt": {
+      "sha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/OFL.txt"
+    },
+    "Fonts/ZenMaruGothic-Bold.ttf": {
+      "sha256": "fe24426b9c8b5523a0146a8235c8674eccf0493af354a53ec895c3596d9eb745",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/zenmarugothic/ZenMaruGothic-Bold.ttf"
+    },
+    "Fonts/ZenMaruGothic-OFL.txt": {
+      "sha256": "2a20cf7ce1909d8ee1e949095d340f7d7656705f7c810a2d6faf56800ad0cb3d",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/zenmarugothic/OFL.txt"
+    },
+    "Fonts/Figtree-Regular.ttf": {
+      "sha256": "a9aa39b7b6ceb178fd0c898861e469f01a50940f6163d43c937dccd29ab5a425",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf; instância estática wght=400, sem subset"
+    },
+    "Fonts/Figtree-SemiBold.ttf": {
+      "sha256": "0583b7bc283958849d367b182262d5365390e03dd33568f77f6fedca64f80964",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf; instância estática wght=600, sem subset"
+    },
+    "Fonts/Figtree-Bold.ttf": {
+      "sha256": "9167c86dde180f0aa8b4c18b1af5bef08f26fc8336a74e1d819c0f0b2ca8b75a",
+      "origin": "https://raw.githubusercontent.com/google/fonts/38411257417e616c5d4daa1b9e91a3dbcebe1c2e/ofl/figtree/Figtree[wght].ttf; instância estática wght=700, sem subset"
+    }
+  }
+}

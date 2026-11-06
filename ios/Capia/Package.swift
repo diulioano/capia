@@ -19,7 +19,9 @@ let package = Package(
     targets: [
         .target(
             name: "Capia",
-            dependencies: ["CapiaFlow"]
+            dependencies: ["CapiaFlow"],
+            exclude: ["Resources/SOURCES.md", "Resources/sources.json"],
+            resources: [.process("Resources/Images"), .process("Resources/Fonts")]
         ),
     ],
     swiftLanguageModes: [.v6]
