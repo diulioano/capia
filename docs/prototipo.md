@@ -8,7 +8,7 @@ Validar a compreensão das telas, o fluxo de registro e revisão, a personalidad
 
 Protótipo nativo para iPhone, escrito em Swift com interface em SwiftUI e dados de exemplo. A continuação adota xtool como ferramenta de compilação e instalação a partir do ambiente Windows. Esta decisão substitui a proposta anterior de protótipo web.
 
-O primeiro passo técnico é compilar um app mínimo e instalá-lo no iPhone pelo xtool. Esse teste valida o ambiente, o SDK e a assinatura antes da construção das telas. O uso de Swift está definido; o funcionamento da cadeia de compilação neste ambiente ainda precisa ser comprovado.
+Em 2026-11-06, o usuário confirmou que já compilou um app padrão e o executou no iPhone. A validação inicial do caminho de compilação e instalação pelo xtool está atendida por esse relato; não precisa ser repetida como pré-requisito para iniciar as telas. Os comandos e as versões utilizados não foram fornecidos nesta conversa e devem ser registrados ao preparar a compilação deste projeto. O app deste repositório ainda precisará de sua própria validação no aparelho.
 
 O protótipo funciona sem backend. Se a versão funcional precisar de um servidor, ele será desenvolvido em Java com Spring Boot. O envio a um serviço de IA é um possível motivo para essa necessidade, ainda a avaliar.
 
@@ -35,4 +35,10 @@ Sem integração bancária, reconhecimento real por IA ou recuperação real por
 
 O protótipo exportado do Claude em `../design/` define a referência visual para todo desenvolvimento. A implementação em SwiftUI deve seguir suas telas, componentes e fluxos, conforme `../AGENTS.md`. Os recursos visuais existentes estão em `../assets/`.
 
-O nome definitivo do produto continua em aberto. Os nomes usados no HTML e no repositório são provisórios.
+O nome escolhido pelo usuário em 2026-11-06 é Capia. O HTML original permanece preservado, inclusive quando usa nomes anteriores à escolha.
+
+## Primeira funcionalidade especificada
+
+A implementação começa pelo fluxo Get Started: boas-vindas e três etapas de apresentação, conforme o primeiro quadro do HTML. O ícone do Capia usará `../assets/capybara-onsen.png` como base, com adaptação de enquadramento para identificação na tela inicial do iPhone.
+
+A especificação está em `../specs/001-get-started/spec.md`. O cadastro de nome da pessoa, preferências, primeira conta e cartão pertence ao próximo fluxo. As tarefas de estrutura e comportamento serão separadas das tarefas de interface e fidelidade visual no planejamento.

@@ -1,4 +1,4 @@
-# Constituição do app de finanças pessoais
+# Constituição do Capia
 
 ## Core Principles
 
@@ -93,8 +93,9 @@ Antes de desenvolver funcionalidades, a equipe DEVE ler `CONTEXT.md`,
 Esses documentos registram o vocabulário, as decisões e o escopo que orientam
 especificações e planos. Intenções ainda abertas não são requisitos confirmados.
 
-O nome do produto permanece em aberto. Nomes presentes no repositório ou no HTML
-são provisórios e não autorizam consolidar uma marca definitiva.
+O nome do produto é Capia, escolhido pelo usuário em 2026-11-06. A identificação
+do app DEVE usar esse nome. Nomes anteriores presentes no repositório ou no HTML
+não substituem essa decisão. O HTML de referência permanece preservado.
 
 ## Fluxo de desenvolvimento
 
@@ -128,4 +129,8 @@ Na revisão de especificações, planos, tarefas e implementação, a equipe DEV
 conformidade com a constituição. Exceções DEVEM identificar a regra afetada, a razão
 e o alcance. Não é permitido omitir uma verificação exigida e declarar a entrega concluída.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06
+A emenda 1.0.1 registra a escolha do nome Capia pelo usuário e atualiza a identificação
+do produto. A mudança substitui a identificação provisória sem alterar os princípios
+técnicos ou o escopo da entrega.
+
+**Version**: 1.0.1 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06

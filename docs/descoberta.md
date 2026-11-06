@@ -52,7 +52,7 @@ O app substituirá a planilha, com exportação dos registros para uso fora do a
 - A primeira entrega será um protótipo navegável com dados de exemplo para validar telas e movimentos, antes do app funcional.
 - O usuário tem iPhone, mas não tem acesso a Mac. O ambiente atual do projeto é Windows.
 - O app será nativo, desenvolvido em Swift com interface em SwiftUI. O usuário utiliza xtool, que será o caminho inicial de compilação e instalação no iPhone.
-- A primeira entrega também será nativa em Swift, substituindo a proposta anterior de protótipo web. A compilação e a instalação de um app mínimo precisam ser validadas antes da construção das telas.
+- A primeira entrega também será nativa em Swift, substituindo a proposta anterior de protótipo web. Em 2026-11-06, o usuário confirmou que já compilou um app padrão e o executou no iPhone, atendendo à validação inicial antes da construção das telas. A compilação do app deste repositório ainda será verificada durante a implementação.
 - Se houver necessidade de backend próprio, a tecnologia escolhida é Java com Spring Boot. O protótipo com dados de exemplo não depende de servidor.
 - A primeira versão funcional será destinada ao usuário e a poucos convidados em teste.
 
@@ -76,7 +76,7 @@ O cálculo deve distinguir sobra do período, saldo em conta e valor reservado p
 
 ## Próximas decisões
 
-O necessário para delimitar o protótipo foi discutido. A continuação está descrita em `prototipo.md`, agora com Swift, SwiftUI e xtool. O próximo passo técnico é validar a compilação e a instalação de um app mínimo no iPhone.
+O necessário para delimitar o protótipo foi discutido. A continuação está descrita em `prototipo.md`, com Swift, SwiftUI e xtool. Após confirmar a execução do app padrão no iPhone, o usuário escolheu começar pelo Get Started e pelo ícone do app. A base escolhida para o ícone é `../assets/capybara-onsen.png`. Em 2026-11-06, o usuário escolheu Capia como nome do produto.
 
 Pontos a resolver antes da versão funcional: fórmula e horizonte do planejador, manutenção e retirada de valores reservados, tratamento de faturas anteriores ao início do acompanhamento, transferências entre contas, estornos, reconciliação de recorrências com importações, datas e limites dos ciclos de fatura, formato da exportação, serviço de IA e seus custos/retenção, comportamento sem iCloud e caminho de compilação/distribuição iOS. Esses pontos não precisam ser simulados como integrações reais no protótipo.
 

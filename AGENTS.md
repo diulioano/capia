@@ -9,7 +9,7 @@ Estas instruções se aplicam a todo o repositório.
 - Adapte o design aos componentes nativos do iOS e à acessibilidade, incluindo redução de movimento. Confira o resultado com a referência ao concluir uma tela.
 - Para fluxos ou estados ausentes do protótipo, siga o mesmo sistema visual e as regras de produto documentadas. Registre as decisões que precisarem complementar o design.
 - Preserve o HTML original e os avisos de licença incorporados. Atualize a referência quando o usuário fornecer uma nova versão do design.
-- O nome do produto ainda não foi definido. O nome da pasta, o título do HTML e os textos do protótipo não confirmam uma marca definitiva. Use nomes provisórios até a escolha do usuário.
+- O nome do produto é Capia, escolhido pelo usuário em 2026-11-06. Use esse nome na identificação do app. O nome da pasta, o título do HTML e os textos anteriores do protótipo não substituem essa escolha. Preserve o HTML original.
 
 ## Produto e implementação
 

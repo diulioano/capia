@@ -1,6 +1,6 @@
-# Finanças pessoais
+# Capia: finanças pessoais
 
-Vocabulário do app de controle financeiro pessoal, ainda sem nome.
+Vocabulário do Capia, app de controle financeiro pessoal. Nome escolhido pelo usuário em 2026-11-06.
 
 ## Language
 

@@ -1,8 +1,8 @@
 <img src="assets/icon.svg" width="64" height="64" alt="">
 
-# App de finanças pessoais
+# Capia
 
-App nativo para iPhone, com uma capivara como mascote. O nome do produto ainda é provisório.
+App nativo de finanças pessoais para iPhone, com uma capivara como mascote. Nome escolhido pelo usuário em 2026-11-06.
 
 ## Design e desenvolvimento
 
@@ -20,7 +20,7 @@ As instruções para os agentes estão em [AGENTS.md](AGENTS.md). A implementaç
 
 ## Estado do projeto
 
-O repositório contém o design, os recursos visuais e a documentação. A implementação do app ainda não começou. O próximo passo técnico é validar a compilação e a instalação de um app mínimo no iPhone pelo xtool, a partir do Windows.
+O repositório contém o design, os recursos visuais e a documentação. A implementação do app ainda não começou. O usuário confirmou a execução de um app padrão no iPhone em 2026-11-06, validando o caminho inicial com xtool. A primeira funcionalidade especificada é o [Get Started com ícone do app](specs/001-get-started/spec.md).
 
 ## Spec Kit
 
@@ -28,7 +28,7 @@ O Spec Kit está inicializado para o Codex, com scripts PowerShell. A configura�
 
 Em uma sessão do Codex que carregue as skills deste projeto, siga a sequência:
 
-1. `$speckit-constitution`: registrar os princípios a partir de `AGENTS.md` e das decisões existentes. A constituição instalada ainda é um template.
+1. `$speckit-constitution`: manter os princípios registrados na [constituição](.specify/memory/constitution.md), a partir de `AGENTS.md` e das decisões existentes.
 2. `$speckit-specify`: especificar a entrega com base em `design/` e na documentação do produto.
 3. `$speckit-plan`: preparar o plano de implementação.
 4. `$speckit-tasks`: gerar as tarefas.
