@@ -85,11 +85,14 @@ etapa provisória conta como tela final.
 **Independent Test**: Da apresentação, Pular ou Configurar meu espaço; preencher nome,
 escolher objetivos, chegar à etapa da conta (ainda provisória) e voltar até a apresentação.
 
-- [ ] T011 [US1] Acrescentar em `ios/Capia/Sources/Capia/Design/CapiaTheme.swift` as cores do quadro (borda `#E5D6BE`, seleção `#ECEBD6`, trilho `#E8DBC6`, inativo `#DDD3C4`/`#6B6258`, dica `#4A433B`, alerta `#9C4A22`, aviso `#45512A`, erro `#FADDCB`/`#84401E`, conclusão `#F1E8DA`) e estilos reutilizáveis de opção selecionável e de Continuar ativo/inativo, conforme contracts/initial-setup-ui.md.
-- [ ] T012 [US1] Implementar o contêiner final em `ios/Capia/Sources/Capia/Setup/SetupView.swift`: Voltar 44 × 44, barra de progresso N/6 animada, capivara 84 pt pelo humor derivado, balão de dica com fade, título com foco acessível e Continuar fixo em `safeAreaInset` acompanhando o teclado; redução de movimento sem animações; depende de T011.
-- [ ] T013 [P] [US1] Implementar `ios/Capia/Sources/Capia/Setup/NameStepView.swift`: rótulo, campo sublinhado 60 pt com placeholder "Ex.: Diuli", `.givenName`, iniciais maiúsculas, sem autocorreção, foco automático, selo de validação, "Só mais uma letrinha." anunciado e Continuar pelo teclado só com nome válido; depende de T012.
-- [ ] T014 [P] [US1] Implementar `ios/Capia/Sources/Capia/Setup/GoalsStepView.swift` com "{Primeiro nome}, o que te trouxe aqui?" e as quatro opções de seleção múltipla com caixa 26 × 26 e estado anunciado; depende de T012.
+- [X] T011 [US1] Acrescentar em `ios/Capia/Sources/Capia/Design/CapiaTheme.swift` as cores do quadro (borda `#E5D6BE`, seleção `#ECEBD6`, trilho `#E8DBC6`, inativo `#DDD3C4`/`#6B6258`, dica `#4A433B`, alerta `#9C4A22`, aviso `#45512A`, erro `#FADDCB`/`#84401E`, conclusão `#F1E8DA`) e estilos reutilizáveis de opção selecionável e de Continuar ativo/inativo, conforme contracts/initial-setup-ui.md.
+- [X] T012 [US1] Implementar o contêiner final em `ios/Capia/Sources/Capia/Setup/SetupView.swift`: Voltar 44 × 44, barra de progresso N/6 animada, capivara 84 pt pelo humor derivado, balão de dica com fade, título com foco acessível e Continuar fixo em `safeAreaInset` acompanhando o teclado; redução de movimento sem animações; depende de T011.
+- [X] T013 [P] [US1] Implementar `ios/Capia/Sources/Capia/Setup/NameStepView.swift`: rótulo, campo sublinhado 60 pt com placeholder "Ex.: Diuli", `.givenName`, iniciais maiúsculas, sem autocorreção, foco automático, selo de validação, "Só mais uma letrinha." anunciado e Continuar pelo teclado só com nome válido; depende de T012.
+- [X] T014 [P] [US1] Implementar `ios/Capia/Sources/Capia/Setup/GoalsStepView.swift` com "{Primeiro nome}, o que te trouxe aqui?" e as quatro opções de seleção múltipla com caixa 26 × 26 e estado anunciado; depende de T012.
 - [ ] T015 [US1] Executar no iPhone o teste independente da US1 e as linhas Entrada, Nome e Objetivos de `specs/002-initial-setup/quickstart.md`, com VoiceOver, texto ampliado, redução de movimento e comparação com as etapas 1–2 do quadro; registrar em `specs/002-initial-setup/validation.md`, atualizar este arquivo e commitar só a US1.
+
+Execução: textos, dicas, rótulos e poses ficam em `ios/Capia/Sources/Capia/Setup/SetupCopy.swift`,
+reutilizado pelas próximas US.
 
 **Checkpoint**: Nome e objetivos finais; as demais etapas ainda podem ser provisórias.
 

@@ -35,7 +35,21 @@ As etapas, a conclusão e o mês são provisórios e não contam como telas fina
 
 ## US1 — Apresentar-se ao Capia
 
-Pendente.
+Branch `feat/002-initial-setup-us1-profile`. Implementação de T011–T014 concluída.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou |
+| `xtool dev run --usb` no aparelho "Gremio" (via Apple Devices, porta 27015) | Passou: instalação e verificação concluídas em 2026-11-06 |
+| Entrada por Pular e Configurar meu espaço; Voltar à origem | Pendente: conferência do usuário no iPhone |
+| Nome: vazio, uma letra ("Só mais uma letrinha."), válido; teclado e Continuar | Pendente |
+| Objetivos: marcar, desmarcar, Continuar só com um marcado | Pendente |
+| Capivara calma → pensando → feliz; dicas; barra 1 e 2 de 6 | Pendente |
+| VoiceOver, maior texto, Reduzir Movimento | Pendente |
+| Comparação com as etapas 1–2 do quadro | Pendente |
+
+Adaptações registradas: Voltar usa o mesmo chevron do Get Started; o rótulo "Nome ou apelido"
+é o nome acessível do campo; Continuar indisponível usa o estado desativado nativo.
 
 ## US2 — Primeira conta e saldo inicial
 

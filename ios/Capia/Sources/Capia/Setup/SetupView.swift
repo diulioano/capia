@@ -1,8 +1,8 @@
 import CapiaFlow
 import SwiftUI
 
-/// Configuração inicial. Esqueleto provisório da base: cada etapa usa controles simples
-/// até a US dona da tela substituí-la pela versão fiel ao quadro "Configuração inicial".
+/// Contêiner da configuração inicial, conforme o quadro "Configuração inicial":
+/// Voltar, progresso, capivara com dica, título da etapa e Continuar fixo no rodapé.
 @MainActor
 struct SetupView: View {
     let flow: SetupFlow
@@ -11,47 +11,160 @@ struct SetupView: View {
     let send: (SetupAction) -> Void
     let retrySave: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @AccessibilityFocusState private var titleFocused: Bool
+
     var body: some View {
         // Capture the rendered step, rather than reading the latest state in a tap.
         let source = flow.step
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                if flow.canGoBack {
-                    Button("Voltar") { send(.init(.back, from: source)) }
-                        .frame(minWidth: 44, minHeight: 44)
-                }
-                Spacer()
-                if let position = source.position {
-                    Text("Etapa \(position) de \(SetupStep.count)")
-                        .font(CapiaFonts.body(14))
-                }
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            header(source)
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
             ScrollView {
-                VStack(alignment: .leading, spacing: 14) {
-                    ProvisionalStepContent(flow: flow, saveFailed: saveFailed, edit: edit,
-                                           send: { send(.init($0, from: source)) },
-                                           retrySave: retrySave)
+                VStack(alignment: .leading, spacing: 0) {
+                    mascot(source)
+                        .padding(.top, 18)
+                    stepBody(source)
+                        .id(source)
+                        .transition(stepTransition)
+                        .padding(.top, 22)
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .scrollDismissesKeyboard(.interactively)
         }
-        .padding(20)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if source != .done {
                 Button("Continuar") { send(.init(.continueStep, from: source)) }
-                    .buttonStyle(CapiaPrimaryButtonStyle())
+                    .buttonStyle(CapiaContinueButtonStyle())
                     .disabled(!flow.canContinue)
-                    .opacity(flow.canContinue ? 1 : 0.4)
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 12)
+                    .padding(.top, 8)
+                    .padding(.bottom, 8)
+                    .background(CapiaTheme.cream)
             }
         }
         .background(CapiaTheme.cream.ignoresSafeArea())
-        .id(source)
+        .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.4), value: source)
+        .task(id: source) {
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            titleFocused = true
+        }
+    }
+
+    private var stepTransition: AnyTransition {
+        reduceMotion ? .identity : .asymmetric(insertion: .opacity.combined(with: .offset(x: 24)),
+                                               removal: .identity)
+    }
+
+    // MARK: Cabeçalho
+
+    @ViewBuilder
+    private func header(_ source: SetupStep) -> some View {
+        HStack(spacing: 14) {
+            if flow.canGoBack {
+                Button { send(.init(.back, from: source)) } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(CapiaTheme.ink)
+                        .frame(width: 44, height: 44)
+                        .background(CapiaTheme.sand, in: RoundedRectangle(cornerRadius: 14))
+                }
+                .buttonStyle(CapiaTapStyle())
+                .accessibilityLabel("Voltar")
+            }
+            if let position = source.position {
+                ProgressTrack(position: position, total: SetupStep.count, reduceMotion: reduceMotion)
+            }
+        }
+        .frame(minHeight: 44)
+    }
+
+    // MARK: Capivara e dica
+
+    @ViewBuilder
+    private func mascot(_ source: SetupStep) -> some View {
+        if source != .done {
+            HStack(alignment: .bottom, spacing: 6) {
+                Image(uiImage: SetupCopy.image(for: flow.mood))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 84, height: 84)
+                    .accessibilityHidden(true)
+                Text(SetupCopy.tip(for: source))
+                    .font(CapiaFonts.body(14, relativeTo: .subheadline))
+                    .lineSpacing(3)
+                    .foregroundStyle(CapiaTheme.tipText)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.vertical, 9)
+                    .padding(.horizontal, 13)
+                    .background(CapiaTheme.paper, in: UnevenRoundedRectangle(
+                        topLeadingRadius: 16, bottomLeadingRadius: 4,
+                        bottomTrailingRadius: 16, topTrailingRadius: 16))
+                    .shadow(color: Color(red: 80/255, green: 60/255, blue: 40/255).opacity(0.10), radius: 7, y: 4)
+                    .padding(.bottom, 26)
+                    .id(source)
+                    .transition(reduceMotion ? .identity : .opacity)
+            }
+        }
+    }
+
+    // MARK: Etapas
+
+    @ViewBuilder
+    private func stepBody(_ source: SetupStep) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(SetupCopy.title(for: source, draft: flow.draft))
+                .font(CapiaFonts.title(source == .cardDates ? 26 : 28))
+                .lineSpacing(4)
+                .foregroundStyle(CapiaTheme.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+                .accessibilityFocused($titleFocused)
+                .padding(.bottom, source == .goals ? 4 : 0)
+            switch source {
+            case .name:
+                NameStepView(draft: flow.draft, edit: edit,
+                             submit: { send(.init(.continueStep, from: source)) })
+            case .goals:
+                GoalsStepView(draft: flow.draft, edit: edit)
+            default:
+                ProvisionalStepContent(flow: flow, saveFailed: saveFailed, edit: edit,
+                                       send: { send(.init($0, from: source)) },
+                                       retrySave: retrySave)
+            }
+        }
     }
 }
 
-/// Conteúdo provisório das etapas. Substituído por arquivo próprio em cada US.
+/// Barra de progresso de 6 pt, preenchida até a etapa atual.
+private struct ProgressTrack: View {
+    let position: Int
+    let total: Int
+    let reduceMotion: Bool
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule().fill(CapiaTheme.track)
+                Capsule().fill(CapiaTheme.action)
+                    .frame(width: geometry.size.width * CGFloat(position) / CGFloat(total))
+            }
+        }
+        .frame(height: 6)
+        .animation(reduceMotion ? nil : .timingCurve(0.2, 0.8, 0.2, 1, duration: 0.5), value: position)
+        .accessibilityElement()
+        .accessibilityLabel("Progresso da configuração")
+        .accessibilityValue("Etapa \(position) de \(total)")
+    }
+}
+
+/// Conteúdo provisório das etapas ainda não finalizadas. Substituído por arquivo
+/// próprio em cada US (conta e saldo na US2, cartão na US3, conclusão na US4).
 @MainActor
 private struct ProvisionalStepContent: View {
     let flow: SetupFlow
@@ -69,26 +182,15 @@ private struct ProvisionalStepContent: View {
 
     var body: some View {
         switch flow.step {
-        case .name:
-            Text("Como podemos te chamar?").font(CapiaFonts.title(28))
-            TextField("Nome ou apelido", text: binding(\.name))
-            if draft.isNameOneShort { Text("Só mais uma letrinha.") }
-        case .goals:
-            Text("\(draft.greeting), o que te trouxe aqui?").font(CapiaFonts.title(28))
-            ForEach(SetupGoal.allCases, id: \.self) { goal in
-                Button("\(draft.goals.contains(goal) ? "☑" : "☐") \(goal.rawValue)") {
-                    edit { $0.toggle(goal) }
-                }
-            }
+        case .name, .goals:
+            EmptyView()
         case .account:
-            Text("Vamos cadastrar sua primeira conta").font(CapiaFonts.title(28))
             Picker("Tipo", selection: binding(\.accountKind)) {
                 ForEach(AccountKind.allCases, id: \.self) { Text($0.rawValue).tag($0) }
             }
             .pickerStyle(.segmented)
             TextField("Nome do banco ou apelido", text: binding(\.accountName))
         case .balance:
-            Text("Quanto tem hoje em \(draft.accountDisplayName)?").font(CapiaFonts.title(28))
             TextField("Saldo inicial", text: Binding(
                 get: { BRL.format(draft.balance) },
                 set: { text in edit { $0.balance = Cents(typed: text) } }))
@@ -99,11 +201,9 @@ private struct ProvisionalStepContent: View {
                 }
             }
         case .cardQuestion:
-            Text("Você usa cartão de crédito de \(draft.accountDisplayName)?").font(CapiaFonts.title(28))
             Button("\(draft.hasCard == true ? "●" : "○") Sim, tenho cartão") { edit { $0.hasCard = true } }
             Button("\(draft.hasCard == false ? "●" : "○") Agora não") { edit { $0.hasCard = false } }
         case .cardDates:
-            Text("Datas do cartão \(draft.accountDisplayName)").font(CapiaFonts.title(26))
             Stepper("Fecha no dia \(draft.closingDay)",
                     value: Binding(get: { draft.closingDay }, set: { day in edit { $0.setClosingDay(day) } }),
                     in: CreditCard.days)
@@ -112,7 +212,6 @@ private struct ProvisionalStepContent: View {
                     in: CreditCard.days)
             if !draft.areCardDaysValid { Text("Fechamento e vencimento precisam ser em dias diferentes.") }
         case .done:
-            Text("Tudo pronto, \(draft.greeting)!").font(CapiaFonts.title(30))
             ForEach(flow.accounts) { account in
                 Text("\(account.name) · \(account.kind.rawValue) · \(BRL.format(account.initialBalance))")
             }
