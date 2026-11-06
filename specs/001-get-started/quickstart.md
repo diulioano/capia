@@ -5,7 +5,9 @@ compilaram; seis testes de navegação passaram. O Capia foi instalado no iPhone
 2026-11-06, e as capturas do usuário confirmam sua abertura. A primeira inspeção visual
 falhou: fundo e capivara ausentes. A build 2 carrega essas imagens diretamente por URL;
 foi instalada, e o usuário confirmou que ambas aparecem. Interações, comparação visual
-completa e acessibilidade seguem pendentes. As introduções finais e o ícone ainda não foram implementados.
+completa e acessibilidade seguem pendentes. O teste com maior texto mostrou falha visual;
+a build 3 reorganiza esse modo e aguarda instalação e conferência. As introduções finais
+e o ícone ainda não foram implementados.
 Consulte [validation.md](validation.md) antes de executar os cenários de aceite final.
 
 ## Preparar o ambiente

@@ -74,6 +74,13 @@ nome, primeira conta, cartão, autenticação ou permissão nesta funcionalidade
 - Em telas pequenas e texto ampliado, rolagem conserva todos os textos e ações.
   O rodapé reserva espaço para não encobrir o último conteúdo.
 
+Na welcome com texto de acessibilidade ou pouca altura disponível, o texto e a cena
+formam uma coluna rolável, enquanto Começar permanece em um rodapé que respeita a
+área segura. A cena usa um recorte proporcional compartilhado por fundo, mascote,
+reflexo e efeitos, com transição suave para o creme. O feedback de carinho ocupa uma
+área reservada acima da cena nesse modo, sem cobrir o mascote nem deslocá-lo ao aparecer.
+O texto continua usando o tamanho escolhido nos Ajustes.
+
 ## Ícone e recursos instalados
 
 Master do ícone em PNG opaco de 1024 × 1024, baseado em `assets/capybara-onsen.png`,

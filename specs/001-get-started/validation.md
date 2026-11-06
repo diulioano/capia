@@ -181,3 +181,29 @@ USBMUXD_SOCKET_ADDRESS=127.0.0.1:27015 xtool dev run --usb
   para identificar o defeito concreto antes de alterar enquadramento ou tipografia.
 - O cenário de maior texto não está aprovado. T012, T014 e T016 continuam abertas;
   VoiceOver, comparação visual completa e SC-001 também permanecem pendentes.
+
+## Vídeo de texto ampliado e build 3 — 2026-11-06
+
+- Evidência recebida: `WhatsApp Video 2026-11-06 at 11.06.07.mp4`, 25,71 segundos,
+  384 × 848 pixels, SHA-256 `bdf4eb8b1e3237c36d95104e68c15a464caf64cca56fbf632de68613259593a7`.
+  Original mantido no anexo da conversa, sem alteração. Quadros de diagnóstico preservados
+  em [evidence/us1-build2/](evidence/us1-build2/), extraídos a 300 pixels de largura.
+- Quadros observados no vídeo: texto passa sob a barra de status ao rolar; a cena
+  surge como faixa com corte abrupto após o texto. As ações continuam disponíveis.
+  O crescimento e a quebra de linhas do texto são esperados com Dynamic Type; não foi
+  reduzido nem limitado o tamanho escolhido pelo usuário para tentar imitar a composição base.
+- Ajuste da build 3: coluna rolável recortada à área útil e Começar em `safeAreaInset`
+  inferior. O rodapé reserva espaço e permanece alcançável sem percorrer todo o texto.
+- Cena agora é composta em um único espaço 390 × 844 e recebe uma transformação comum
+  para fundo, mascote, reflexo, efeitos e alvo de toque. Removida a heurística de recorte
+  por altura física, aplicada anteriormente a cada camada.
+- No modo de leitura, o recorte é a região y=444…844 da referência, escalada pela largura,
+  com altura proporcional de 400/390 e transição superior para o creme. O feedback ocupa
+  uma região reservada acima da cena; sua aparição não muda a posição do mascote.
+- No modo de tela inteira, as coordenadas da referência e o enquadramento por cobertura
+  são mantidos. O contrato registra a reorganização para acessibilidade.
+- **Passou**: `xtool dev build` e `python scripts/prepare-design-assets.py --check`.
+  `CFBundleVersion` elevado para 3; recursos originais e HTML permanecem intactos.
+- **Pendente**: instalar a build 3 e conferir texto máximo, rolagem, cena, feedback e
+  regressão em tamanho padrão no iPhone. O socket Apple não listava aparelho na tentativa
+  de conexão desta etapa. Solicitada reconexão ao usuário. T012/T014/T016 continuam abertas.
