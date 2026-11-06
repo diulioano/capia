@@ -19,3 +19,10 @@ Estas instruções se aplicam a todo o repositório.
 - Se houver necessidade de backend próprio, a tecnologia escolhida é Java com Spring Boot.
 - Use os recursos existentes em `assets/` quando corresponderem ao design. Mantenha as distinções financeiras definidas em `CONTEXT.md`.
 - Uma instrução posterior do usuário prevalece sobre estas orientações. Atualize a documentação afetada quando uma decisão mudar.
+
+## Branches e commits
+
+- Implemente cada user story em sua própria branch e faça commits separados por US. Não misture alterações de histórias diferentes no mesmo commit.
+- Mantenha o esqueleto compartilhado e a validação integrada em commits próprios da branch base da funcionalidade.
+- Para Get Started, siga os nomes, a ordem e as regras de integração em `specs/001-get-started/tasks.md`. Atualize o progresso das tarefas e registre as verificações no commit correspondente.
+- Uma verificação pendente não pode ser marcada como concluída. Se for necessário salvar trabalho parcial, identifique o commit como parcial e preserve as pendências documentadas.

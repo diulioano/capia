@@ -1,12 +1,12 @@
 ﻿# Feature Specification: Get Started e identidade do Capia
 
-**Feature Branch**: `master` (nenhuma branch criada por hook)
+**Feature Branch**: `feat/001-get-started` (base compartilhada; branches por US em `tasks.md`)
 
 **Feature Directory**: `specs/001-get-started`
 
 **Created**: 2026-11-06
 
-**Status**: Ready for planning
+**Status**: Tasks generated
 
 **Input**: User description: "Já compilei um app padrão no iPhone e está funcionando. Começar pela tela Get Started, adicionar um ícone usando a capybara-onsen ou uma imagem gerada e definir o nome." Nome escolhido pelo usuário: Capia.
 
