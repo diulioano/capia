@@ -336,3 +336,16 @@ Verificações:
 - **Pendente**: maior texto acessível, VoiceOver e redução de movimento nas novas telas.
   Solicitada a conferência conjunta desses ajustes, com legibilidade dos exemplos,
   controles alcançáveis, foco no título e progresso sem duplicação. T025 permanece aberta.
+
+## Aceite da US2 — 2026-11-06
+
+- O usuário respondeu "Tudo funcionou e ficou legível" ao percurso nas três introduções
+  e na entrada da configuração com texto no máximo, Reduzir Movimento e VoiceOver ativos.
+  Foram solicitados textos e exemplos legíveis, controles alcançáveis por rolagem,
+  cena estática, foco no título ao trocar de tela, progresso sem duplicação e todas as ações.
+- **Passou por relato do usuário no aparelho, build 4 (`7a1a421`)**: cenário combinado
+  de acessibilidade nas novas telas. SC-004 aprovado; SC-005 aprovado nos painéis e
+  adaptações conferidos pelo usuário, junto à aprovação visual do percurso principal.
+- Com SC-002 e SC-003 já registrados, T025 concluída. US2 aceita no iPhone15,2 / iOS 26.7.2.
+  Não há medição instrumental dos tempos nem novas capturas da build 4.
+- US3 e validação integrada ainda pendentes.
