@@ -1,0 +1,4 @@
+# Preserve the exported reference and upstream font/license bytes on Windows.
+design/*.html -text
+ios/Capia/Sources/Capia/Resources/Fonts/* -text
+ios/Capia/Sources/Capia/Resources/Fonts/*-OFL.txt -whitespace

@@ -46,6 +46,7 @@ python scripts/prepare-design-assets.py --check
 ```
 
 - Preparação repetida comparando hashes de todos os arquivos: resultado idêntico. `--check` passou sem modificar recursos. Conferidos pixels da capivara, igualdade do fundo, dimensões, cabeçalhos TTF, nomes PostScript, licenças e hashes.
+- `.gitattributes` preserva bytes do HTML e das fontes/licenças contra conversão de fim de linha no checkout Windows. Espaços finais dos avisos OFL originais são preservados.
 - `xtool dev build` no Bash em `ios/Capia`: passou com as boas-vindas e os recursos. Artefato: `ios/Capia/xtool/Capia.app`.
 - Inspeção do `.app`: nome e bundle Capia confirmados; imagens, fontes e arquivos OFL encontrados uma única vez e iguais byte a byte aos recursos de origem.
 - **T016 pendente**: nenhum iPhone listado em nova execução de `xtool devices --no-wait`. Sem instalação, execução, capturas nativas, VoiceOver, maior texto acessível, redução de movimento ou observação de SC-001. O comportamento de renovação/saída foi implementado, mas não observado no aparelho.
