@@ -137,6 +137,10 @@ struct SetupView: View {
                                 submit: { send(.init(.continueStep, from: source)) })
             case .balance:
                 BalanceStepView(draft: flow.draft, edit: edit)
+            case .cardQuestion:
+                CardQuestionStepView(draft: flow.draft, edit: edit)
+            case .cardDates:
+                CardDatesStepView(draft: flow.draft, edit: edit)
             default:
                 ProvisionalStepContent(flow: flow, saveFailed: saveFailed, edit: edit,
                                        send: { send(.init($0, from: source)) },
@@ -169,7 +173,7 @@ private struct ProgressTrack: View {
 }
 
 /// Conteúdo provisório das etapas ainda não finalizadas. Substituído por arquivo
-/// próprio em cada US (cartão na US3, conclusão na US4).
+/// próprio na US4 (conclusão).
 @MainActor
 private struct ProvisionalStepContent: View {
     let flow: SetupFlow
@@ -178,23 +182,10 @@ private struct ProvisionalStepContent: View {
     let send: (SetupAction.Intent) -> Void
     let retrySave: () -> Void
 
-    private var draft: SetupDraft { flow.draft }
-
     var body: some View {
         switch flow.step {
-        case .name, .goals, .account, .balance:
+        case .name, .goals, .account, .balance, .cardQuestion, .cardDates:
             EmptyView()
-        case .cardQuestion:
-            Button("\(draft.hasCard == true ? "●" : "○") Sim, tenho cartão") { edit { $0.hasCard = true } }
-            Button("\(draft.hasCard == false ? "●" : "○") Agora não") { edit { $0.hasCard = false } }
-        case .cardDates:
-            Stepper("Fecha no dia \(draft.closingDay)",
-                    value: Binding(get: { draft.closingDay }, set: { day in edit { $0.setClosingDay(day) } }),
-                    in: CreditCard.days)
-            Stepper("Vence no dia \(draft.dueDay)",
-                    value: Binding(get: { draft.dueDay }, set: { day in edit { $0.setDueDay(day) } }),
-                    in: CreditCard.days)
-            if !draft.areCardDaysValid { Text("Fechamento e vencimento precisam ser em dias diferentes.") }
         case .done:
             ForEach(flow.accounts) { account in
                 Text("\(account.name) · \(SetupCopy.kindDescription(account.kind)) · \(BRL.format(account.initialBalance))")

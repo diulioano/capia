@@ -69,7 +69,18 @@ para coluna quando não cabem na largura com texto ampliado; valor reduz até 50
 
 ## US3 — Cartão de crédito separado
 
-Pendente.
+Branch `feat/002-initial-setup-us3-card`. Implementação de T019–T020 concluída.
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `xtool dev build` | Passou |
+| `xtool dev run --usb` no aparelho "Gremio" | Passou em 2026-11-06 |
+| "Agora não" conclui sem datas; "Sim" abre as datas 3 e 10 | Pendente: conferência do usuário no iPhone |
+| Dias iguais: erro, tremor e Continuar indisponível; dias diferentes: aviso verde | Pendente |
+| VoiceOver nas fileiras de dias, texto ampliado; comparação com as etapas 5–6 | Pendente |
+
+Adaptações: ícones de cartão e "Agora não" desenhados a partir dos traços do quadro; dias
+anunciados como "Fecha no dia N" / "Vence no dia N"; tremor omitido com Reduzir Movimento.
 
 ## US4 — Conclusão, nova conta e reabertura
 
