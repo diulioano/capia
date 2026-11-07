@@ -127,7 +127,7 @@ arquivos de tela (`RecordFormView.swift`, `NewRecordView.swift`).
 
 ## Phase 8: Validação integrada
 
-- [ ] T028 Integrar as US1–US5 na base, executar `quickstart.md` completo no iPhone (incluindo Toques rápidos e Ocultar), comparar com os quadros "Novo registro" e "Resumo do mês" com registros, registrar adaptações, atualizar `docs/prototipo.md` e o status da spec; commitar.
+- [X] T028 Integrar as US1–US5 na base, executar `quickstart.md` completo no iPhone (incluindo Toques rápidos e Ocultar), comparar com os quadros "Novo registro" e "Resumo do mês" com registros, registrar adaptações, atualizar `docs/prototipo.md` e o status da spec; commitar.
 
 ## Dependencies & Execution Order
 

@@ -140,6 +140,6 @@ Branch `feat/004-new-record`, atualizada com `git merge --ff-only` de
 | `swift test` em `ios/CapiaFlow` | Passou: 137 testes |
 | `xtool dev build` | Passou, sem avisos |
 | `xtool dev run --usb` no "Gremio" | Passou em 2026-11-06: instalação e verificação concluídas |
-| `quickstart.md` completo no iPhone, com Toques rápidos e Ocultar | Pendente: aceite do usuário |
-| Acessibilidade (VoiceOver, Reduzir Movimento, texto ampliado) | Pendente: aceite do usuário |
-| Revisão de layout do fluxo inteiro, adiada pelo usuário na US3 | Pendente |
+| `quickstart.md` completo no iPhone, com Toques rápidos e Ocultar | Aceito pelo usuário no "Gremio" em 2026-11-06 ("está ok") |
+| Acessibilidade (VoiceOver, Reduzir Movimento, texto ampliado) | Incluída no pedido de conferência e coberta pelo mesmo aceite geral; o usuário não detalhou item por item |
+| Revisão de layout do fluxo inteiro, adiada pelo usuário na US3 | Feita pelo usuário no aparelho; nenhum ajuste pedido além dos já registrados nas US3 e US4 |

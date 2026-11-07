@@ -6,7 +6,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Draft
+**Status**: Implemented
 
 **Input**: User description: "comece a especificar o registro de gastos". Próximo fluxo após o
 resumo do mês: o destino do botão "Adicionar registro", que hoje é provisório.
